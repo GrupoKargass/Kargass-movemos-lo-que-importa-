@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kargass - Plataforma de Acarreos Meta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body, input, select, textarea, button {
+            font-size: 15px !important;
+        }
+        .btn-tab-active {
+            background-color: #f97316 !important;
+            color: #ffffff !important;
+            font-weight: 800 !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col leading-relaxed">
+
+    <!-- HEADER / LOGO OFICIAL -->
+    <header class="bg-slate-800 border-b-2 border-slate-700 p-3 sticky top-0 z-40 shadow-xl">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-xl bg-orange-500/20 border-2 border-orange-500/50 flex items-center justify-center text-xl shadow-lg">
+                    🛺
+                </div>
+                <div>
+                    <h1 class="font-black text-lg tracking-wider text-white">KARGASS</h1>
+                    <p class="text-[9px] text-orange-400 font-black tracking-wide">PLATAFORMA DE ACARREOS • META</p>
+                </div>
+            </div>
+            <button onclick="mostrarSelectorRol()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-xl border border-slate-600 text-orange-400 font-black shadow-md cursor-pointer">Menú</button>
+        </div>
+    </header>
+
+    <!-- PANTALLA PRINCIPAL / MENÚ INICIAL -->
+    <div id="modal-selector" class="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-800 border-2 border-slate-700 p-5 rounded-3xl max-w-sm w-full text-center space-y-4 shadow-2xl my-auto">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-orange-500/20 border-2 border-orange-500/50 flex items-center justify-center text-3xl shadow-lg">
+                🛺
+            </div>
+            <div>
+                <h2 class="text-xl font-black text-white tracking-wide">KARGASS</h2>
+                <p class="text-xs text-slate-300 mt-0.5 font-medium">Servicio de acarreos seguro en el Meta</p>
+            </div>
+
+            <div class="space-y-3 pt-1">
+                <button onclick="irModulo('cliente')" class="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 font-black py-4 rounded-2xl text-white text-base shadow-xl flex items-center justify-center space-x-2 border-2 border-orange-400 cursor-pointer">
+                    <span class="text-xl">📦</span>
+                    <span>¡Solicitar Acarreo!</span>
+                </button>
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="irModulo('transportador')" class="bg-slate-900 hover:bg-slate-950 border border-slate-700 font-black py-3 rounded-xl text-orange-400 text-xs shadow-md cursor-pointer flex items-center justify-center space-x-1">
+                        <span>🏍️</span><span>Conductores</span>
+                    </button>
+                    <button onclick="irModulo('central')" class="bg-slate-900 hover:bg-slate-950 border border-slate-700 font-black py-3 rounded-xl text-slate-300 text-xs shadow-md cursor-pointer flex items-center justify-center space-x-1">
+                        <span>🛠️</span><span>Central</span>
+                    </button>
+                </div>
+
+                <button onclick="irModulo('afiliacion')" class="w-full bg-slate-900 hover:bg-slate-950 border border-slate-700 p-3 rounded-xl text-left flex items-center space-x-3 cursor-pointer shadow-md group">
+                    <div class="text-2xl bg-orange-500/10 p-2 rounded-lg border border-orange-500/30">🚛</div>
+                    <div>
+                        <p class="font-black text-white text-xs group-hover:text-orange-400 transition-colors">¿Quieres ser parte de la Flota?</p>
+                        <p class="text-[10px] text-slate-400">Conoce requisitos y únete aquí.</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="max-w-md mx-auto w-full p-3 pb-16 flex-grow">
+
+        <!-- 1. MÓDULO CLIENTE -->
+        <div id="view-cliente" class="space-y-4 hidden">
+            <div id="cliente-login" class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-xl text-center space-y-3">
+                <div class="text-4xl">📦</div>
+                <h3 class="font-black text-lg text-white">Portal de Clientes</h3>
+                <p class="text-xs text-slate-300">Ingresa tu número de cédula para gestionar o consultar tus servicios</p>
+                <input type="number" id="cli-doc-input" placeholder="Ej: 112193848" class="w-full text-center tracking-widest text-lg p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-black focus:border-orange-500 outline-none">
+                <button onclick="verificarClienteLogin()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white shadow-lg cursor-pointer">Ingresar / Continuar</button>
+            </div>
+
+            <div id="cliente-dashboard" class="hidden space-y-4">
+                <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
+                    <span class="font-bold">Cliente C.C: <b id="cli-perfil-doc" class="text-orange-400">--</b></span>
+                    <button onclick="cerrarSesionCliente()" class="bg-slate-700 hover:bg-slate-600 px-2.5 py-1.5 rounded-lg text-slate-200 font-black cursor-pointer">Cambiar Cédula</button>
+                </div>
+
+                <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 shadow-xl space-y-4">
+                    <div class="space-y-2 border-b border-slate-700 pb-3">
+                        <h2 class="text-xs font-black text-orange-400 uppercase tracking-wider">1. DATOS DE CONTACTO</h2>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Nombre Completo</label>
+                                <input type="text" id="cli-nombre" placeholder="David Martínez" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Teléfono Celular</label>
+                                <input type="tel" id="cli-tel" placeholder="3143842007" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 border-b border-slate-700 pb-3">
+                        <h2 class="text-xs font-black text-orange-400 uppercase tracking-wider">2. TIPO DE SERVICIO Y ZONA</h2>
+                        <div class="grid grid-cols-2 gap-2 pt-1">
+                            <button type="button" id="btn-tipo-urbano" onclick="setTipoZona('Local (Urbano)')" class="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer"><span>🏠 Local (Urbano)</span></button>
+                            <button type="button" id="btn-tipo-inter" onclick="setTipoZona('Intermunicipal')" class="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer"><span>🛣️ Intermunicipal</span></button>
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-300">Municipio Base / Origen</label>
+                            <select id="cli-mun-local" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 border-b border-slate-700 pb-3">
+                        <h2 class="text-xs font-black text-orange-400 uppercase tracking-wider">3. HORARIO DE CARGUE</h2>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" id="btn-horario-inmediato" onclick="setHorario('Inmediato')" class="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer">⚡ Inmediato</button>
+                            <button type="button" id="btn-horario-programado" onclick="setHorario('Programado')" class="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer">⏰ Programar Hora</button>
+                        </div>
+                        <div id="box-hora-programada" class="hidden pt-1">
+                            <label class="text-[11px] font-bold text-slate-300">Seleccionar Hora y Fecha Deseada</label>
+                            <input type="datetime-local" id="cli-hora-input" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold">
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h2 class="text-xs font-black text-orange-400 uppercase tracking-wider">4. VEHÍCULO Y DIRECCIONES</h2>
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-300">Vehículo Requerido</label>
+                            <select id="cli-vehiculo" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black outline-none">
+                                <option value="Motocarguero Sencillo">🛺 Motocarguero Sencillo</option>
+                                <option value="Motocarguero Doble Pacha">🚛 Motocarguero Doble Pacha</option>
+                                <option value="Camioneta">🚙 Camioneta</option>
+                                <option value="Camión">🚚 Camión</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-300">Peso o Referencia (Ej: 250 kg, sala...)</label>
+                            <input type="text" id="cli-peso" placeholder="Ej: 250 kg, nevera..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center">
+                                <label class="text-[11px] font-bold text-slate-300">Dirección de Origen (Recogida)</label>
+                                <button type="button" onclick="obtenerGPS()" class="text-[10px] text-orange-400 font-black hover:underline cursor-pointer">📍 Usar GPS</button>
+                            </div>
+                            <input type="text" id="cli-origen" placeholder="Barrio o dirección exacta" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                        </div>
+
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-300">Dirección de Destino (Entrega)</label>
+                            <input type="text" id="cli-destino" placeholder="Barrio o dirección exacta" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                        </div>
+
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-300">Detalles adicionales (Observaciones)</label>
+                            <textarea id="cli-obs" rows="2" placeholder="Observaciones..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-medium outline-none"></textarea>
+                        </div>
+
+                        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-base">📸</span>
+                                <div>
+                                    <p class="font-bold text-white text-[11px]">Foto de la Carga</p>
+                                    <p id="foto-estado" class="text-[10px] text-slate-400">Sin foto</p>
+                                </div>
+                            </div>
+                            <input type="file" id="cli-foto-input" accept="image/*" capture="environment" class="hidden" onchange="capturarFoto(event)">
+                            <button type="button" onclick="document.getElementById('cli-foto-input').click()" class="bg-slate-800 hover:bg-slate-700 px-2.5 py-1.5 rounded-lg border border-slate-600 text-orange-400 font-bold text-[11px] cursor-pointer">Cámara / Galería</button>
+                        </div>
+
+                        <button onclick="publicarSolicitudCliente()" class="w-full bg-gradient-to-r from-orange-500 to-amber-500 font-black py-3.5 rounded-xl text-white text-xs shadow-xl uppercase tracking-wider border border-orange-400 cursor-pointer mt-2">
+                            🚀 Publicar mi Solicitud
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-2 pt-2">
+                    <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📋 Mis Solicitudes e Historial</h3>
+                    <div id="lista-mis-cargas" class="space-y-2.5"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. MÓDULO TRANSPORTADOR PROFESIONAL -->
+        <div id="view-transportador" class="space-y-4 hidden">
+            <div id="trans-login" class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-xl text-center space-y-3">
+                <div class="text-4xl">🏍️</div>
+                <h3 class="font-black text-lg text-white">Portal de Transportadores</h3>
+                <p class="text-xs text-slate-300">Ingresa la placa de tu vehículo registrado</p>
+                <input type="text" id="trans-placa-input" placeholder="Ej: ABC123" class="w-full text-center tracking-widest text-lg p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-black uppercase outline-none">
+                <button onclick="verificarTransportadorLogin()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white shadow-lg cursor-pointer">Ingresar al Panel</button>
+            </div>
+
+            <div id="trans-dashboard" class="hidden space-y-3">
+                <!-- Tarjeta de Perfil del Conductor -->
+                <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-2 shadow-lg">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="font-black text-white text-sm" id="trans-perfil-nombre">Conductor</p>
+                            <p class="text-[11px] text-slate-300">C.C: <span id="trans-perfil-doc">--</span> | Tel: <span id="trans-perfil-tel">--</span></p>
+                        </div>
+                        <button onclick="cerrarSesionTrans()" class="bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded-lg text-slate-200 font-bold text-xs cursor-pointer">Salir</button>
+                    </div>
+                    <div class="pt-2 border-t border-slate-700 grid grid-cols-2 gap-2 text-xs">
+                        <p class="text-orange-400 font-bold">Placa: <span id="trans-perfil-placa" class="text-white">--</span></p>
+                        <p class="text-orange-400 font-bold">Vehículo: <span id="trans-perfil-vehiculo" class="text-white">--</span></p>
+                        <p class="text-slate-300">Marca: <span id="trans-perfil-marca" class="text-white">--</span></p>
+                        <p class="text-slate-300">Cilindraje: <span id="trans-perfil-cilindraje" class="text-white">--</span></p>
+                    </div>
+                </div>
+
+                <!-- Pestañas horizontales transportador -->
+                <div class="grid grid-cols-5 gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700 text-[10px] font-black text-center">
+                    <button onclick="switchTabTrans('servicios')" id="tab-t-servicios" class="bg-orange-500 text-white py-2 rounded-lg cursor-pointer">Servicios</button>
+                    <button onclick="switchTabTrans('tarifas')" id="tab-t-tarifas" class="text-slate-400 py-2 rounded-lg cursor-pointer">Tarifas</button>
+                    <button onclick="switchTabTrans('pico')" id="tab-t-pico" class="text-slate-400 py-2 rounded-lg cursor-pointer">Pico & P</button>
+                    <button onclick="switchTabTrans('sub')" id="tab-t-sub" class="text-slate-400 py-2 rounded-lg cursor-pointer">Suscripción</button>
+                    <button onclick="switchTabTrans('viajes')" id="tab-t-viajes" class="text-slate-400 py-2 rounded-lg cursor-pointer">Historial</button>
+                </div>
+
+                <!-- OFERTA DE SERVICIOS -->
+                <div id="t-content-servicios" class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📦 Oferta de Servicios Disponibles</h3>
+                        <span class="text-[10px] bg-orange-500/20 text-orange-400 font-bold px-2 py-0.5 rounded border border-orange-500/30">Acacías y Zona</span>
+                    </div>
+                    <div id="lista-cargas-disponibles" class="space-y-3"></div>
+                </div>
+
+                <!-- GUÍA DE TARIFAS (Exclusivo Acacías con subpestañas) -->
+                <div id="t-content-tarifas" class="space-y-3 hidden">
+                    <div class="bg-slate-800 p-3 rounded-2xl border border-slate-700 space-y-3 text-xs">
+                        <div class="text-center">
+                            <h3 class="font-black text-sm text-orange-400">Tarifas de Motocarguero 2026 (Acacías)</h3>
+                            <p class="text-[10px] text-slate-400">Tarifas oficiales exclusivas para operadores en Acacías</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-1 bg-slate-900 p-1 rounded-xl border border-slate-700 text-[10px] font-bold text-center">
+                            <button onclick="switchSubTabTarifas('urbano')" id="subtab-t-urbano" class="bg-orange-500 text-white py-1.5 rounded-lg cursor-pointer">Urbanos</button>
+                            <button onclick="switchSubTabTarifas('veredas')" id="subtab-t-veredas" class="text-slate-400 py-1.5 rounded-lg cursor-pointer">Veredas</button>
+                            <button onclick="switchSubTabTarifas('municipios')" id="subtab-t-municipios" class="text-slate-400 py-1.5 rounded-lg cursor-pointer">Municipios</button>
+                        </div>
+
+                        <div id="subcontent-t-urbano" class="space-y-1.5">
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Urbano</span><span class="font-black text-orange-400">$25.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Cobalto</span><span class="font-black text-orange-400">$40.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Trasteos</span><span class="font-black text-orange-400">$40.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Escombros</span><span class="font-black text-orange-400">$40.000</span></div>
+                        </div>
+
+                        <div id="subcontent-t-veredas" class="space-y-1.5 hidden">
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda San Nicolas</span><span class="font-black text-orange-400">$35.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda El Centro</span><span class="font-black text-orange-400">$35.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda El Dimante</span><span class="font-black text-orange-400">$35.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda Monte Bello</span><span class="font-black text-orange-400">$50.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda la Esmeralda</span><span class="font-black text-orange-400">$50.000 - $60.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda Montelibano</span><span class="font-black text-orange-400">$60.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda San Calletano</span><span class="font-black text-orange-400">$60.000</span></div>
+                        </div>
+
+                        <div id="subcontent-t-municipios" class="space-y-1.5 hidden">
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Guamal</span><span class="font-black text-orange-400">$60.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Chichimene</span><span class="font-black text-orange-400">$60.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Violeta</span><span class="font-black text-orange-400">$80.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Santa Rosa</span><span class="font-black text-orange-400">$80.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Castilla</span><span class="font-black text-orange-400">$100.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Puerto Canecas</span><span class="font-black text-orange-400">$100.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>San Martin</span><span class="font-black text-orange-400">$130.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Cubarral</span><span class="font-black text-orange-400">$130.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Dinamarca</span><span class="font-black text-orange-400">$130.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Patio Bonito</span><span class="font-black text-orange-400">$130.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Villavicencio</span><span class="font-black text-orange-400">$130.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>San Lorenzo</span><span class="font-black text-orange-400">$150.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>El Dorado</span><span class="font-black text-orange-400">$160.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Granada</span><span class="font-black text-orange-400">$190.000 - $220.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Sancarlos de guaroa</span><span class="font-black text-orange-400">$250.000</span></div>
+                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Surimena</span><span class="font-black text-orange-400">$250.000</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PICO Y PLACA OFICIAL -->
+                <div id="t-content-pico" class="space-y-3 hidden">
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
+                        <div class="flex items-center space-x-2 border-b border-slate-700 pb-2">
+                            <span class="text-2xl">⚠️</span>
+                            <div>
+                                <h3 class="font-black text-sm text-orange-400">Pico y Placa (Villavicencio 2026)</h3>
+                                <p class="text-[10px] text-slate-300 font-bold">Decreto oficial vigente</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2 text-slate-200">
+                            <p><b>📅 Periodo:</b> 26 de enero al 22 de diciembre de 2026[span_2](start_span)[span_2](end_span).</p>
+                            <p><b>⏰ Horarios:</b> De <b>6:30 a.m. a 9:30 a.m.</b> y de <b>5:00 p.m. a 8:00 p.m.</b>[span_3](start_span)[span_3](end_span)</p>
+                            <p><b>🗓️ Días:</b> Lunes a viernes (excepto días festivos). Fines de semana y festivos <b>no aplica</b>[span_4](start_span)[span_4](end_span).</p>
+                            <div class="pt-2 border-t border-slate-700 text-orange-400 font-bold">
+                                Rotación de hoy: Placas terminadas en 3 y 4[span_5](start_span)[span_5](end_span).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUSCRIPCIÓN EMPRESARIAL -->
+                <div id="t-content-sub" class="space-y-3 hidden">
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs text-center shadow-xl">
+                        <div class="w-12 h-12 mx-auto rounded-xl bg-purple-500/20 border-2 border-purple-500/50 flex items-center justify-center text-xl shadow-lg">
+                            💎
+                        </div>
+                        <div>
+                            <h3 class="font-black text-sm text-white">Membresía Mensual Kargass</h3>
+                            <p class="text-[11px] text-slate-300 mt-0.5">Tarifa plana de <b>$45.000 COP</b> • 0% Comisiones</p>
+                        </div>
+                        
+                        <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-700 space-y-2">
+                            <p class="text-[11px] text-slate-400">Cuenta de Recaudo Nequi:</p>
+                            <p class="text-xl font-black text-purple-400 tracking-widest">314 384 2007</p>
+                            <button onclick="copiarNequi()" class="w-full bg-slate-800 hover:bg-slate-700 text-orange-400 font-bold py-2 rounded-xl border border-slate-600 text-xs cursor-pointer">📋 Copiar Número Nequi</button>
+                        </div>
+
+                        <a href="https://wa.me/573507690951?text=Hola%20Central,%20envío%20el%20comprobante%20de%20pago%20de%20mi%20suscripción%20mensual%20Kargass." target="_blank" class="block w-full bg-emerald-600 hover:bg-emerald-700 font-black py-3 rounded-xl text-white shadow-lg">💬 Enviar Soporte por WhatsApp (3507690951)</a>
+                    </div>
+                </div>
+
+                <!-- HISTORIAL VIAJES -->
+                <div id="t-content-viajes" class="space-y-3 hidden">
+                    <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📋 Historial de Mis Viajes Realizados</h3>
+                    <div id="lista-mis-viajes-trans" class="space-y-2">
+                        <div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin viajes completados en este dispositivo.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. MÓDULO AFILIACIÓN PROFESIONAL -->
+        <div id="view-afiliacion" class="space-y-4 hidden">
+            <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 shadow-xl space-y-3 text-xs">
+                <div class="text-center space-y-1">
+                    <div class="text-3xl">🤝</div>
+                    <h3 class="font-black text-base text-white">Únete a la Comunidad Kargass</h3>
+                    <p class="text-slate-300 text-[11px]">La red de transportadores más confiable del Meta</p>
+                </div>
+
+                <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-1.5">
+                    <p class="font-black text-orange-400">💎 Beneficios de Afiliación:</p>
+                    <ul class="list-disc list-inside text-slate-300 space-y-1 text-[11px]">
+                        <li>Tarifa plana mensual de <b>$45.000 COP</b> (equivalente a solo <b>$1.500 diarios</b>).</li>
+                        <li><b>0% de comisión</b> por tus servicios realizados.</li>
+                        <li>Acceso directo a solicitudes de clientes en tiempo real.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2 text-center">
+                    <p class="text-slate-400 text-[11px]">Realiza tu pago Nequi:</p>
+                    <p class="text-base font-black text-white tracking-widest">314 384 2007</p>
+                    <a href="https://wa.me/573507690951?text=Hola%20Central,%20quiero%20afiliarme%20a%20Kargass.%20Adjunto%20mis%20datos%20y%20pago." target="_blank" class="block w-full bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white">💬 Enviar Soporte y Registrarme (WhatsApp)</a>
+                </div>
+
+                <!-- Botón de Apertura de Reglamento Modal -->
+                <div class="pt-1">
+                    <button type="button" onclick="abrirReglamentoModal()" class="w-full bg-slate-900 hover:bg-slate-950 text-orange-400 font-black py-2.5 rounded-xl border border-orange-500/40 text-xs cursor-pointer flex items-center justify-center space-x-2">
+                        <span>📜</span><span>Leer Reglamento Operativo Obligatorio</span>
+                    </button>
+                </div>
+
+                <!-- FORMULARIO NUEVO SOCIO -->
+                <div class="space-y-2 pt-2 border-t border-slate-700">
+                    <h4 class="font-black text-orange-400">📝 Formulario de Postulación</h4>
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-300">Nombre Completo</label>
+                        <input type="text" id="af-nombre" placeholder="Tu nombre" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-300">Cédula</label>
+                            <input type="number" id="af-doc" placeholder="Cédula" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-300">Teléfono Celular</label>
+                            <input type="tel" id="af-tel" placeholder="314..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-300">Tipo de Vehículo</label>
+                            <select id="af-vehiculo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-black outline-none">
+                                <option value="Motocarguero Sencillo">Motocarguero Sencillo</option>
+                                <option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option>
+                                <option value="Camioneta">Camioneta</option>
+                                <option value="Camión">Camión</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-300">Placa</label>
+                            <input type="text" id="af-placa" placeholder="Placa" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-black uppercase outline-none">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-300">Marca Carguero</label>
+                            <input type="text" id="af-marca" placeholder="Ej: AKT, Bajaj" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-bold text-slate-300">Cilindraje</label>
+                            <input type="text" id="af-cilindraje" placeholder="Ej: 200cc, 300cc" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Casilla Obligatoria Aceptación -->
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex items-center space-x-2 mt-2">
+                        <input type="checkbox" id="af-check-reglamento" class="w-4 h-4 accent-orange-500 cursor-pointer">
+                        <label for="af-check-reglamento" class="text-[11px] text-slate-200 font-bold cursor-pointer">He leído y acepto el reglamento operativo obligatorio</label>
+                    </div>
+
+                    <button onclick="enviarPostulacion()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white uppercase tracking-wider cursor-pointer mt-1">Enviar Solicitud a la Central</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. MÓDULO CENTRAL / ADMIN -->
+        <div id="view-central" class="space-y-4 hidden">
+            <div id="admin-login" class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-xl text-center space-y-3">
+                <div class="text-4xl">🛠️</div>
+                <h3 class="font-black text-lg text-white">Central / Administrador</h3>
+                <p class="text-xs text-slate-300">Ingresa la clave de administración</p>
+                <input type="password" id="admin-pass" placeholder="Clave secreta" class="w-full text-center tracking-widest text-lg p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-black outline-none">
+                <button onclick="verificarAdminLogin()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white shadow-lg cursor-pointer">Acceder al Panel Central</button>
+            </div>
+
+            <div id="admin-dashboard" class="hidden space-y-3">
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 flex justify-between items-center text-xs shadow-lg">
+                    <p class="font-black text-orange-400">🛠️ Panel de Control Central</p>
+                    <button onclick="cerrarSesionAdmin()" class="bg-slate-700 hover:bg-slate-600 px-2.5 py-1.5 rounded-lg text-slate-200 font-black cursor-pointer">Cerrar</button>
+                </div>
+
+                <div class="grid grid-cols-4 gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700 text-[10px] font-black text-center">
+                    <button onclick="switchTabAdmin('servicios')" id="tab-a-servicios" class="bg-orange-500 text-white py-2 rounded-lg cursor-pointer">Call Center</button>
+                    <button onclick="switchTabAdmin('conductores')" id="tab-a-cond" class="text-slate-400 py-2 rounded-lg cursor-pointer">Flota</button>
+                    <button onclick="switchTabAdmin('tarifas')" id="tab-a-tarifas" class="text-slate-400 py-2 rounded-lg cursor-pointer">Tarifas</button>
+                    <button onclick="switchTabAdmin('ajustes')" id="tab-a-ajustes" class="text-slate-400 py-2 rounded-lg cursor-pointer">Ajustes</button>
+                </div>
+
+                <!-- CALL CENTER -->
+                <div id="a-content-servicios" class="space-y-2.5">
+                    <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
+                        <span class="font-bold text-slate-300">Servicios Totales en Sistema</span>
+                        <span id="admin-total-servicios" class="font-black text-orange-400 text-sm">0</span>
+                    </div>
+                    <div id="admin-lista-cargas" class="space-y-2.5"></div>
+                </div>
+
+                <!-- GESTIÓN FLOTA / SOCIOS -->
+                <div id="a-content-conductores" class="space-y-2.5 hidden">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Gestión de Flota y Afiliaciones</h3>
+                        <button onclick="agregarConductorAdminModal()" class="bg-orange-500 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold cursor-pointer">+ Agregar Socio</button>
+                    </div>
+                    <div id="admin-lista-conductores" class="space-y-2"></div>
+                </div>
+
+                <!-- GESTIÓN DINÁMICA DE TARIFAS POR MUNICIPIO -->
+                <div id="a-content-tarifas" class="space-y-2.5 hidden">
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
+                        <h3 class="font-black text-sm text-orange-400">⚙️ Editor de Tarifas Regionales</h3>
+                        <p class="text-slate-300">Agrega o edita tarifas específicas por municipio:</p>
+                        <div class="space-y-2">
+                            <input type="text" id="admin-tarifa-mun" placeholder="Municipio (Ej: Guamal)" class="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-white">
+                            <input type="text" id="admin-tarifa-desc" placeholder="Descripción Ruta / Servicio" class="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-white">
+                            <input type="text" id="admin-tarifa-val" placeholder="Valor (Ej: $60.000)" class="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-white">
+                            <button onclick="guardarNuevaTarifaAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2 rounded-lg text-white">💾 Registrar Tarifa por Municipio</button>
+                        </div>
+                        <div id="admin-lista-tarifas-extras" class="space-y-1.5 pt-2"></div>
+                    </div>
+                </div>
+
+                <!-- AJUSTES GLOBALES -->
+                <div id="a-content-ajustes" class="space-y-2.5 hidden">
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
+                        <h3 class="font-black text-sm text-orange-400">⚙️ Ajustes y Configuración Global</h3>
+                        <div>
+                            <label class="text-slate-300 font-bold">Valor Suscripción Mensual (COP)</label>
+                            <input type="number" id="cfg-valor-sus" value="45000" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                        </div>
+                        <div>
+                            <label class="text-slate-300 font-bold">Número Nequi Oficial</label>
+                            <input type="text" id="cfg-nequi" value="3143842007" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                        </div>
+                        <div>
+                            <label class="text-slate-300 font-bold">WhatsApp Central de Soporte</label>
+                            <input type="text" id="cfg-whatsapp" value="3507690951" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                        </div>
+                        <button onclick="guardarAjustesGlobales()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-lg text-white">💾 Guardar Ajustes de la Plataforma</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- VENTANA MODAL REGLAMENTO OPERATIVO OBLIGATORIO -->
+    <div id="modal-reglamento" class="fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white text-slate-900 p-5 rounded-3xl max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto">
+            <div class="text-center">
+                <h3 class="text-lg font-black text-orange-600">REGLAMENTO OPERATIVO</h3>
+                <p class="text-[11px] text-slate-600 font-bold">Normas de la Comunidad Kargass</p>
+            </div>
+            <div class="space-y-2 text-xs text-slate-800 font-medium">
+                <p><b>1. Datos Reales:</b> Mantener la documentación y datos de su vehículo al día.</p>
+                <p><b>2. Puntualidad:</b> Compromiso absoluto con el horario y cuidado de la carga del cliente.</p>
+                <p><b>3. Respeto Tarifario:</b> Cumplimiento estricto de las tarifas oficiales establecidas por la red.</p>
+                <p><b>4. Suscripción:</b> Pago puntual de la membresía mensual para conservar activo el perfil en la plataforma.</p>
+            </div>
+            <button onclick="cerrarReglamentoModal()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white text-xs cursor-pointer">Entendido y Cerrado</button>
+        </div>
+    </div>
+
+    <script>
+        const listaMunicipiosMeta = [
+            "Villavicencio", "Acacías", "Barranca de Upía", "Cabuyaro", "Castilla la Nueva",
+            "Cubarral", "Cumaral", "El Calvario", "El Castillo", "El Dorado",
+            "Fuente de Oro", "Granada", "Guamal", "La Macarena", "La Uribe",
+            "Lejanías", "Mapiripán", "Mesetas", "Puerto Concordia", "Puerto Gaitán",
+            "Puerto Lleras", "Puerto López", "Puerto Rico", "Restrepo",
+            "San Carlos de Guaroa", "San Juan de Arama", "San Juanito", "San Martín", "Vista Hermosa"
+        ];
+
+        let state = {
+            cargas: JSON.parse(localStorage.getItem('kargass_cargas')) || [
+                { id: 1711200, clienteDoc: "123456", clienteNombre: "David Martínez", clienteTel: "3143842007", tipoZona: "Local (Urbano)", municipio: "Acacías", horario: "⚡ Cargue Inmediato", vehiculo: "Motocarguero Sencillo", peso: "250 kg", origen: "Calle 10A 32-07 (Acacías)", destino: "Calle 14#32-45 (Acacías)", observaciones: "Caja frágil", foto: null, estado: "Recibiendo Ofertas Libres", fechaCreacion: "10:00 AM" }
+            ],
+            conductores: JSON.parse(localStorage.getItem('kargass_conductores')) || [
+                { placa: "ABC123", nombre: "Pedro Gómez", doc: "11223344", tel: "3101234567", vehiculo: "Motocarguero Sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo" }
+            ],
+            tarifasExtras: JSON.parse(localStorage.getItem('kargass_tarifas_extras')) || [],
+            clienteActualDoc: localStorage.getItem('kargass_cliente_doc') || null,
+            transActualPlaca: localStorage.getItem('kargass_trans_placa') || null,
+            isAdmin: false,
+            tipoZona: "Local (Urbano)",
+            horarioTipo: "Inmediato",
+            fotoBase64: null
+        };
+
+        function guardarDatosLocal() {
+            localStorage.setItem('kargass_cargas', JSON.stringify(state.cargas));
+            localStorage.setItem('kargass_conductores', JSON.stringify(state.conductores));
+            localStorage.setItem('kargass_tarifas_extras', JSON.stringify(state.tarifasExtras));
+            if (state.clienteActualDoc) localStorage.setItem('kargass_cliente_doc', state.clienteActualDoc);
+            else localStorage.removeItem('kargass_cliente_doc');
+            if (state.transActualPlaca) localStorage.setItem('kargass_trans_placa', state.transActualPlaca);
+            else localStorage.removeItem('kargass_trans_placa');
+        }
+
+        function poblarSelectMunicipios() {
+            document.querySelectorAll('.select-municipios').forEach(sel => {
+                const actual = sel.value || "Acacías";
+                sel.innerHTML = listaMunicipiosMeta.map(m => `<option value="${m}">${m}</option>`).join('');
+                sel.value = actual;
+            });
+        }
+
+        function mostrarSelectorRol() {
+            document.getElementById('modal-selector').classList.remove('hidden');
+        }
+
+        function abrirReglamentoModal() {
+            document.getElementById('modal-reglamento').classList.remove('hidden');
+        }
+
+        function cerrarReglamentoModal() {
+            document.getElementById('modal-reglamento').classList.add('hidden');
+        }
+
+        function irModulo(mod) {
+            document.getElementById('modal-selector').classList.add('hidden');
+            document.getElementById('view-cliente').classList.add('hidden');
+            document.getElementById('view-transportador').classList.add('hidden');
+            document.getElementById('view-afiliacion').classList.add('hidden');
+            document.getElementById('view-central').classList.add('hidden');
+            poblarSelectMunicipios();
+
+            if (mod === 'cliente') {
+                document.getElementById('view-cliente').classList.remove('hidden');
+                if (state.clienteActualDoc) cargarPerfilCliente(state.clienteActualDoc);
+                else {
+                    document.getElementById('cliente-login').classList.remove('hidden');
+                    document.getElementById('cliente-dashboard').classList.add('hidden');
+                }
+            } else if (mod === 'transportador') {
+                document.getElementById('view-transportador').classList.remove('hidden');
+                if (state.transActualPlaca) {
+                    let cond = state.conductores.find(c => c.placa === state.transActualPlaca);
+                    if (cond) cargarDashboardTrans(cond);
+                    else {
+                        document.getElementById('trans-login').classList.remove('hidden');
+                        document.getElementById('trans-dashboard').classList.add('hidden');
+                    }
+                } else {
+                    document.getElementById('trans-login').classList.remove('hidden');
+                    document.getElementById('trans-dashboard').classList.add('hidden');
+                }
+            } else if (mod === 'afiliacion') {
+                document.getElementById('view-afiliacion').classList.remove('hidden');
+            } else if (mod === 'central') {
+                document.getElementById('view-central').classList.remove('hidden');
+                if (state.isAdmin) {
+                    document.getElementById('admin-login').classList.add('hidden');
+                    document.getElementById('admin-dashboard').classList.remove('hidden');
+                    renderAdminServicios();
+                    renderAdminConductores();
+                    renderAdminTarifasExtras();
+                } else {
+                    document.getElementById('admin-login').classList.remove('hidden');
+                    document.getElementById('admin-dashboard').classList.add('hidden');
+                }
+            }
+        }
+
+        // CLIENTE JS
+        function verificarClienteLogin() {
+            const doc = document.getElementById('cli-doc-input').value.trim();
+            if (!doc) { alert("Ingresa tu cédula"); return; }
+            state.clienteActualDoc = doc;
+            guardarDatosLocal();
+            cargarPerfilCliente(doc);
+        }
+
+        function cargarPerfilCliente(doc) {
+            document.getElementById('cliente-login').classList.add('hidden');
+            document.getElementById('cliente-dashboard').classList.remove('hidden');
+            document.getElementById('cli-perfil-doc').innerText = doc;
+            const guardado = JSON.parse(localStorage.getItem('kargass_memoria_cli_' + doc));
+            if (guardado) {
+                document.getElementById('cli-nombre').value = guardado.nombre || "";
+                document.getElementById('cli-tel').value = guardado.tel || "";
+            }
+            renderHistorialCliente();
+        }
+
+        function cerrarSesionCliente() {
+            state.clienteActualDoc = null;
+            guardarDatosLocal();
+            document.getElementById('cliente-dashboard').classList.add('hidden');
+            document.getElementById('cliente-login').classList.remove('hidden');
+        }
+
+        function setTipoZona(tipo) {
+            state.tipoZona = tipo;
+            const btnU = document.getElementById('btn-tipo-urbano');
+            const btnI = document.getElementById('btn-tipo-inter');
+            if (tipo === 'Local (Urbano)') {
+                btnU.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+                btnI.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+            } else {
+                btnI.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+                btnU.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+            }
+        }
+
+        function setHorario(horario) {
+            state.horarioTipo = horario;
+            const btnI = document.getElementById('btn-horario-inmediato');
+            const btnP = document.getElementById('btn-horario-programado');
+            const box = document.getElementById('box-hora-programada');
+            if (horario === 'Inmediato') {
+                btnI.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";
+                btnP.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";
+                box.classList.add('hidden');
+            } else {
+                btnP.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";
+                btnI.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";
+                box.classList.remove('hidden');
+            }
+        }
+
+        function obtenerGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    document.getElementById('cli-origen').value = `GPS: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
+                    alert("📍 Coordenadas capturadas");
+                }, () => alert("No se pudo obtener GPS"));
+            } else alert("GPS no soportado");
+        }
+
+        function capturarFoto(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    state.fotoBase64 = evt.target.result;
+                    document.getElementById('foto-estado').innerText = "¡Foto cargada!";
+                    document.getElementById('foto-estado').className = "text-[10px] text-green-400 font-bold";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function publicarSolicitudCliente() {
+            const nombre = document.getElementById('cli-nombre').value.trim();
+            const tel = document.getElementById('cli-tel').value.trim();
+            const peso = document.getElementById('cli-peso').value.trim();
+            const origen = document.getElementById('cli-origen').value.trim();
+            const destino = document.getElementById('cli-destino').value.trim();
+
+            if (!nombre || !tel || !peso || !origen || !destino) {
+                alert("Completa todos los campos requeridos"); return;
+            }
+
+            localStorage.setItem('kargass_memoria_cli_' + state.clienteActualDoc, JSON.stringify({ nombre, tel }));
+            const horaCargue = state.horarioTipo === 'Inmediato' ? '⚡ Cargue Inmediato' : '⏰ Programado: ' + (document.getElementById('cli-hora-input').value || 'Acordado');
+
+            const nuevaCarga = {
+                id: Date.now(),
+                clienteDoc: state.clienteActualDoc,
+                clienteNombre: nombre,
+                clienteTel: tel,
+                tipoZona: state.tipoZona,
+                municipio: document.getElementById('cli-mun-local').value,
+                horario: horaCargue,
+                vehiculo: document.getElementById('cli-vehiculo').value,
+                peso: peso,
+                origen: origen,
+                destino: destino,
+                observaciones: document.getElementById('cli-obs').value.trim(),
+                foto: state.fotoBase64,
+                estado: "Recibiendo Ofertas Libres",
+                fechaCreacion: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+
+            state.cargas.unshift(nuevaCarga);
+            guardarDatosLocal();
+            alert("🚀 ¡Solicitud publicada con éxito!");
+            document.getElementById('cli-peso').value = '';
+            document.getElementById('cli-origen').value = '';
+            document.getElementById('cli-destino').value = '';
+            document.getElementById('cli-obs').value = '';
+            document.getElementById('foto-estado').innerText = "Sin foto";
+            state.fotoBase64 = null;
+            renderHistorialCliente();
+        }
+
+        function renderHistorialCliente() {
+            const el = document.getElementById('lista-mis-cargas');
+            const mis = state.cargas.filter(c => c.clienteDoc === state.clienteActualDoc);
+            if (mis.length === 0) {
+                el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin solicitudes aún.</div>';
+                return;
+            }
+            el.innerHTML = mis.map(c => `
+                <div class="bg-slate-800 p-3 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-lg">
+                    <div class="flex justify-between items-start border-b border-slate-700 pb-1.5">
+                        <span class="bg-orange-500/20 text-orange-400 font-black px-2 py-0.5 rounded-lg text-[10px]">${c.tipoZona}</span>
+                        <span class="text-orange-400 font-black text-[11px]">${c.estado}</span>
+                    </div>
+                    <p class="font-black text-white">📦 ${c.origen} ➔ ${c.destino}</p>
+                    <p><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
+                    ${c.foto ? `<img src="${c.foto}" class="w-full h-24 object-cover rounded-xl border border-slate-700">` : ''}
+                </div>
+            `).join('');
+        }
+
+        // TRANSPORTADOR JS
+        function verificarTransportadorLogin() {
+            const placa = document.getElementById('trans-placa-input').value.trim().toUpperCase();
+            if (!placa) { alert("Ingresa tu placa"); return; }
+            
+            let cond = state.conductores.find(c => c.placa === placa);
+            if (!cond) {
+                alert("⚠️ Placa no encontrada o pendiente de aprobación en la Central.");
+                return;
+            }
+
+            if (cond.estado !== 'Activo') {
+                alert("⚠️ Tu cuenta se encuentra en estado: " + cond.estado + ". Comunícate con la Central.");
+                return;
+            }
+
+            state.transActualPlaca = placa;
+            guardarDatosLocal();
+            cargarDashboardTrans(cond);
+        }
+
+        function cargarDashboardTrans(cond) {
+            document.getElementById('trans-login').classList.add('hidden');
+            document.getElementById('trans-dashboard').classList.remove('hidden');
+            
+            document.getElementById('trans-perfil-nombre').innerText = cond.nombre || "Conductor";
+            document.getElementById('trans-perfil-doc').innerText = cond.doc || "N/A";
+            document.getElementById('trans-perfil-tel').innerText = cond.tel || "N/A";
+            document.getElementById('trans-perfil-placa').innerText = cond.placa;
+            document.getElementById('trans-perfil-vehiculo').innerText = cond.vehiculo || "Motocarguero";
+            document.getElementById('trans-perfil-marca').innerText = cond.marca || "AKT";
+            document.getElementById('trans-perfil-cilindraje').innerText = cond.cilindraje || "200cc";
+
+            renderCargasDisponiblesTrans();
+        }
+
+        function cerrarSesionTrans() {
+            state.transActualPlaca = null;
+            guardarDatosLocal();
+            document.getElementById('trans-dashboard').classList.add('hidden');
+            document.getElementById('trans-login').classList.remove('hidden');
+        }
+
+        function switchTabTrans(tab) {
+            ['servicios', 'tarifas', 'pico', 'sub', 'viajes'].forEach(t => {
+                document.getElementById('t-content-' + t).classList.add('hidden');
+                document.getElementById('tab-t-' + t).className = "text-slate-400 py-2 rounded-lg cursor-pointer";
+            });
+            document.getElementById('t-content-' + tab).classList.remove('hidden');
+            document.getElementById('tab-t-' + tab).className = "bg-orange-500 text-white py-2 rounded-lg cursor-pointer";
+        }
+
+        function switchSubTabTarifas(sub) {
+            ['urbano', 'veredas', 'municipios'].forEach(s => {
+                document.getElementById('subcontent-t-' + s).classList.add('hidden');
+                document.getElementById('subtab-t-' + s).className = "text-slate-400 py-1.5 rounded-lg cursor-pointer";
+            });
+            document.getElementById('subcontent-t-' + sub).classList.remove('hidden');
+            document.getElementById('subtab-t-' + sub).className = "bg-orange-500 text-white py-1.5 rounded-lg cursor-pointer";
+        }
+
+        function renderCargasDisponiblesTrans() {
+            const el = document.getElementById('lista-cargas-disponibles');
+            const filtradas = state.cargas.filter(c => c.municipio === "Acacías" || c.tipoZona === "Intermunicipal");
+
+            if (filtradas.length === 0) {
+                el.innerHTML = '<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay acarreos disponibles en este momento para Acacías.</div>';
+                return;
+            }
+            el.innerHTML = filtradas.map(c => `
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-md">
+                    <div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1">
+                        <span>📍 ${c.municipio} (${c.tipoZona})</span>
+                        <span>🛺 ${c.vehiculo}</span>
+                    </div>
+                    <p class="font-black text-white text-sm">${c.origen} ➔ ${c.destino}</p>
+                    <p class="text-slate-300"><b>Carga:</b> ${c.peso} | <b>Horario:</b> ${c.horario}</p>
+                    <p class="text-slate-400"><b>Cliente:</b> ${c.clienteNombre} (${c.clienteTel})</p>
+                    ${c.observaciones ? `<p class="text-slate-400 italic">"${c.observaciones}"</p>` : ''}
+                    <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20vi%20tu%20acarreo%20en%20Kargass%20y%20estoy%20listo%20para%20realizarlo." target="_blank" class="block text-center bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white mt-1 shadow">💬 Acordar por WhatsApp</a>
+                </div>
+            `).join('');
+        }
+
+        function copiarNequi() {
+            navigator.clipboard.writeText("3143842007");
+            alert("✅ Número Nequi copiado: 3143842007");
+        }
+
+        // AFILIACIÓN JS
+        function enviarPostulacion() {
+            const nombre = document.getElementById('af-nombre').value.trim();
+            const doc = document.getElementById('af-doc').value.trim();
+            const tel = document.getElementById('af-tel').value.trim();
+            const vehiculo = document.getElementById('af-vehiculo').value;
+            const placa = document.getElementById('af-placa').value.trim().toUpperCase();
+            const marca = document.getElementById('af-marca').value.trim();
+            const cilindraje = document.getElementById('af-cilindraje').value.trim();
+            const acepto = document.getElementById('af-check-reglamento').checked;
+
+            if (!nombre || !doc || !tel || !placa || !marca || !cilindraje) {
+                alert("⚠️ Por favor completa todos los campos del formulario.");
+                return;
+            }
+
+            if (!acepto) {
+                alert("⚠️ Debes leer y aceptar obligatoriamente el Reglamento Operativo para continuar.");
+                return;
+            }
+
+            state.conductores.push({ placa, nombre, doc, tel, vehiculo, marca, cilindraje, municipio: "Acacías", estado: "Pendiente Pago" });
+            guardarDatosLocal();
+            alert("🚀 ¡Postulación enviada con éxito a la Central! Recuerda enviar tu soporte por WhatsApp.");
+            
+            document.getElementById('af-nombre').value = '';
+            document.getElementById('af-doc').value = '';
+            document.getElementById('af-tel').value = '';
+            document.getElementById('af-placa').value = '';
+            document.getElementById('af-marca').value = '';
+            document.getElementById('af-cilindraje').value = '';
+            document.getElementById('af-check-reglamento').checked = false;
+            irModulo('transportador');
+        }
+
+        // CENTRAL / ADMIN JS
+        function verificarAdminLogin() {
+            const pass = document.getElementById('admin-pass').value.trim();
+            if (pass === "1234") {
+                state.isAdmin = true;
+                document.getElementById('admin-login').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                renderAdminServicios();
+                renderAdminConductores();
+                renderAdminTarifasExtras();
+            } else alert("Clave incorrecta (Prueba 1234)");
+        }
+
+        function cerrarSesionAdmin() {
+            state.isAdmin = false;
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('admin-login').classList.remove('hidden');
+        }
+
+        function switchTabAdmin(tab) {
+            ['servicios', 'conductores', 'tarifas', 'ajustes'].forEach(t => {
+                document.getElementById('a-content-' + t).classList.add('hidden');
+                document.getElementById('tab-a-' + t).className = "text-slate-400 py-2 rounded-lg cursor-pointer";
+            });
+            document.getElementById('a-content-' + tab).classList.remove('hidden');
+            document.getElementById('tab-a-' + tab).className = "bg-orange-500 text-white py-2 rounded-lg cursor-pointer";
+        }
+
+        function renderAdminServicios() {
+            document.getElementById('admin-total-servicios').innerText = state.cargas.length;
+            const el = document.getElementById('admin-lista-cargas');
+            if (state.cargas.length === 0) { 
+                el.innerHTML = '<p class="text-xs text-slate-400">Sin servicios.</p>'; 
+                return; 
+            }
+            el.innerHTML = state.cargas.map(c => `
+                <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 text-xs space-y-2 shadow-md">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-1">
+                        <span class="font-bold text-orange-400">[${c.municipio}] ${c.clienteNombre} (${c.clienteTel})</span>
+                        <div class="space-x-1">
+                            <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20te%20contacto%20de%20la%20Central%20Kargass%20sobre%20tu%20servicio." target="_blank" class="bg-emerald-600 px-2 py-1 rounded text-white font-bold">WhatsApp</a>
+                            <button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 px-2 py-1 rounded text-white font-bold">Eliminar</button>
+                        </div>
+                    </div>
+                    ${c.foto ? `<img src="${c.foto}" class="w-full h-20 object-cover rounded-lg border border-slate-700">` : ''}
+                    <p class="text-white"><b>Vehículo:</b> ${c.vehiculo}</p>
+                    <p class="text-slate-300"><b>Ruta:</b> ${c.origen} ➔ ${c.destino}</p>
+                    <p class="text-slate-400">Estado: ${c.estado}</p>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-300">Forzar asignación a conductor:</label>
+                        <select onchange="asignarConductorServicio(${c.id}, this.value)" class="w-full mt-0.5 p-1.5 bg-slate-900 border border-slate-700 rounded text-xs text-white">
+                            <option>-- Seleccionar Conductor Activo --</option>
+                            ${state.conductores.filter(co => co.estado === 'Activo').map(cond => `<option value="${cond.nombre}">${cond.nombre} (${cond.placa})</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function asignarConductorServicio(cargaId, nombreConductor) {
+            let carga = state.cargas.find(c => c.id === cargaId);
+            if (carga) {
+                carga.estado = "Asignado a: " + nombreConductor;
+                guardarDatosLocal();
+                renderAdminServicios();
+                alert("✅ Servicio asignado exitosamente a " + nombreConductor);
+            }
+        }
+
+        function eliminarCargaAdmin(id) {
+            if (confirm("¿Eliminar este servicio?")) {
+                state.cargas = state.cargas.filter(c => c.id !== id);
+                guardarDatosLocal();
+                renderAdminServicios();
+            }
+        }
+
+        function renderAdminConductores() {
+            const el = document.getElementById('admin-lista-conductores');
+            if (state.conductores.length === 0) {
+                el.innerHTML = '<p class="text-xs text-slate-400">Sin transportadores registrados.</p>';
+                return;
+            }
+            el.innerHTML = state.conductores.map((cond, idx) => `
+                <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 text-xs space-y-1.5 shadow">
+                    <div class="flex justify-between items-center">
+                        <p class="font-black text-white">${cond.nombre} (<span class="text-orange-400">${cond.placa}</span>)</p>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${cond.estado === 'Activo' ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}">${cond.estado}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-300">C.C: ${cond.doc} • Tel: ${cond.tel} • ${cond.vehiculo} (${cond.marca} - ${cond.cilindraje})</p>
+                    <div class="flex space-x-2 pt-1">
+                        ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold">Aceptar / Activar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold">Suspender</button>`}
+                        <button onclick="eliminarConductorAdmin(${idx})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold">Eliminar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function cambiarEstadoConductor(idx, nuevoEstado) {
+            state.conductores[idx].estado = nuevoEstado;
+            guardarDatosLocal();
+            renderAdminConductores();
+            alert("✅ Estado del conductor actualizado a: " + nuevoEstado);
+        }
+
+        function agregarConductorAdminModal() {
+            const placa = prompt("Placa del transportador:");
+            const nombre = prompt("Nombre completo:");
+            const doc = prompt("Cédula:");
+            const tel = prompt("Teléfono:");
+            if (placa && nombre) {
+                state.conductores.push({ placa: placa.toUpperCase(), nombre, doc: doc || "N/A", tel: tel || "N/A", vehiculo: "Motocarguero Sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo" });
+                guardarDatosLocal();
+                renderAdminConductores();
+                alert("✅ Transportador agregado y activado");
+            }
+        }
+
+        function eliminarConductorAdmin(idx) {
+            if (confirm("¿Eliminar transportador del sistema?")) {
+                state.conductores.splice(idx, 1);
+                guardarDatosLocal();
+                renderAdminConductores();
+            }
+        }
+
+        function guardarNuevaTarifaAdmin() {
+            const mun = document.getElementById('admin-tarifa-mun').value.trim();
+            const desc = document.getElementById('admin-tarifa-desc').value.trim();
+            const val = document.getElementById('admin-tarifa-val').value.trim();
+            if (!mun || !desc || !val) { alert("Completa todos los campos de tarifa"); return; }
+            state.tarifasExtras.push({ municipio: mun, descripcion: desc, valor: val });
+            guardarDatosLocal();
+            document.getElementById('admin-tarifa-mun').value = '';
+            document.getElementById('admin-tarifa-desc').value = '';
+            document.getElementById('admin-tarifa-val').value = '';
+            renderAdminTarifasExtras();
+            alert("✅ Tarifa regional registrada correctamente");
+        }
+
+        function renderAdminTarifasExtras() {
+            const el = document.getElementById('admin-lista-tarifas-extras');
+            if (state.tarifasExtras.length === 0) { el.innerHTML = '<p class="text-[11px] text-slate-400">Sin tarifas adicionales registradas.</p>'; return; }
+            el.innerHTML = state.tarifasExtras.map((t, idx) => `
+                <div class="bg-slate-900 p-2 rounded-lg border border-slate-700 flex justify-between items-center text-[11px]">
+                    <div><span class="text-orange-400 font-bold">[${t.municipio}]</span> ${t.descripcion}: <b class="text-white">${t.valor}</b></div>
+                    <button onclick="state.tarifasExtras.splice(${idx},1); guardarDatosLocal(); renderAdminTarifasExtras();" class="text-red-400 font-bold">Eliminar</button>
+                </div>
+            `).join('');
+        }
+
+        function guardarAjustesGlobales() {
+            alert("✅ Ajustes globales guardados con éxito.");
+        }
+
+        window.onload = function() {
+            poblarSelectMunicipios();
+        };
+    </script>
+</body>
+</html>
