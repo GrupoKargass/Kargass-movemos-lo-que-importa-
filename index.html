@@ -96,11 +96,11 @@
                         <div class="grid grid-cols-2 gap-2">
                             <div>
                                 <label class="text-[11px] font-bold text-slate-300">Nombre Completo</label>
-                                <input type="text" id="cli-nombre" placeholder="David Martínez" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                                <input type="text" id="cli-nombre" placeholder="Tu nombre" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
                             </div>
                             <div>
                                 <label class="text-[11px] font-bold text-slate-300">Teléfono Celular</label>
-                                <input type="tel" id="cli-tel" placeholder="3143842007" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                                <input type="tel" id="cli-tel" placeholder="314..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
                             </div>
                         </div>
                     </div>
@@ -142,7 +142,7 @@
                         </div>
 
                         <div>
-                            <label class="text-[11px] font-bold text-slate-300">Peso o Referencia (Ej: 250 kg, sala...)</label>
+                            <label class="text-[11px] font-bold text-slate-300">Peso o Referencia (Ej: 250 kg, nevera...)</label>
                             <input type="text" id="cli-peso" placeholder="Ej: 250 kg, nevera..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
                         </div>
 
@@ -246,39 +246,15 @@
                         </div>
 
                         <div id="subcontent-t-urbano" class="space-y-1.5">
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Urbano</span><span class="font-black text-orange-400">$25.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Cobalto</span><span class="font-black text-orange-400">$40.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Trasteos</span><span class="font-black text-orange-400">$40.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Escombros</span><span class="font-black text-orange-400">$40.000</span></div>
+                            <div id="contenedor-tarifas-urbano" class="space-y-1.5"></div>
                         </div>
 
                         <div id="subcontent-t-veredas" class="space-y-1.5 hidden">
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda San Nicolas</span><span class="font-black text-orange-400">$35.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda El Centro</span><span class="font-black text-orange-400">$35.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda El Dimante</span><span class="font-black text-orange-400">$35.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda Monte Bello</span><span class="font-black text-orange-400">$50.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda la Esmeralda</span><span class="font-black text-orange-400">$50.000 - $60.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda Montelibano</span><span class="font-black text-orange-400">$60.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Vereda San Calletano</span><span class="font-black text-orange-400">$60.000</span></div>
+                            <div id="contenedor-tarifas-veredas" class="space-y-1.5"></div>
                         </div>
 
                         <div id="subcontent-t-municipios" class="space-y-1.5 hidden">
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Guamal</span><span class="font-black text-orange-400">$60.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Chichimene</span><span class="font-black text-orange-400">$60.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Violeta</span><span class="font-black text-orange-400">$80.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Santa Rosa</span><span class="font-black text-orange-400">$80.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Castilla</span><span class="font-black text-orange-400">$100.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Puerto Canecas</span><span class="font-black text-orange-400">$100.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>San Martin</span><span class="font-black text-orange-400">$130.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Cubarral</span><span class="font-black text-orange-400">$130.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Dinamarca</span><span class="font-black text-orange-400">$130.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Patio Bonito</span><span class="font-black text-orange-400">$130.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Villavicencio</span><span class="font-black text-orange-400">$130.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>San Lorenzo</span><span class="font-black text-orange-400">$150.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>El Dorado</span><span class="font-black text-orange-400">$160.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Granada</span><span class="font-black text-orange-400">$190.000 - $220.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Sancarlos de guaroa</span><span class="font-black text-orange-400">$250.000</span></div>
-                            <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>Surimena</span><span class="font-black text-orange-400">$250.000</span></div>
+                            <div id="contenedor-tarifas-municipios" class="space-y-1.5"></div>
                         </div>
                     </div>
                 </div>
@@ -293,11 +269,11 @@
                             </div>
                         </div>
                         <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2 text-slate-200">
-                            <p><b>📅 Periodo:</b> 26 de enero al 22 de diciembre de 2026[span_0](start_span)[span_0](end_span).</p>
-                            <p><b>⏰ Horarios:</b> De <b>6:30 a.m. a 9:30 a.m.</b> y de <b>5:00 p.m. a 8:00 p.m.</b>[span_1](start_span)[span_1](end_span)</p>
-                            <p><b>🗓️ Días:</b> Lunes a viernes (excepto días festivos). Fines de semana y festivos <b>no aplica</b>[span_2](start_span)[span_2](end_span).</p>
-                            <div class="pt-2 border-t border-slate-700 text-orange-400 font-bold">
-                                Rotación de hoy: Placas terminadas en 3 y 4[span_3](start_span)[span_3](end_span).
+                            <p><b>📅 Periodo:</b> 26 de enero al 22 de diciembre de 2026.</p>
+                            <p><b>⏰ Horarios:</b> De <b>6:30 a.m. a 9:30 a.m.</b> y de <b>5:00 p.m. a 8:00 p.m.</b></p>
+                            <p><b>🗓️ Regla:</b> Lunes a viernes (excepto días festivos). Fines de semana y festivos <b>no aplica</b>.</p>
+                            <div id="pico-placa-hoy" class="pt-2 border-t border-slate-700 text-orange-400 font-bold text-sm">
+                                Cargando restricción de hoy...
                             </div>
                         </div>
                     </div>
@@ -310,16 +286,16 @@
                         </div>
                         <div>
                             <h3 class="font-black text-sm text-white">Membresía Mensual Kargass</h3>
-                            <p class="text-[11px] text-slate-300 mt-0.5">Tarifa plana de <b>$45.000 COP</b> • 0% Comisiones</p>
+                            <p class="text-[11px] text-slate-300 mt-0.5">Tarifa plana de <b id="sub-valor-text">$45.000 COP</b> • 0% Comisiones</p>
                         </div>
                         
                         <div class="bg-slate-900 p-3.5 rounded-2xl border border-slate-700 space-y-2">
                             <p class="text-[11px] text-slate-400">Cuenta de Recaudo Nequi:</p>
-                            <p class="text-xl font-black text-purple-400 tracking-widest">314 384 2007</p>
+                            <p id="sub-nequi-text" class="text-xl font-black text-purple-400 tracking-widest">314 384 2007</p>
                             <button onclick="copiarNequi()" class="w-full bg-slate-800 hover:bg-slate-700 text-orange-400 font-bold py-2 rounded-xl border border-slate-600 text-xs cursor-pointer">📋 Copiar Número Nequi</button>
                         </div>
 
-                        <a href="https://wa.me/573507690951?text=Hola%20Central,%20envío%20el%20comprobante%20de%20pago%20de%20mi%20suscripción%20mensual%20Kargass." target="_blank" class="block w-full bg-emerald-600 hover:bg-emerald-700 font-black py-3 rounded-xl text-white shadow-lg">💬 Enviar Soporte por WhatsApp (3507690951)</a>
+                        <a id="sub-wa-btn" href="https://wa.me/573507690951?text=Hola%20Central,%20envío%20el%20comprobante%20de%20pago%20de%20mi%20suscripción%20mensual%20Kargass." target="_blank" class="block w-full bg-emerald-600 hover:bg-emerald-700 font-black py-3 rounded-xl text-white shadow-lg">💬 Enviar Soporte por WhatsApp</a>
                     </div>
                 </div>
 
@@ -344,7 +320,7 @@
                 <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-1.5">
                     <p class="font-black text-orange-400">💎 Beneficios de Afiliación:</p>
                     <ul class="list-disc list-inside text-slate-300 space-y-1 text-[11px]">
-                        <li>Tarifa plana mensual de <b>$45.000 COP</b> (equivalente a solo <b>$1.500 diarios</b>).</li>
+                        <li>Tarifa plana mensual de <b id="af-valor-sub">$45.000 COP</b> (equivalente a solo <b>$1.500 diarios</b>).</li>
                         <li><b>0% de comisión</b> por tus servicios realizados.</li>
                         <li>Acceso directo a solicitudes de clientes en tiempo real.</li>
                     </ul>
@@ -352,8 +328,8 @@
 
                 <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2 text-center">
                     <p class="text-slate-400 text-[11px]">Realiza tu pago Nequi:</p>
-                    <p class="text-base font-black text-white tracking-widest">314 384 2007</p>
-                    <a href="https://wa.me/573507690951?text=Hola%20Central,%20quiero%20afiliarme%20a%20Kargass.%20Adjunto%20mis%20datos%20y%20pago." target="_blank" class="block w-full bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white">💬 Enviar Soporte y Registrarme (WhatsApp)</a>
+                    <p id="af-nequi-num" class="text-base font-black text-white tracking-widest">314 384 2007</p>
+                    <a id="af-wa-btn" href="https://wa.me/573507690951?text=Hola%20Central,%20quiero%20afiliarme%20a%20Kargass.%20Adjunto%20mis%20datos%20y%20pago." target="_blank" class="block w-full bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white">💬 Enviar Soporte y Registrarme (WhatsApp)</a>
                 </div>
 
                 <div class="pt-1">
@@ -448,25 +424,88 @@
 
                 <!-- GESTIÓN FLOTA / SOCIOS -->
                 <div id="a-content-conductores" class="space-y-2.5 hidden">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Gestión de Flota y Afiliaciones</h3>
-                        <button onclick="agregarConductorAdminModal()" class="bg-orange-500 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold cursor-pointer">+ Agregar Socio</button>
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs shadow-xl">
+                        <h3 class="font-black text-sm text-orange-400" id="admin-cond-form-title">➕ Registrar Nuevo Transportador</h3>
+                        <input type="hidden" id="admin-cond-idx" value="-1">
+                        
+                        <div class="space-y-2">
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Nombre Completo</label>
+                                <input type="text" id="adm-c-nombre" placeholder="Nombre completo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-300">Cédula</label>
+                                    <input type="number" id="adm-c-doc" placeholder="Cédula" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-300">Teléfono</label>
+                                    <input type="tel" id="adm-c-tel" placeholder="Teléfono" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-300">Tipo Vehículo</label>
+                                    <select id="adm-c-vehiculo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                        <option value="Motocarguero Sencillo">Motocarguero Sencillo</option>
+                                        <option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option>
+                                        <option value="Camioneta">Camioneta</option>
+                                        <option value="Camión">Camión</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-300">Placa</label>
+                                    <input type="text" id="adm-c-placa" placeholder="Placa" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-black uppercase outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-300">Marca</label>
+                                    <input type="text" id="adm-c-marca" placeholder="Ej: AKT, Bajaj" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-300">Cilindraje</label>
+                                    <input type="text" id="adm-c-cilindraje" placeholder="Ej: 200cc" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                </div>
+                            </div>
+
+                            <div class="flex space-x-2 pt-1">
+                                <button onclick="guardarConductorAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow">💾 Guardar Transportador</button>
+                                <button onclick="limpiarFormConductorAdmin()" class="bg-slate-700 hover:bg-slate-600 px-3 py-2.5 rounded-xl text-slate-200 font-bold">Limpiar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-2">
+                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Flota de Transportadores</h3>
                     </div>
                     <div id="admin-lista-conductores" class="space-y-2"></div>
                 </div>
 
-                <!-- GESTIÓN DINÁMICA DE TARIFAS POR MUNICIPIO -->
+                <!-- GESTIÓN DINÁMICA DE TARIFAS -->
                 <div id="a-content-tarifas" class="space-y-2.5 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
-                        <h3 class="font-black text-sm text-orange-400">⚙️ Editor de Tarifas Regionales</h3>
-                        <p class="text-slate-300">Agrega o edita tarifas específicas por municipio:</p>
+                        <h3 class="font-black text-sm text-orange-400">⚙️ Editor de Tarifas (Acacías)</h3>
+                        <p class="text-slate-300">Agrega o edita tarifas específicas por categoría:</p>
                         <div class="space-y-2">
-                            <input type="text" id="admin-tarifa-mun" placeholder="Municipio (Ej: Guamal)" class="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-white">
-                            <input type="text" id="admin-tarifa-desc" placeholder="Descripción Ruta / Servicio" class="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-white">
-                            <input type="text" id="admin-tarifa-val" placeholder="Valor (Ej: $60.000)" class="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-white">
-                            <button onclick="guardarNuevaTarifaAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2 rounded-lg text-white">💾 Registrar Tarifa por Municipio</button>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Categoría de Ruta</label>
+                                <select id="admin-tarifa-cat" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                                    <option value="urbano">Urbanos</option>
+                                    <option value="veredas">Veredas</option>
+                                    <option value="municipios">Municipios</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Nombre de la Ruta / Destino</label>
+                                <input type="text" id="admin-tarifa-nombre" placeholder="Ej: Vereda La Palmita" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Valor Flete (COP)</label>
+                                <input type="text" id="admin-tarifa-val" placeholder="Ej: $45.000" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                            </div>
+                            <button onclick="guardarNuevaTarifaAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow">💾 Registrar / Actualizar Tarifa</button>
                         </div>
-                        <div id="admin-lista-tarifas-extras" class="space-y-1.5 pt-2"></div>
                     </div>
                 </div>
 
@@ -474,6 +513,10 @@
                 <div id="a-content-ajustes" class="space-y-2.5 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
                         <h3 class="font-black text-sm text-orange-400">⚙️ Ajustes y Configuración Global</h3>
+                        <div>
+                            <label class="text-slate-300 font-bold">Clave de Administrador</label>
+                            <input type="password" id="cfg-admin-pass" value="1234" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                        </div>
                         <div>
                             <label class="text-slate-300 font-bold">Valor Suscripción Mensual (COP)</label>
                             <input type="number" id="cfg-valor-sus" value="45000" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
@@ -486,7 +529,7 @@
                             <label class="text-slate-300 font-bold">WhatsApp Central de Soporte</label>
                             <input type="text" id="cfg-whatsapp" value="3507690951" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
                         </div>
-                        <button onclick="guardarAjustesGlobales()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-lg text-white">💾 Guardar Ajustes de la Plataforma</button>
+                        <button onclick="guardarAjustesGlobales()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow">💾 Guardar Ajustes de la Plataforma</button>
                     </div>
                 </div>
             </div>
@@ -521,6 +564,42 @@
             "San Carlos de Guaroa", "San Juan de Arama", "San Juanito", "San Martín", "Vista Hermosa"
         ];
 
+        const tarifasBaseAcacias = {
+            urbano: [
+                { id: 1, ruta: "Urbano", valor: "$25.000" },
+                { id: 2, ruta: "Cobalto", valor: "$40.000" },
+                { id: 3, ruta: "Trasteos", valor: "$40.000" },
+                { id: 4, ruta: "Escombros", valor: "$40.000" }
+            ],
+            veredas: [
+                { id: 5, ruta: "Vereda San Nicolas", valor: "$35.000" },
+                { id: 6, ruta: "Vereda El Centro", valor: "$35.000" },
+                { id: 7, ruta: "Vereda El Dimante", valor: "$35.000" },
+                { id: 8, ruta: "Vereda Monte Bello", valor: "$50.000" },
+                { id: 9, ruta: "Vereda la Esmeralda", valor: "$50.000 - $60.000" },
+                { id: 10, ruta: "Vereda Montelibano", valor: "$60.000" },
+                { id: 11, ruta: "Vereda San Calletano", valor: "$60.000" }
+            ],
+            municipios: [
+                { id: 12, ruta: "Guamal", valor: "$60.000" },
+                { id: 13, ruta: "Chichimene", valor: "$60.000" },
+                { id: 14, ruta: "Violeta", valor: "$80.000" },
+                { id: 15, ruta: "Santa Rosa", valor: "$80.000" },
+                { id: 16, ruta: "Castilla", valor: "$100.000" },
+                { id: 17, ruta: "Puerto Canecas", valor: "$100.000" },
+                { id: 18, ruta: "San Martin", valor: "$130.000" },
+                { id: 19, ruta: "Cubarral", valor: "$130.000" },
+                { id: 20, ruta: "Dinamarca", valor: "$130.000" },
+                { id: 21, ruta: "Patio Bonito", valor: "$130.000" },
+                { id: 22, ruta: "Villavicencio", valor: "$130.000" },
+                { id: 23, ruta: "San Lorenzo", valor: "$150.000" },
+                { id: 24, ruta: "El Dorado", valor: "$160.000" },
+                { id: 25, ruta: "Granada", valor: "$190.000 - $220.000" },
+                { id: 26, ruta: "Sancarlos de guaroba", valor: "$250.000" },
+                { id: 27, ruta: "Surimena", valor: "$250.000" }
+            ]
+        };
+
         let state = {
             cargas: JSON.parse(localStorage.getItem('kargass_cargas')) || [
                 { id: 1711200, clienteDoc: "123456", clienteNombre: "David Martínez", clienteTel: "3143842007", tipoZona: "Local (Urbano)", municipio: "Acacías", horario: "⚡ Cargue Inmediato", vehiculo: "Motocarguero Sencillo", peso: "250 kg", origen: "Calle 10A 32-07 (Acacías)", destino: "Calle 14#32-45 (Acacías)", observaciones: "Caja frágil", foto: null, estado: "Recibiendo Ofertas Libres", fechaCreacion: "10:00 AM" }
@@ -528,7 +607,13 @@
             conductores: JSON.parse(localStorage.getItem('kargass_conductores')) || [
                 { placa: "ABC123", nombre: "Pedro Gómez", doc: "11223344", tel: "3101234567", vehiculo: "Motocarguero Sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo" }
             ],
-            tarifasExtras: JSON.parse(localStorage.getItem('kargass_tarifas_extras')) || [],
+            tarifas: JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || tarifasBaseAcacias,
+            config: JSON.parse(localStorage.getItem('kargass_config_global')) || {
+                adminPass: "1234",
+                valorSuscripcion: 45000,
+                nequi: "3143842007",
+                whatsapp: "3507690951"
+            },
             clienteActualDoc: localStorage.getItem('kargass_cliente_doc') || null,
             transActualPlaca: localStorage.getItem('kargass_trans_placa') || null,
             isAdmin: localStorage.getItem('kargass_is_admin') === 'true',
@@ -540,7 +625,8 @@
         function guardarDatosLocal() {
             localStorage.setItem('kargass_cargas', JSON.stringify(state.cargas));
             localStorage.setItem('kargass_conductores', JSON.stringify(state.conductores));
-            localStorage.setItem('kargass_tarifas_extras', JSON.stringify(state.tarifasExtras));
+            localStorage.setItem('kargass_tarifas_oficiales', JSON.stringify(state.tarifas));
+            localStorage.setItem('kargass_config_global', JSON.stringify(state.config));
             if (state.clienteActualDoc) localStorage.setItem('kargass_cliente_doc', state.clienteActualDoc);
             else localStorage.removeItem('kargass_cliente_doc');
             if (state.transActualPlaca) localStorage.setItem('kargass_trans_placa', state.transActualPlaca);
@@ -554,6 +640,19 @@
                 sel.innerHTML = listaMunicipiosMeta.map(m => `<option value="${m}">${m}</option>`).join('');
                 sel.value = actual;
             });
+        }
+
+        function actualizarTextosGlobales() {
+            document.getElementById('sub-valor-text').innerText = `$${Number(state.config.valorSuscripcion).toLocaleString('es-CO')} COP`;
+            document.getElementById('sub-nequi-text').innerText = state.config.nequi;
+            document.getElementById('af-valor-sub').innerText = `$${Number(state.config.valorSuscripcion).toLocaleString('es-CO')} COP`;
+            document.getElementById('af-nequi-num').innerText = state.config.nequi;
+            
+            const msgSub = encodeURIComponent("Hola Central, envío el comprobante de pago de mi suscripción mensual Kargass.");
+            document.getElementById('sub-wa-btn').href = `https://wa.me/57${state.config.whatsapp}?text=${msgSub}`;
+            
+            const msgAf = encodeURIComponent("Hola Central, quiero afiliarme a Kargass. Adjunto mis datos y pago.");
+            document.getElementById('af-wa-btn').href = `https://wa.me/57${state.config.whatsapp}?text=${msgAf}`;
         }
 
         function mostrarSelectorRol() {
@@ -575,6 +674,7 @@
             document.getElementById('view-afiliacion').classList.add('hidden');
             document.getElementById('view-central').classList.add('hidden');
             poblarSelectMunicipios();
+            actualizarTextosGlobales();
 
             if (mod === 'cliente') {
                 document.getElementById('view-cliente').classList.remove('hidden');
@@ -605,7 +705,7 @@
                     document.getElementById('admin-dashboard').classList.remove('hidden');
                     renderAdminServicios();
                     renderAdminConductores();
-                    renderAdminTarifasExtras();
+                    cargarAjustesGlobales();
                 } else {
                     document.getElementById('admin-login').classList.remove('hidden');
                     document.getElementById('admin-dashboard').classList.add('hidden');
@@ -790,6 +890,8 @@
             document.getElementById('trans-perfil-cilindraje').innerText = cond.cilindraje || "200cc";
 
             renderCargasDisponiblesTrans();
+            renderTarifasTransportador();
+            calcularPicoYPlacaHoy();
         }
 
         function cerrarSesionTrans() {
@@ -817,6 +919,46 @@
             document.getElementById('subtab-t-' + sub).className = "bg-orange-500 text-white py-1.5 rounded-lg cursor-pointer";
         }
 
+        function renderTarifasTransportador() {
+            ['urbano', 'veredas', 'municipios'].forEach(cat => {
+                const contenedor = document.getElementById(`contenedor-tarifas-${cat}`);
+                const items = state.tarifas[cat] || [];
+                if (items.length === 0) {
+                    contenedor.innerHTML = `<p class="text-slate-400 text-center py-2">Sin tarifas registradas en esta categoría.</p>`;
+                } else {
+                    contenedor.innerHTML = items.map(t => `
+                        <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700">
+                            <span>${t.ruta}</span>
+                            <span class="font-black text-orange-400">${t.valor}</span>
+                        </div>
+                    `).join('');
+                }
+            });
+        }
+
+        function calcularPicoYPlacaHoy() {
+            const hoy = new Date();
+            const diaSemana = hoy.getDay(); // 0: Domingo, 1: Lunes... 6: Sábado
+            const el = document.getElementById('pico-placa-hoy');
+
+            if (diaSemana === 0 || diaSemana === 6) {
+                el.innerHTML = "<b>🟢 Fin de Semana:</b> No aplica Pico y Placa en Villavicencio.";
+                el.className = "pt-2 border-t border-slate-700 text-green-400 font-bold text-xs";
+                return;
+            }
+
+            const rotacion = {
+                1: "Placas terminadas en 5 y 6",
+                2: "Placas terminadas en 7 y 8",
+                3: "Placas terminadas en 9 y 0",
+                4: "Placas terminadas en 1 y 2",
+                5: "Placas terminadas en 3 y 4"
+            };
+
+            el.innerHTML = `<b>🔴 Restricción para hoy:</b> ${rotacion[diaSemana]}`;
+            el.className = "pt-2 border-t border-slate-700 text-orange-400 font-bold text-xs";
+        }
+
         function renderCargasDisponiblesTrans() {
             const el = document.getElementById('lista-cargas-disponibles');
             const filtradas = state.cargas.filter(c => c.municipio === "Acacías" || c.tipoZona === "Intermunicipal");
@@ -841,8 +983,8 @@
         }
 
         function copiarNequi() {
-            navigator.clipboard.writeText("3143842007");
-            alert("✅ Número Nequi copiado: 3143842007");
+            navigator.clipboard.writeText(state.config.nequi);
+            alert("✅ Número Nequi copiado: " + state.config.nequi);
         }
 
         // AFILIACIÓN JS
@@ -883,15 +1025,15 @@
         // CENTRAL / ADMIN JS
         function verificarAdminLogin() {
             const pass = document.getElementById('admin-pass').value.trim();
-            if (pass === "1234") {
+            if (pass === state.config.adminPass) {
                 state.isAdmin = true;
                 guardarDatosLocal();
                 document.getElementById('admin-login').classList.add('hidden');
                 document.getElementById('admin-dashboard').classList.remove('hidden');
                 renderAdminServicios();
                 renderAdminConductores();
-                renderAdminTarifasExtras();
-            } else alert("Clave incorrecta (Prueba 1234)");
+                cargarAjustesGlobales();
+            } else alert("Clave incorrecta");
         }
 
         function cerrarSesionAdmin() {
@@ -922,8 +1064,8 @@
                     <div class="flex justify-between items-center border-b border-slate-700 pb-1">
                         <span class="font-bold text-orange-400">[${c.municipio}] ${c.clienteNombre} (${c.clienteTel})</span>
                         <div class="space-x-1">
-                            <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20te%20contacto%20de%20la%20Central%20Kargass%20sobre%20tu%20servicio." target="_blank" class="bg-emerald-600 px-2 py-1 rounded text-white font-bold">WhatsApp</a>
-                            <button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 px-2 py-1 rounded text-white font-bold">Eliminar</button>
+                            <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20te%20contacto%20de%20la%20Central%20Kargass%20sobre%20tu%20servicio." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 px-2.5 py-1 rounded-lg text-white font-bold inline-block">WhatsApp</a>
+                            <button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 hover:bg-red-700 px-2.5 py-1 rounded-lg text-white font-bold">Eliminar</button>
                         </div>
                     </div>
                     ${c.foto ? `<img src="${c.foto}" class="w-full h-20 object-cover rounded-lg border border-slate-700">` : ''}
@@ -973,11 +1115,66 @@
                     </div>
                     <p class="text-[11px] text-slate-300">C.C: ${cond.doc} • Tel: ${cond.tel} • ${cond.vehiculo} (${cond.marca} - ${cond.cilindraje})</p>
                     <div class="flex space-x-2 pt-1">
-                        ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold">Aceptar / Activar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold">Suspender</button>`}
+                        ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold">Activar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold">Suspender</button>`}
+                        <button onclick="editarConductorAdmin(${idx})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold">Editar</button>
                         <button onclick="eliminarConductorAdmin(${idx})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold">Eliminar</button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function guardarConductorAdmin() {
+            const nombre = document.getElementById('adm-c-nombre').value.trim();
+            const doc = document.getElementById('adm-c-doc').value.trim();
+            const tel = document.getElementById('adm-c-tel').value.trim();
+            const vehiculo = document.getElementById('adm-c-vehiculo').value;
+            const placa = document.getElementById('adm-c-placa').value.trim().toUpperCase();
+            const marca = document.getElementById('adm-c-marca').value.trim();
+            const cilindraje = document.getElementById('adm-c-cilindraje').value.trim();
+            const idx = parseInt(document.getElementById('admin-cond-idx').value);
+
+            if (!nombre || !placa) {
+                alert("Ingresa como mínimo el Nombre y la Placa");
+                return;
+            }
+
+            const datosCond = { placa, nombre, doc: doc || "N/A", tel: tel || "N/A", vehiculo, marca: marca || "N/A", cilindraje: cilindraje || "N/A", municipio: "Acacías", estado: "Activo" };
+
+            if (idx >= 0) {
+                state.conductores[idx] = datosCond;
+                alert("✅ Conductor actualizado con éxito");
+            } else {
+                state.conductores.push(datosCond);
+                alert("✅ Conductor registrado y activado con éxito");
+            }
+
+            guardarDatosLocal();
+            limpiarFormConductorAdmin();
+            renderAdminConductores();
+        }
+
+        function editarConductorAdmin(idx) {
+            const cond = state.conductores[idx];
+            document.getElementById('admin-cond-idx').value = idx;
+            document.getElementById('adm-c-nombre').value = cond.nombre;
+            document.getElementById('adm-c-doc').value = cond.doc;
+            document.getElementById('adm-c-tel').value = cond.tel;
+            document.getElementById('adm-c-vehiculo').value = cond.vehiculo;
+            document.getElementById('adm-c-placa').value = cond.placa;
+            document.getElementById('adm-c-marca').value = cond.marca;
+            document.getElementById('adm-c-cilindraje').value = cond.cilindraje;
+            document.getElementById('admin-cond-form-title').innerText = "✏️ Editar Transportador (" + cond.placa + ")";
+        }
+
+        function limpiarFormConductorAdmin() {
+            document.getElementById('admin-cond-idx').value = "-1";
+            document.getElementById('adm-c-nombre').value = "";
+            document.getElementById('adm-c-doc').value = "";
+            document.getElementById('adm-c-tel').value = "";
+            document.getElementById('adm-c-placa').value = "";
+            document.getElementById('adm-c-marca').value = "";
+            document.getElementById('adm-c-cilindraje').value = "";
+            document.getElementById('admin-cond-form-title').innerText = "➕ Registrar Nuevo Transportador";
         }
 
         function cambiarEstadoConductor(idx, nuevoEstado) {
@@ -985,19 +1182,6 @@
             guardarDatosLocal();
             renderAdminConductores();
             alert("✅ Estado del conductor actualizado a: " + nuevoEstado);
-        }
-
-        function agregarConductorAdminModal() {
-            const placa = prompt("Placa del transportador:");
-            const nombre = prompt("Nombre completo:");
-            const doc = prompt("Cédula:");
-            const tel = prompt("Teléfono:");
-            if (placa && nombre) {
-                state.conductores.push({ placa: placa.toUpperCase(), nombre, doc: doc || "N/A", tel: tel || "N/A", vehiculo: "Motocarguero Sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo" });
-                guardarDatosLocal();
-                renderAdminConductores();
-                alert("✅ Transportador agregado y activado");
-            }
         }
 
         function eliminarConductorAdmin(idx) {
@@ -1009,36 +1193,40 @@
         }
 
         function guardarNuevaTarifaAdmin() {
-            const mun = document.getElementById('admin-tarifa-mun').value.trim();
-            const desc = document.getElementById('admin-tarifa-desc').value.trim();
+            const cat = document.getElementById('admin-tarifa-cat').value;
+            const ruta = document.getElementById('admin-tarifa-nombre').value.trim();
             const val = document.getElementById('admin-tarifa-val').value.trim();
-            if (!mun || !desc || !val) { alert("Completa todos los campos de tarifa"); return; }
-            state.tarifasExtras.push({ municipio: mun, descripcion: desc, valor: val });
+            if (!ruta || !val) { alert("Completa la ruta y el valor"); return; }
+            
+            state.tarifas[cat].push({ id: Date.now(), ruta, valor: val });
             guardarDatosLocal();
-            document.getElementById('admin-tarifa-mun').value = '';
-            document.getElementById('admin-tarifa-desc').value = '';
+            document.getElementById('admin-tarifa-nombre').value = '';
             document.getElementById('admin-tarifa-val').value = '';
-            renderAdminTarifasExtras();
-            alert("✅ Tarifa regional registrada correctamente");
+            renderTarifasTransportador();
+            alert("✅ Tarifa guardada en categoría: " + cat);
         }
 
-        function renderAdminTarifasExtras() {
-            const el = document.getElementById('admin-lista-tarifas-extras');
-            if (state.tarifasExtras.length === 0) { el.innerHTML = '<p class="text-[11px] text-slate-400">Sin tarifas adicionales registradas.</p>'; return; }
-            el.innerHTML = state.tarifasExtras.map((t, idx) => `
-                <div class="bg-slate-900 p-2 rounded-lg border border-slate-700 flex justify-between items-center text-[11px]">
-                    <div><span class="text-orange-400 font-bold">[${t.municipio}]</span> ${t.descripcion}: <b class="text-white">${t.valor}</b></div>
-                    <button onclick="state.tarifasExtras.splice(${idx},1); guardarDatosLocal(); renderAdminTarifasExtras();" class="text-red-400 font-bold">Eliminar</button>
-                </div>
-            `).join('');
+        function cargarAjustesGlobales() {
+            document.getElementById('cfg-admin-pass').value = state.config.adminPass;
+            document.getElementById('cfg-valor-sus').value = state.config.valorSuscripcion;
+            document.getElementById('cfg-nequi').value = state.config.nequi;
+            document.getElementById('cfg-whatsapp').value = state.config.whatsapp;
         }
 
         function guardarAjustesGlobales() {
+            state.config.adminPass = document.getElementById('cfg-admin-pass').value.trim() || "1234";
+            state.config.valorSuscripcion = parseInt(document.getElementById('cfg-valor-sus').value) || 45000;
+            state.config.nequi = document.getElementById('cfg-nequi').value.trim() || "3143842007";
+            state.config.whatsapp = document.getElementById('cfg-whatsapp').value.trim() || "3507690951";
+            
+            guardarDatosLocal();
+            actualizarTextosGlobales();
             alert("✅ Ajustes globales guardados con éxito.");
         }
 
         window.onload = function() {
             poblarSelectMunicipios();
+            actualizarTextosGlobales();
             if (state.isAdmin) {
                 irModulo('central');
             }
