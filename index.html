@@ -183,7 +183,7 @@
                 </div>
 
                 <div class="space-y-2 pt-2">
-                    <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📋 Mis Solicitudes e Historial</h3>
+                    <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📋 Mis Solicitudes y Ofertas Recibidas</h3>
                     <div id="lista-mis-cargas" class="space-y-2.5"></div>
                 </div>
             </div>
@@ -200,7 +200,6 @@
             </div>
 
             <div id="trans-dashboard" class="hidden space-y-3">
-                <!-- ENCABEZADO CON SUSCRIPCIÓN Y CUENTA REGRESIVA -->
                 <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-2 shadow-lg">
                     <div class="flex justify-between items-start">
                         <div>
@@ -215,7 +214,6 @@
                         <p class="text-orange-400 font-bold">Vehículo: <span id="trans-perfil-vehiculo" class="text-white">--</span></p>
                     </div>
 
-                    <!-- CAJA DE SUSCRIPCIÓN ACTIVA Y ALERTA DINÁMICA -->
                     <div id="box-suscripcion-alerta" class="mt-2 p-3 rounded-xl border text-xs space-y-1 bg-slate-900 border-slate-700">
                         <div class="flex justify-between items-center font-bold">
                             <span class="text-slate-300">💎 Suscripción Activa:</span>
@@ -227,17 +225,17 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-5 gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700 text-[10px] font-black text-center">
-                    <button onclick="switchTabTrans('servicios')" id="tab-t-servicios" class="bg-orange-500 text-white py-2 rounded-lg cursor-pointer">Servicios</button>
-                    <button onclick="switchTabTrans('tarifas')" id="tab-t-tarifas" class="text-slate-400 py-2 rounded-lg cursor-pointer">Tarifas</button>
-                    <button onclick="switchTabTrans('pico')" id="tab-t-pico" class="text-slate-400 py-2 rounded-lg cursor-pointer">Pico & P</button>
-                    <button onclick="switchTabTrans('sub')" id="tab-t-sub" class="text-slate-400 py-2 rounded-lg cursor-pointer">Suscripción</button>
-                    <button onclick="switchTabTrans('viajes')" id="tab-t-viajes" class="text-slate-400 py-2 rounded-lg cursor-pointer">Historial</button>
+                <div class="grid grid-cols-5 gap-0.5 bg-slate-800 p-1 rounded-xl border border-slate-700 text-[10px] font-black text-center">
+                    <button onclick="switchTabTrans('servicios')" id="tab-t-servicios" class="bg-orange-500 text-white py-2 px-1 rounded-lg cursor-pointer truncate">Servicios</button>
+                    <button onclick="switchTabTrans('tarifas')" id="tab-t-tarifas" class="text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate">Tarifas</button>
+                    <button onclick="switchTabTrans('pico')" id="tab-t-pico" class="text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate">Pico&Placa</button>
+                    <button onclick="switchTabTrans('sub')" id="tab-t-sub" class="text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate">Subscrip</button>
+                    <button onclick="switchTabTrans('viajes')" id="tab-t-viajes" class="text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate">Historial</button>
                 </div>
 
                 <div id="t-content-servicios" class="space-y-3">
                     <div class="flex justify-between items-center">
-                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📦 Oferta de Servicios Disponibles</h3>
+                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📦 Oferta de Servicios y Puja</h3>
                         <span class="text-[10px] bg-orange-500/20 text-orange-400 font-black px-2 py-0.5 rounded border border-orange-500/30">Acacías y Zona</span>
                     </div>
                     <div id="lista-cargas-disponibles" class="space-y-3"></div>
@@ -275,16 +273,13 @@
                         <div class="flex items-center space-x-2 border-b border-slate-700 pb-2">
                             <span class="text-2xl">⚠️</span>
                             <div>
-                                <h3 class="font-black text-sm text-orange-400">Pico y Placa (Villavicencio 2026)</h3>
-                                <p class="text-[10px] text-slate-300 font-bold">Decreto oficial vigente</p>
+                                <h3 class="font-black text-sm text-orange-400">Pico y Placa Vigente</h3>
+                                <p class="text-[10px] text-slate-300 font-bold">Información oficial actualizada por la Central</p>
                             </div>
                         </div>
                         <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2 text-slate-200">
-                            <p><b>📅 Periodo:</b> 26 de enero al 22 de diciembre de 2026.</p>
-                            <p><b>⏰ Horarios:</b> De <b>6:30 a.m. a 9:30 a.m.</b> y de <b>5:00 p.m. a 8:00 p.m.</b></p>
-                            <p><b>🗓️ Regla:</b> Lunes a viernes (excepto días festivos). Fines de semana y festivos <b>no aplica</b>.</p>
-                            <div id="pico-placa-hoy" class="pt-2 border-t border-slate-700 text-orange-400 font-bold text-sm">
-                                Cargando restricción de hoy...
+                            <div id="pico-placa-dinamico" class="text-slate-200 font-medium whitespace-pre-line text-xs">
+                                Cargando información de Pico y Placa...
                             </div>
                         </div>
                     </div>
@@ -401,7 +396,7 @@
             </div>
         </div>
 
-        <!-- 4. MÓDULO CENTRAL / ADMIN (REDESIGNADO Y REPARADO) -->
+        <!-- 4. MÓDULO CENTRAL / ADMIN -->
         <div id="view-central" class="space-y-4 hidden">
             <div id="admin-login" class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-xl text-center space-y-3">
                 <div class="text-4xl">🛠️</div>
@@ -417,6 +412,7 @@
                     <button onclick="cerrarSesionAdmin()" class="bg-slate-700 hover:bg-slate-600 px-2.5 py-1.5 rounded-lg text-slate-200 font-black cursor-pointer">Cerrar</button>
                 </div>
 
+                <!-- PESTAÑAS DE ADMINISTRACIÓN -->
                 <div class="grid grid-cols-4 gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700 text-[10px] font-black text-center">
                     <button onclick="switchTabAdmin('servicios')" id="tab-a-servicios" class="bg-orange-500 text-white py-2 rounded-lg cursor-pointer">Call Center</button>
                     <button onclick="switchTabAdmin('conductores')" id="tab-a-cond" class="text-slate-400 py-2 rounded-lg cursor-pointer">Flota</button>
@@ -424,7 +420,7 @@
                     <button onclick="switchTabAdmin('ajustes')" id="tab-a-ajustes" class="text-slate-400 py-2 rounded-lg cursor-pointer">Ajustes</button>
                 </div>
 
-                <!-- CALL CENTER -->
+                <!-- 1. CALL CENTER -->
                 <div id="a-content-servicios" class="space-y-2.5">
                     <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
                         <span class="font-bold text-slate-300">Servicios Totales en Sistema</span>
@@ -433,7 +429,7 @@
                     <div id="admin-lista-cargas" class="space-y-2.5"></div>
                 </div>
 
-                <!-- GESTIÓN FLOTA / SOCIOS -->
+                <!-- 2. GESTIÓN FLOTA / SOCIOS -->
                 <div id="a-content-conductores" class="space-y-2.5 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs shadow-xl">
                         <h3 class="font-black text-sm text-orange-400" id="admin-cond-form-title">➕ Registrar Nuevo Transportador</h3>
@@ -481,22 +477,22 @@
                             </div>
 
                             <div class="flex space-x-2 pt-1">
-                                <button onclick="guardarConductorAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow">💾 Guardar Transportador</button>
-                                <button onclick="limpiarFormConductorAdmin()" class="bg-slate-700 hover:bg-slate-600 px-3 py-2.5 rounded-xl text-slate-200 font-bold">Limpiar</button>
+                                <button onclick="guardarConductorAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow cursor-pointer">💾 Guardar Transportador</button>
+                                <button onclick="limpiarFormConductorAdmin()" class="bg-slate-700 hover:bg-slate-600 px-3 py-2.5 rounded-xl text-slate-200 font-bold cursor-pointer">Limpiar</button>
                             </div>
                         </div>
                     </div>
 
                     <div class="flex justify-between items-center pt-2">
-                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Flota de Transportadores</h3>
+                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Flota Registrada</h3>
                     </div>
                     <div id="admin-lista-conductores" class="space-y-2"></div>
                 </div>
 
-                <!-- GESTIÓN DINÁMICA DE TARIFAS -->
+                <!-- 3. GESTIÓN DINÁMICA DE TARIFAS -->
                 <div id="a-content-tarifas" class="space-y-2.5 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
-                        <h3 class="font-black text-sm text-orange-400">⚙️ Editor de Tarifas (Acacías)</h3>
+                        <h3 class="font-black text-sm text-orange-400">⚙️ Editor de Tarifas Oficiales</h3>
                         <p class="text-slate-300">Agrega o edita tarifas específicas por categoría:</p>
                         <div class="space-y-2">
                             <div>
@@ -515,13 +511,18 @@
                                 <label class="text-[11px] font-bold text-slate-300">Valor Flete (COP)</label>
                                 <input type="text" id="admin-tarifa-val" placeholder="Ej: $45.000" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
                             </div>
-                            <button onclick="guardarNuevaTarifaAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow">💾 Registrar / Actualizar Tarifa</button>
+                            <button onclick="guardarNuevaTarifaAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow cursor-pointer">💾 Registrar Nueva Tarifa</button>
                         </div>
+                    </div>
+
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
+                        <h3 class="font-black text-sm text-orange-400">📋 Listado de Tarifas Actuales</h3>
+                        <div id="admin-lista-tarifas" class="space-y-2"></div>
                     </div>
                 </div>
 
-                <!-- AJUSTES GLOBALES -->
-                <div id="a-content-ajustes" class="space-y-2.5 hidden">
+                <!-- 4. AJUSTES GLOBALES, PICO Y PLACA Y REGLAMENTO -->
+                <div id="a-content-ajustes" class="space-y-3 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
                         <h3 class="font-black text-sm text-orange-400">⚙️ Ajustes y Configuración Global</h3>
                         <div>
@@ -540,26 +541,38 @@
                             <label class="text-slate-300 font-bold">WhatsApp Central de Soporte</label>
                             <input type="text" id="cfg-whatsapp" value="3507690951" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
                         </div>
-                        <button onclick="guardarAjustesGlobales()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow">💾 Guardar Ajustes de la Plataforma</button>
                     </div>
+
+                    <!-- EDITOR MANUAL DE PICO Y PLACA -->
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-2 text-xs">
+                        <h3 class="font-black text-sm text-orange-400">🚗 Editor de Pico y Placa</h3>
+                        <p class="text-slate-300 text-[11px]">Actualiza aquí la información de restricciones cuando cambie el decreto:</p>
+                        <textarea id="cfg-pico-placa" rows="4" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium outline-none text-xs"></textarea>
+                    </div>
+
+                    <!-- EDITOR MANUAL DE REGLAMENTO -->
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-2 text-xs">
+                        <h3 class="font-black text-sm text-orange-400">📜 Editor del Reglamento Operativo</h3>
+                        <p class="text-slate-300 text-[11px]">Modifica las normas de la comunidad que leen los transportadores:</p>
+                        <textarea id="cfg-reglamento" rows="6" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium outline-none text-xs"></textarea>
+                    </div>
+
+                    <button onclick="guardarAjustesGlobales()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white shadow cursor-pointer uppercase tracking-wider">💾 Guardar Todos los Ajustes</button>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <!-- VENTANA MODAL REGLAMENTO OPERATIVO OBLIGATORIO -->
+    <!-- VENTANA MODAL REGLAMENTO OBLIGATORIO -->
     <div id="modal-reglamento" class="fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white text-slate-900 p-5 rounded-3xl max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto">
             <div class="text-center">
                 <h3 class="text-lg font-black text-orange-600">REGLAMENTO OPERATIVO</h3>
                 <p class="text-[11px] text-slate-600 font-bold">Normas de la Comunidad Kargass</p>
             </div>
-            <div class="space-y-2 text-xs text-slate-800 font-medium">
-                <p><b>1. Datos Reales:</b> Mantener la documentación y datos de su vehículo al día.</p>
-                <p><b>2. Puntualidad:</b> Compromiso absoluto con el horario y cuidado de la carga del cliente.</p>
-                <p><b>3. Respeto Tarifario:</b> Cumplimiento estricto de las tarifas oficiales establecidas por la red.</p>
-                <p><b>4. Suscripción:</b> Pago puntual de la membresía mensual para conservar activo el perfil en la plataforma.</p>
+            <div id="modal-reglamento-texto" class="space-y-2 text-xs text-slate-800 font-medium whitespace-pre-line">
+                <!-- Se carga dinámicamente -->
             </div>
             <button onclick="cerrarReglamentoModal()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white text-xs cursor-pointer">Entendido y Cerrado</button>
         </div>
@@ -611,9 +624,23 @@
             ]
         };
 
+        const reglamentoPorDefecto = `1. Datos Reales: Mantener la documentación y datos de su vehículo al día.
+2. Puntualidad: Compromiso absoluto con el horario y cuidado de la carga.
+3. Respeto Tarifario: Cumplimiento estricto de las tarifas oficiales.
+4. Suscripción: Pago puntual de la membresía mensual.`;
+
+        const picoPlacaPorDefecto = `📅 Periodo: Vigente 2026.
+⏰ Horarios: De 6:30 a.m. a 9:30 a.m. y de 5:00 p.m. a 8:00 p.m.
+🗓️ Regla: Lunes a viernes (excepto festivos).
+• Lunes: Placas 5 y 6
+• Martes: Placas 7 y 8
+• Miércoles: Placas 9 y 0
+• Jueves: Placas 1 y 2
+• Viernes: Placas 3 y 4`;
+
         let state = {
             cargas: JSON.parse(localStorage.getItem('kargass_cargas')) || [
-                { id: 1711200, clienteDoc: "123456", clienteNombre: "David Martínez", clienteTel: "3143842007", tipoZona: "Local (Urbano)", municipio: "Acacías", horario: "⚡ Cargue Inmediato", vehiculo: "Motocarguero Sencillo", peso: "250 kg", origen: "Calle 10A 32-07 (Acacías)", destino: "Calle 14#32-45 (Acacías)", observaciones: "Caja frágil", foto: null, estado: "Recibiendo Ofertas Libres", fechaCreacion: "10:00 AM" }
+                { id: 1711200, clienteDoc: "123456", clienteNombre: "David Martínez", clienteTel: "3143842007", tipoZona: "Local (Urbano)", municipio: "Acacías", horario: "⚡ Cargue Inmediato", vehiculo: "Motocarguero Sencillo", peso: "250 kg", origen: "Calle 10A 32-07 (Acacías)", destino: "Calle 14#32-45 (Acacías)", observaciones: "Caja frágil", foto: null, estado: "Recibiendo Ofertas", ofertas: [], fechaCreacion: "10:00 AM" }
             ],
             conductores: JSON.parse(localStorage.getItem('kargass_conductores')) || [
                 { placa: "ABC123", nombre: "Pedro Gómez", doc: "11223344", tel: "3101234567", vehiculo: "Motocarguero Sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-11-30" }
@@ -623,7 +650,9 @@
                 adminPass: "1234",
                 valorSuscripcion: 45000,
                 nequi: "3143842007",
-                whatsapp: "3507690951"
+                whatsapp: "3507690951",
+                picoPlacaTexto: picoPlacaPorDefecto,
+                reglamentoTexto: reglamentoPorDefecto
             },
             clienteActualDoc: localStorage.getItem('kargass_cliente_doc') || null,
             transActualPlaca: localStorage.getItem('kargass_trans_placa') || null,
@@ -664,6 +693,13 @@
             
             const msgAf = encodeURIComponent("Hola Central, quiero afiliarme a Kargass. Adjunto mis datos y pago.");
             document.getElementById('af-wa-btn').href = `https://wa.me/57${state.config.whatsapp}?text=${msgAf}`;
+
+            // Pico y placa y reglamento dinámicos
+            const elPico = document.getElementById('pico-placa-dinamico');
+            if (elPico) elPico.innerText = state.config.picoPlacaTexto || picoPlacaPorDefecto;
+
+            const elReg = document.getElementById('modal-reglamento-texto');
+            if (elReg) elReg.innerText = state.config.reglamentoTexto || reglamentoPorDefecto;
         }
 
         function mostrarSelectorRol() {
@@ -716,6 +752,7 @@
                     document.getElementById('admin-dashboard').classList.remove('hidden');
                     renderAdminServicios();
                     renderAdminConductores();
+                    renderAdminTarifas();
                     cargarAjustesGlobales();
                 } else {
                     document.getElementById('admin-login').classList.remove('hidden');
@@ -831,7 +868,8 @@
                 destino: destino,
                 observaciones: document.getElementById('cli-obs').value.trim(),
                 foto: state.fotoBase64,
-                estado: "Recibiendo Ofertas Libres",
+                estado: "Recibiendo Ofertas",
+                ofertas: [],
                 fechaCreacion: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
@@ -855,7 +893,7 @@
                 return;
             }
             el.innerHTML = mis.map(c => `
-                <div class="bg-slate-800 p-3 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-lg">
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-lg">
                     <div class="flex justify-between items-start border-b border-slate-700 pb-1.5">
                         <span class="bg-orange-500/20 text-orange-400 font-black px-2 py-0.5 rounded-lg text-[10px]">${c.tipoZona}</span>
                         <span class="text-orange-400 font-black text-[11px]">${c.estado}</span>
@@ -863,11 +901,38 @@
                     <p class="font-black text-white">📦 ${c.origen} ➔ ${c.destino}</p>
                     <p><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
                     ${c.foto ? `<img src="${c.foto}" class="w-full h-24 object-cover rounded-xl border border-slate-700">` : ''}
+                    
+                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1.5">
+                        <p class="font-black text-orange-400">🏷️ Ofertas Recibidas (${c.ofertas ? c.ofertas.length : 0}):</p>
+                        ${(!c.ofertas || c.ofertas.length === 0) ? '<p class="text-slate-400 italic">Esperando ofertas de transportadores...</p>' : c.ofertas.map((of, oIdx) => `
+                            <div class="flex justify-between items-center bg-slate-800 p-2 rounded-lg border border-slate-700">
+                                <div>
+                                    <p class="font-bold text-white">${of.conductorNombre} (${of.placa})</p>
+                                    <p class="text-[10px] text-slate-300">Tel: ${of.tel}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-black text-emerald-400 text-sm">$${Number(of.precio).toLocaleString('es-CO')}</span>
+                                    <button onclick="seleccionarOfertaCliente(${c.id}, ${oIdx})" class="block mt-1 bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1 rounded text-[10px] cursor-pointer">Seleccionar</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
             `).join('');
         }
 
-        // TRANSPORTADOR JS + CUENTA REGRESIVA DE SUSCRIPCIÓN
+        function seleccionarOfertaCliente(cargaId, ofertaIdx) {
+            let carga = state.cargas.find(c => c.id === cargaId);
+            if (carga && carga.ofertas[ofertaIdx]) {
+                const seleccionada = carga.ofertas[ofertaIdx];
+                carga.estado = `Asignado a ${seleccionada.conductorNombre} ($${Number(seleccionada.precio).toLocaleString('es-CO')})`;
+                guardarDatosLocal();
+                renderHistorialCliente();
+                alert(`✅ ¡Has seleccionado la oferta de ${seleccionada.conductorNombre}!`);
+            }
+        }
+
+        // TRANSPORTADOR JS
         function verificarTransportadorLogin() {
             const placa = document.getElementById('trans-placa-input').value.trim().toUpperCase();
             if (!placa) { alert("Ingresa tu placa"); return; }
@@ -879,7 +944,7 @@
             }
 
             if (cond.estado !== 'Activo') {
-                alert("⚠️ Tu cuenta se encuentra en estado: " + cond.estado + ". Comunícate con la Central.");
+                alert("⚠️ Tu cuenta se encuentra en estado: " + cond.estado);
                 return;
             }
 
@@ -898,12 +963,10 @@
             document.getElementById('trans-perfil-placa').innerText = cond.placa;
             document.getElementById('trans-perfil-vehiculo').innerText = (cond.vehiculo || "Motocarguero") + ` (${cond.marca || 'AKT'} - ${cond.cilindraje || '200cc'})`;
 
-            // Calcular y mostrar la suscripción con cuenta regresiva
             calcularCuentaRegresivaSuscripcion(cond.vencimiento);
-
             renderCargasDisponiblesTrans();
             renderTarifasTransportador();
-            calcularPicoYPlacaHoy();
+            actualizarTextosGlobales();
         }
 
         function calcularCuentaRegresivaSuscripcion(fechaVencimientoStr) {
@@ -921,8 +984,6 @@
             const hoy = new Date();
             hoy.setHours(0,0,0,0);
             const vencimiento = new Date(fechaVencimientoStr + 'T00:00:00');
-            
-            // Asumimos un mes de vigencia hacia atrás para mostrar el rango
             const inicioVigencia = new Date(vencimiento);
             inicioVigencia.setMonth(inicioVigencia.getMonth() - 1);
 
@@ -936,7 +997,7 @@
                 elRegresiva.innerText = "❌ ¡Suscripción Vencida! Actualiza tu pago";
                 boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-red-950/80 border-red-500 text-red-400 animate-pulse";
             } else if (diasRestantes <= 5) {
-                elRegresiva.innerText = `🚨 ¡URGENTE! Te quedan ${diasRestantes} día(s) para vencerse la suscripción`;
+                elRegresiva.innerText = `🚨 ¡URGENTE! Te quedan ${diasRestantes} día(s) para vencerse`;
                 boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-red-950/60 border-red-500 text-red-400";
             } else if (diasRestantes <= 10) {
                 elRegresiva.innerText = `⚠️ ¡Atención! Te quedan ${diasRestantes} días de suscripción`;
@@ -957,10 +1018,10 @@
         function switchTabTrans(tab) {
             ['servicios', 'tarifas', 'pico', 'sub', 'viajes'].forEach(t => {
                 document.getElementById('t-content-' + t).classList.add('hidden');
-                document.getElementById('tab-t-' + t).className = "text-slate-400 py-2 rounded-lg cursor-pointer";
+                document.getElementById('tab-t-' + t).className = "text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate";
             });
             document.getElementById('t-content-' + tab).classList.remove('hidden');
-            document.getElementById('tab-t-' + tab).className = "bg-orange-500 text-white py-2 rounded-lg cursor-pointer";
+            document.getElementById('tab-t-' + tab).className = "bg-orange-500 text-white py-2 px-1 rounded-lg cursor-pointer truncate";
         }
 
         function switchSubTabTarifas(sub) {
@@ -977,7 +1038,7 @@
                 const contenedor = document.getElementById(`contenedor-tarifas-${cat}`);
                 const items = state.tarifas[cat] || [];
                 if (items.length === 0) {
-                    contenedor.innerHTML = `<p class="text-slate-400 text-center py-2">Sin tarifas registradas en esta categoría.</p>`;
+                    contenedor.innerHTML = `<p class="text-slate-400 text-center py-2">Sin tarifas registradas.</p>`;
                 } else {
                     contenedor.innerHTML = items.map(t => `
                         <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700">
@@ -989,35 +1050,12 @@
             });
         }
 
-        function calcularPicoYPlacaHoy() {
-            const hoy = new Date();
-            const diaSemana = hoy.getDay();
-            const el = document.getElementById('pico-placa-hoy');
-
-            if (diaSemana === 0 || diaSemana === 6) {
-                el.innerHTML = "<b>🟢 Fin de Semana:</b> No aplica Pico y Placa en Villavicencio.";
-                el.className = "pt-2 border-t border-slate-700 text-green-400 font-bold text-xs";
-                return;
-            }
-
-            const rotacion = {
-                1: "Placas terminadas en 5 y 6",
-                2: "Placas terminadas en 7 y 8",
-                3: "Placas terminadas en 9 y 0",
-                4: "Placas terminadas en 1 y 2",
-                5: "Placas terminadas en 3 y 4"
-            };
-
-            el.innerHTML = `<b>🔴 Restricción para hoy:</b> ${rotacion[diaSemana]}`;
-            el.className = "pt-2 border-t border-slate-700 text-orange-400 font-bold text-xs";
-        }
-
         function renderCargasDisponiblesTrans() {
             const el = document.getElementById('lista-cargas-disponibles');
             const filtradas = state.cargas.filter(c => c.municipio === "Acacías" || c.tipoZona === "Intermunicipal");
 
             if (filtradas.length === 0) {
-                el.innerHTML = '<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay acarreos disponibles en este momento para Acacías.</div>';
+                el.innerHTML = '<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay acarreos disponibles.</div>';
                 return;
             }
             el.innerHTML = filtradas.map(c => `
@@ -1030,9 +1068,51 @@
                     <p class="text-slate-300"><b>Carga:</b> ${c.peso} | <b>Horario:</b> ${c.horario}</p>
                     <p class="text-slate-400"><b>Cliente:</b> ${c.clienteNombre} (${c.clienteTel})</p>
                     ${c.observaciones ? `<p class="text-slate-400 italic">"${c.observaciones}"</p>` : ''}
-                    <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20vi%20tu%20acarreo%20en%20Kargass%20y%20estoy%20listo%20para%20realizarlo." target="_blank" class="block text-center bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white mt-1 shadow">💬 Acordar por WhatsApp</a>
+                    ${c.foto ? `<img src="${c.foto}" class="w-full h-24 object-cover rounded-xl border border-slate-700">` : ''}
+                    
+                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2">
+                        <label class="font-bold text-slate-300">Mi propuesta de flete (COP):</label>
+                        <div class="flex space-x-2">
+                            <input type="number" id="input-oferta-${c.id}" placeholder="Ej: 35000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs">
+                            <button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Puja</button>
+                        </div>
+                    </div>
+                    
+                    <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20vi%20tu%20acarreo%20en%20Kargass." target="_blank" class="block text-center bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white mt-1 shadow">💬 Contactar Directo por WhatsApp</a>
                 </div>
             `).join('');
+        }
+
+        function enviarOfertaTransportador(cargaId) {
+            const inputVal = document.getElementById(`input-oferta-${cargaId}`).value.trim();
+            if (!inputVal || isNaN(inputVal)) {
+                alert("⚠️ Ingresa un valor numérico válido para tu oferta.");
+                return;
+            }
+
+            let carga = state.cargas.find(c => c.id === cargaId);
+            let cond = state.conductores.find(co => co.placa === state.transActualPlaca);
+
+            if (carga && cond) {
+                if (!carga.ofertas) carga.ofertas = [];
+                
+                let existente = carga.ofertas.find(o => o.placa === cond.placa);
+                if (existente) {
+                    existente.precio = inputVal;
+                } else {
+                    carga.ofertas.push({
+                        placa: cond.placa,
+                        conductorNombre: cond.nombre,
+                        tel: cond.tel,
+                        precio: inputVal
+                    });
+                }
+
+                guardarDatosLocal();
+                alert(`🚀 ¡Oferta de $${Number(inputVal).toLocaleString('es-CO')} enviada con éxito al cliente!`);
+                document.getElementById(`input-oferta-${cargaId}`).value = '';
+                renderCargasDisponiblesTrans();
+            }
         }
 
         function copiarNequi() {
@@ -1052,23 +1132,22 @@
             const acepto = document.getElementById('af-check-reglamento').checked;
 
             if (!nombre || !doc || !tel || !placa || !marca || !cilindraje) {
-                alert("⚠️ Por favor completa todos los campos del formulario.");
+                alert("⚠️ Completa todos los campos.");
                 return;
             }
 
             if (!acepto) {
-                alert("⚠️ Debes leer y aceptar obligatoriamente el Reglamento Operativo para continuar.");
+                alert("⚠️ Debes aceptar el reglamento.");
                 return;
             }
 
-            // Fecha por defecto 30 días adelante al postularse
             const fechaFutura = new Date();
             fechaFutura.setDate(fechaFutura.getDate() + 30);
             const vencimientoStr = fechaFutura.toISOString().split('T')[0];
 
-            state.conductores.push({ placa, nombre, doc, tel, vehiculo, marca, cilindraje, municipio: "Acacías", estado: "Pendiente Pago", vencimiento: vencimientoStr });
+            state.conductores.push({ placa, nombre, doc, tel, vehiculo, marca, cilindraje, municipio: "Acacías", estado: "Activo", vencimiento: vencimientoStr });
             guardarDatosLocal();
-            alert("🚀 ¡Postulación enviada con éxito a la Central! Recuerda enviar tu soporte por WhatsApp.");
+            alert("🚀 ¡Postulación y activación completada con éxito!");
             
             document.getElementById('af-nombre').value = '';
             document.getElementById('af-doc').value = '';
@@ -1080,7 +1159,7 @@
             irModulo('transportador');
         }
 
-        // CENTRAL / ADMIN JS (TOTALMENTE REESTRUCTURADO Y BLINDADO)
+        // CENTRAL / ADMIN JS
         function verificarAdminLogin() {
             const pass = document.getElementById('admin-pass').value.trim();
             if (pass === state.config.adminPass) {
@@ -1090,6 +1169,7 @@
                 document.getElementById('admin-dashboard').classList.remove('hidden');
                 renderAdminServicios();
                 renderAdminConductores();
+                renderAdminTarifas();
                 cargarAjustesGlobales();
             } else alert("Clave incorrecta");
         }
@@ -1103,53 +1183,43 @@
 
         function switchTabAdmin(tab) {
             ['servicios', 'conductores', 'tarifas', 'ajustes'].forEach(t => {
-                document.getElementById('a-content-' + t).classList.add('hidden');
-                document.getElementById('tab-a-' + t).className = "text-slate-400 py-2 rounded-lg cursor-pointer";
+                const content = document.getElementById('a-content-' + t);
+                const btn = document.getElementById('tab-a-' + t);
+                if (content && btn) {
+                    if (t === tab) {
+                        content.classList.remove('hidden');
+                        btn.className = "bg-orange-500 text-white py-2 rounded-lg cursor-pointer font-black";
+                    } else {
+                        content.classList.add('hidden');
+                        btn.className = "text-slate-400 py-2 rounded-lg cursor-pointer";
+                    }
+                }
             });
-            document.getElementById('a-content-' + tab).classList.remove('hidden');
-            document.getElementById('tab-a-' + tab).className = "bg-orange-500 text-white py-2 rounded-lg cursor-pointer";
         }
 
         function renderAdminServicios() {
             document.getElementById('admin-total-servicios').innerText = state.cargas.length;
             const el = document.getElementById('admin-lista-cargas');
-            if (state.cargas.length === 0) { 
+            if (!state.cargas || state.cargas.length === 0) { 
                 el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin servicios registrados.</div>'; 
                 return; 
             }
             el.innerHTML = state.cargas.map(c => `
-                <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 text-xs space-y-2 shadow-md">
+                <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-2 shadow-md">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-1">
                         <span class="font-bold text-orange-400">[${c.municipio}] ${c.clienteNombre} (${c.clienteTel})</span>
                         <div class="space-x-1">
-                            <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20te%20contacto%20de%20la%20Central%20Kargass%20sobre%20tu%20servicio." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded text-white font-bold inline-block">WhatsApp</a>
-                            <button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold">Eliminar</button>
+                            <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20te%20contacto%20de%20la%20Central%20Kargass." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded text-white font-bold inline-block">WhatsApp</a>
+                            <button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button>
                         </div>
                     </div>
                     ${c.foto ? `<img src="${c.foto}" class="w-full h-20 object-cover rounded-lg border border-slate-700">` : ''}
                     <p class="text-white"><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
                     <p class="text-slate-300"><b>Ruta:</b> ${c.origen} ➔ ${c.destino}</p>
                     <p class="text-slate-400 font-bold">Estado: ${c.estado}</p>
-                    <div>
-                        <label class="text-[10px] font-bold text-slate-300">Asignar a conductor:</label>
-                        <select onchange="asignarConductorServicio(${c.id}, this.value)" class="w-full mt-0.5 p-1.5 bg-slate-900 border border-slate-700 rounded text-xs text-white">
-                            <option value="">-- Seleccionar Conductor Activo --</option>
-                            ${state.conductores.filter(co => co.estado === 'Activo').map(cond => `<option value="${cond.nombre}">${cond.nombre} (${cond.placa})</option>`).join('')}
-                        </select>
-                    </div>
+                    <p class="text-emerald-400 font-bold">Ofertas recibidas: ${c.ofertas ? c.ofertas.length : 0}</p>
                 </div>
             `).join('');
-        }
-
-        function asignarConductorServicio(cargaId, nombreConductor) {
-            if (!nombreConductor) return;
-            let carga = state.cargas.find(c => c.id === cargaId);
-            if (carga) {
-                carga.estado = "Asignado a: " + nombreConductor;
-                guardarDatosLocal();
-                renderAdminServicios();
-                alert("✅ Servicio asignado exitosamente a " + nombreConductor);
-            }
         }
 
         function eliminarCargaAdmin(id) {
@@ -1162,12 +1232,12 @@
 
         function renderAdminConductores() {
             const el = document.getElementById('admin-lista-conductores');
-            if (state.conductores.length === 0) {
+            if (!state.conductores || state.conductores.length === 0) {
                 el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin transportadores registrados.</div>';
                 return;
             }
             el.innerHTML = state.conductores.map((cond, idx) => `
-                <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 text-xs space-y-1.5 shadow">
+                <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-1.5 shadow">
                     <div class="flex justify-between items-center">
                         <p class="font-black text-white">${cond.nombre} (<span class="text-orange-400">${cond.placa}</span>)</p>
                         <span class="px-2 py-0.5 rounded text-[10px] font-bold ${cond.estado === 'Activo' ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}">${cond.estado}</span>
@@ -1175,9 +1245,9 @@
                     <p class="text-[11px] text-slate-300">C.C: ${cond.doc} • Tel: ${cond.tel} • Vence: <b class="text-orange-400">${cond.vencimiento || 'No asignado'}</b></p>
                     <p class="text-[11px] text-slate-400">${cond.vehiculo} (${cond.marca} - ${cond.cilindraje})</p>
                     <div class="flex space-x-2 pt-1">
-                        ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold">Activar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold">Suspender</button>`}
-                        <button onclick="editarConductorAdmin(${idx})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold">Editar</button>
-                        <button onclick="eliminarConductorAdmin(${idx})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold">Eliminar</button>
+                        ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Activar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Suspender</button>`}
+                        <button onclick="editarConductorAdmin(${idx})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Editar</button>
+                        <button onclick="eliminarConductorAdmin(${idx})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button>
                     </div>
                 </div>
             `).join('');
@@ -1213,10 +1283,10 @@
 
             if (idx >= 0) {
                 state.conductores[idx] = datosCond;
-                alert("✅ Conductor actualizado con éxito");
+                alert("✅ Conductor actualizado");
             } else {
                 state.conductores.push(datosCond);
-                alert("✅ Conductor registrado y activado con éxito");
+                alert("✅ Conductor registrado y activado");
             }
 
             guardarDatosLocal();
@@ -1252,11 +1322,11 @@
             state.conductores[idx].estado = nuevoEstado;
             guardarDatosLocal();
             renderAdminConductores();
-            alert("✅ Estado del conductor actualizado a: " + nuevoEstado);
+            alert("✅ Estado actualizado a: " + nuevoEstado);
         }
 
         function eliminarConductorAdmin(idx) {
-            if (confirm("¿Eliminar transportador del sistema?")) {
+            if (confirm("¿Eliminar transportador?")) {
                 state.conductores.splice(idx, 1);
                 guardarDatosLocal();
                 renderAdminConductores();
@@ -1267,14 +1337,44 @@
             const cat = document.getElementById('admin-tarifa-cat').value;
             const ruta = document.getElementById('admin-tarifa-nombre').value.trim();
             const val = document.getElementById('admin-tarifa-val').value.trim();
-            if (!ruta || !val) { alert("Completa la ruta y el valor"); return; }
+            if (!ruta || !val) { alert("Completa ruta y valor"); return; }
             
             state.tarifas[cat].push({ id: Date.now(), ruta, valor: val });
             guardarDatosLocal();
             document.getElementById('admin-tarifa-nombre').value = '';
             document.getElementById('admin-tarifa-val').value = '';
+            renderAdminTarifas();
             renderTarifasTransportador();
-            alert("✅ Tarifa guardada en categoría: " + cat);
+            alert("✅ Tarifa guardada con éxito");
+        }
+
+        function renderAdminTarifas() {
+            const el = document.getElementById('admin-lista-tarifas');
+            let html = '';
+            ['urbano', 'veredas', 'municipios'].forEach(cat => {
+                const items = state.tarifas[cat] || [];
+                html += `<p class="font-bold text-orange-400 capitalize mt-2">📂 Categoría: ${cat}</p>`;
+                if (items.length === 0) {
+                    html += `<p class="text-slate-400 text-[11px]">Sin tarifas.</p>`;
+                } else {
+                    html += items.map((t, tIdx) => `
+                        <div class="flex justify-between items-center bg-slate-900 p-2 rounded border border-slate-700 text-[11px]">
+                            <span>${t.ruta} - <b class="text-orange-400">${t.valor}</b></span>
+                            <button onclick="eliminarTarifaAdmin('${cat}', ${tIdx})" class="bg-red-600 hover:bg-red-700 px-2 py-0.5 rounded text-white font-bold cursor-pointer">Eliminar</button>
+                        </div>
+                    `).join('');
+                }
+            });
+            el.innerHTML = html;
+        }
+
+        function eliminarTarifaAdmin(cat, idx) {
+            if (confirm("¿Eliminar esta tarifa?")) {
+                state.tarifas[cat].splice(idx, 1);
+                guardarDatosLocal();
+                renderAdminTarifas();
+                renderTarifasTransportador();
+            }
         }
 
         function cargarAjustesGlobales() {
@@ -1282,6 +1382,8 @@
             document.getElementById('cfg-valor-sus').value = state.config.valorSuscripcion;
             document.getElementById('cfg-nequi').value = state.config.nequi;
             document.getElementById('cfg-whatsapp').value = state.config.whatsapp;
+            document.getElementById('cfg-pico-placa').value = state.config.picoPlacaTexto || picoPlacaPorDefecto;
+            document.getElementById('cfg-reglamento').value = state.config.reglamentoTexto || reglamentoPorDefecto;
         }
 
         function guardarAjustesGlobales() {
@@ -1289,10 +1391,12 @@
             state.config.valorSuscripcion = parseInt(document.getElementById('cfg-valor-sus').value) || 45000;
             state.config.nequi = document.getElementById('cfg-nequi').value.trim() || "3143842007";
             state.config.whatsapp = document.getElementById('cfg-whatsapp').value.trim() || "3507690951";
+            state.config.picoPlacaTexto = document.getElementById('cfg-pico-placa').value.trim() || picoPlacaPorDefecto;
+            state.config.reglamentoTexto = document.getElementById('cfg-reglamento').value.trim() || reglamentoPorDefecto;
             
             guardarDatosLocal();
             actualizarTextosGlobales();
-            alert("✅ Ajustes globales guardados con éxito.");
+            alert("✅ ¡Todos los ajustes, Pico y Placa y Reglamento se han guardado y actualizado con éxito!");
         }
 
         window.onload = function() {
