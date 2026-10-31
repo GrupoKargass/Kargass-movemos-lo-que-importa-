@@ -200,6 +200,7 @@
             </div>
 
             <div id="trans-dashboard" class="hidden space-y-3">
+                <!-- ENCABEZADO CON SUSCRIPCIÓN Y CUENTA REGRESIVA -->
                 <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-2 shadow-lg">
                     <div class="flex justify-between items-start">
                         <div>
@@ -208,11 +209,21 @@
                         </div>
                         <button onclick="cerrarSesionTrans()" class="bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded-lg text-slate-200 font-bold text-xs cursor-pointer">Salir</button>
                     </div>
+                    
                     <div class="pt-2 border-t border-slate-700 grid grid-cols-2 gap-2 text-xs">
                         <p class="text-orange-400 font-bold">Placa: <span id="trans-perfil-placa" class="text-white">--</span></p>
                         <p class="text-orange-400 font-bold">Vehículo: <span id="trans-perfil-vehiculo" class="text-white">--</span></p>
-                        <p class="text-slate-300">Marca: <span id="trans-perfil-marca" class="text-white">--</span></p>
-                        <p class="text-slate-300">Cilindraje: <span id="trans-perfil-cilindraje" class="text-white">--</span></p>
+                    </div>
+
+                    <!-- CAJA DE SUSCRIPCIÓN ACTIVA Y ALERTA DINÁMICA -->
+                    <div id="box-suscripcion-alerta" class="mt-2 p-3 rounded-xl border text-xs space-y-1 bg-slate-900 border-slate-700">
+                        <div class="flex justify-between items-center font-bold">
+                            <span class="text-slate-300">💎 Suscripción Activa:</span>
+                            <span id="trans-fechas-sus" class="text-white text-[11px]">-- al --</span>
+                        </div>
+                        <div id="trans-cuenta-regresiva" class="font-black text-center pt-1 text-xs">
+                            Calculando días restantes...
+                        </div>
                     </div>
                 </div>
 
@@ -227,7 +238,7 @@
                 <div id="t-content-servicios" class="space-y-3">
                     <div class="flex justify-between items-center">
                         <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📦 Oferta de Servicios Disponibles</h3>
-                        <span class="text-[10px] bg-orange-500/20 text-orange-400 font-bold px-2 py-0.5 rounded border border-orange-500/30">Acacías y Zona</span>
+                        <span class="text-[10px] bg-orange-500/20 text-orange-400 font-black px-2 py-0.5 rounded border border-orange-500/30">Acacías y Zona</span>
                     </div>
                     <div id="lista-cargas-disponibles" class="space-y-3"></div>
                 </div>
@@ -390,7 +401,7 @@
             </div>
         </div>
 
-        <!-- 4. MÓDULO CENTRAL / ADMIN -->
+        <!-- 4. MÓDULO CENTRAL / ADMIN (REDESIGNADO Y REPARADO) -->
         <div id="view-central" class="space-y-4 hidden">
             <div id="admin-login" class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-xl text-center space-y-3">
                 <div class="text-4xl">🛠️</div>
@@ -460,12 +471,12 @@
                             </div>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label class="text-[11px] font-bold text-slate-300">Marca</label>
-                                    <input type="text" id="adm-c-marca" placeholder="Ej: AKT, Bajaj" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                    <label class="text-[11px] font-bold text-slate-300">Vencimiento Suscripción</label>
+                                    <input type="date" id="adm-c-vencimiento" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
                                 </div>
                                 <div>
-                                    <label class="text-[11px] font-bold text-slate-300">Cilindraje</label>
-                                    <input type="text" id="adm-c-cilindraje" placeholder="Ej: 200cc" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                    <label class="text-[11px] font-bold text-slate-300">Cilindraje / Marca</label>
+                                    <input type="text" id="adm-c-marca" placeholder="Ej: AKT 200cc" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
                                 </div>
                             </div>
 
@@ -605,7 +616,7 @@
                 { id: 1711200, clienteDoc: "123456", clienteNombre: "David Martínez", clienteTel: "3143842007", tipoZona: "Local (Urbano)", municipio: "Acacías", horario: "⚡ Cargue Inmediato", vehiculo: "Motocarguero Sencillo", peso: "250 kg", origen: "Calle 10A 32-07 (Acacías)", destino: "Calle 14#32-45 (Acacías)", observaciones: "Caja frágil", foto: null, estado: "Recibiendo Ofertas Libres", fechaCreacion: "10:00 AM" }
             ],
             conductores: JSON.parse(localStorage.getItem('kargass_conductores')) || [
-                { placa: "ABC123", nombre: "Pedro Gómez", doc: "11223344", tel: "3101234567", vehiculo: "Motocarguero Sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo" }
+                { placa: "ABC123", nombre: "Pedro Gómez", doc: "11223344", tel: "3101234567", vehiculo: "Motocarguero Sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-11-30" }
             ],
             tarifas: JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || tarifasBaseAcacias,
             config: JSON.parse(localStorage.getItem('kargass_config_global')) || {
@@ -856,7 +867,7 @@
             `).join('');
         }
 
-        // TRANSPORTADOR JS
+        // TRANSPORTADOR JS + CUENTA REGRESIVA DE SUSCRIPCIÓN
         function verificarTransportadorLogin() {
             const placa = document.getElementById('trans-placa-input').value.trim().toUpperCase();
             if (!placa) { alert("Ingresa tu placa"); return; }
@@ -885,13 +896,55 @@
             document.getElementById('trans-perfil-doc').innerText = cond.doc || "N/A";
             document.getElementById('trans-perfil-tel').innerText = cond.tel || "N/A";
             document.getElementById('trans-perfil-placa').innerText = cond.placa;
-            document.getElementById('trans-perfil-vehiculo').innerText = cond.vehiculo || "Motocarguero";
-            document.getElementById('trans-perfil-marca').innerText = cond.marca || "AKT";
-            document.getElementById('trans-perfil-cilindraje').innerText = cond.cilindraje || "200cc";
+            document.getElementById('trans-perfil-vehiculo').innerText = (cond.vehiculo || "Motocarguero") + ` (${cond.marca || 'AKT'} - ${cond.cilindraje || '200cc'})`;
+
+            // Calcular y mostrar la suscripción con cuenta regresiva
+            calcularCuentaRegresivaSuscripcion(cond.vencimiento);
 
             renderCargasDisponiblesTrans();
             renderTarifasTransportador();
             calcularPicoYPlacaHoy();
+        }
+
+        function calcularCuentaRegresivaSuscripcion(fechaVencimientoStr) {
+            const elFechas = document.getElementById('trans-fechas-sus');
+            const elRegresiva = document.getElementById('trans-cuenta-regresiva');
+            const boxAlerta = document.getElementById('box-suscripcion-alerta');
+
+            if (!fechaVencimientoStr) {
+                elFechas.innerText = "Sin fecha registrada";
+                elRegresiva.innerText = "⚠️ Comunícate con la Central para activar vigencia";
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-slate-900 border-amber-500 text-amber-400";
+                return;
+            }
+
+            const hoy = new Date();
+            hoy.setHours(0,0,0,0);
+            const vencimiento = new Date(fechaVencimientoStr + 'T00:00:00');
+            
+            // Asumimos un mes de vigencia hacia atrás para mostrar el rango
+            const inicioVigencia = new Date(vencimiento);
+            inicioVigencia.setMonth(inicioVigencia.getMonth() - 1);
+
+            const formatoF = (f) => f.toLocaleDateString('es-CO', {day: '2-digit', month: 'short', year: 'numeric'});
+            elFechas.innerText = `${formatoF(inicioVigencia)} al ${formatoF(vencimiento)}`;
+
+            const diferenciaTiempo = vencimiento - hoy;
+            const diasRestantes = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24));
+
+            if (diasRestantes < 0) {
+                elRegresiva.innerText = "❌ ¡Suscripción Vencida! Actualiza tu pago";
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-red-950/80 border-red-500 text-red-400 animate-pulse";
+            } else if (diasRestantes <= 5) {
+                elRegresiva.innerText = `🚨 ¡URGENTE! Te quedan ${diasRestantes} día(s) para vencerse la suscripción`;
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-red-950/60 border-red-500 text-red-400";
+            } else if (diasRestantes <= 10) {
+                elRegresiva.innerText = `⚠️ ¡Atención! Te quedan ${diasRestantes} días de suscripción`;
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-amber-950/60 border-amber-500 text-amber-400";
+            } else {
+                elRegresiva.innerText = `✅ Suscripción Activa (${diasRestantes} días restantes)`;
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-slate-900 border-emerald-500/50 text-emerald-400";
+            }
         }
 
         function cerrarSesionTrans() {
@@ -938,7 +991,7 @@
 
         function calcularPicoYPlacaHoy() {
             const hoy = new Date();
-            const diaSemana = hoy.getDay(); // 0: Domingo, 1: Lunes... 6: Sábado
+            const diaSemana = hoy.getDay();
             const el = document.getElementById('pico-placa-hoy');
 
             if (diaSemana === 0 || diaSemana === 6) {
@@ -1008,7 +1061,12 @@
                 return;
             }
 
-            state.conductores.push({ placa, nombre, doc, tel, vehiculo, marca, cilindraje, municipio: "Acacías", estado: "Pendiente Pago" });
+            // Fecha por defecto 30 días adelante al postularse
+            const fechaFutura = new Date();
+            fechaFutura.setDate(fechaFutura.getDate() + 30);
+            const vencimientoStr = fechaFutura.toISOString().split('T')[0];
+
+            state.conductores.push({ placa, nombre, doc, tel, vehiculo, marca, cilindraje, municipio: "Acacías", estado: "Pendiente Pago", vencimiento: vencimientoStr });
             guardarDatosLocal();
             alert("🚀 ¡Postulación enviada con éxito a la Central! Recuerda enviar tu soporte por WhatsApp.");
             
@@ -1022,7 +1080,7 @@
             irModulo('transportador');
         }
 
-        // CENTRAL / ADMIN JS
+        // CENTRAL / ADMIN JS (TOTALMENTE REESTRUCTURADO Y BLINDADO)
         function verificarAdminLogin() {
             const pass = document.getElementById('admin-pass').value.trim();
             if (pass === state.config.adminPass) {
@@ -1056,7 +1114,7 @@
             document.getElementById('admin-total-servicios').innerText = state.cargas.length;
             const el = document.getElementById('admin-lista-cargas');
             if (state.cargas.length === 0) { 
-                el.innerHTML = '<p class="text-xs text-slate-400">Sin servicios.</p>'; 
+                el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin servicios registrados.</div>'; 
                 return; 
             }
             el.innerHTML = state.cargas.map(c => `
@@ -1064,18 +1122,18 @@
                     <div class="flex justify-between items-center border-b border-slate-700 pb-1">
                         <span class="font-bold text-orange-400">[${c.municipio}] ${c.clienteNombre} (${c.clienteTel})</span>
                         <div class="space-x-1">
-                            <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20te%20contacto%20de%20la%20Central%20Kargass%20sobre%20tu%20servicio." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 px-2.5 py-1 rounded-lg text-white font-bold inline-block">WhatsApp</a>
-                            <button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 hover:bg-red-700 px-2.5 py-1 rounded-lg text-white font-bold">Eliminar</button>
+                            <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20te%20contacto%20de%20la%20Central%20Kargass%20sobre%20tu%20servicio." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded text-white font-bold inline-block">WhatsApp</a>
+                            <button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold">Eliminar</button>
                         </div>
                     </div>
                     ${c.foto ? `<img src="${c.foto}" class="w-full h-20 object-cover rounded-lg border border-slate-700">` : ''}
-                    <p class="text-white"><b>Vehículo:</b> ${c.vehiculo}</p>
+                    <p class="text-white"><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
                     <p class="text-slate-300"><b>Ruta:</b> ${c.origen} ➔ ${c.destino}</p>
-                    <p class="text-slate-400">Estado: ${c.estado}</p>
+                    <p class="text-slate-400 font-bold">Estado: ${c.estado}</p>
                     <div>
-                        <label class="text-[10px] font-bold text-slate-300">Forzar asignación a conductor:</label>
+                        <label class="text-[10px] font-bold text-slate-300">Asignar a conductor:</label>
                         <select onchange="asignarConductorServicio(${c.id}, this.value)" class="w-full mt-0.5 p-1.5 bg-slate-900 border border-slate-700 rounded text-xs text-white">
-                            <option>-- Seleccionar Conductor Activo --</option>
+                            <option value="">-- Seleccionar Conductor Activo --</option>
                             ${state.conductores.filter(co => co.estado === 'Activo').map(cond => `<option value="${cond.nombre}">${cond.nombre} (${cond.placa})</option>`).join('')}
                         </select>
                     </div>
@@ -1084,6 +1142,7 @@
         }
 
         function asignarConductorServicio(cargaId, nombreConductor) {
+            if (!nombreConductor) return;
             let carga = state.cargas.find(c => c.id === cargaId);
             if (carga) {
                 carga.estado = "Asignado a: " + nombreConductor;
@@ -1094,7 +1153,7 @@
         }
 
         function eliminarCargaAdmin(id) {
-            if (confirm("¿Eliminar este servicio?")) {
+            if (confirm("¿Eliminar este servicio del sistema?")) {
                 state.cargas = state.cargas.filter(c => c.id !== id);
                 guardarDatosLocal();
                 renderAdminServicios();
@@ -1104,7 +1163,7 @@
         function renderAdminConductores() {
             const el = document.getElementById('admin-lista-conductores');
             if (state.conductores.length === 0) {
-                el.innerHTML = '<p class="text-xs text-slate-400">Sin transportadores registrados.</p>';
+                el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin transportadores registrados.</div>';
                 return;
             }
             el.innerHTML = state.conductores.map((cond, idx) => `
@@ -1113,7 +1172,8 @@
                         <p class="font-black text-white">${cond.nombre} (<span class="text-orange-400">${cond.placa}</span>)</p>
                         <span class="px-2 py-0.5 rounded text-[10px] font-bold ${cond.estado === 'Activo' ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}">${cond.estado}</span>
                     </div>
-                    <p class="text-[11px] text-slate-300">C.C: ${cond.doc} • Tel: ${cond.tel} • ${cond.vehiculo} (${cond.marca} - ${cond.cilindraje})</p>
+                    <p class="text-[11px] text-slate-300">C.C: ${cond.doc} • Tel: ${cond.tel} • Vence: <b class="text-orange-400">${cond.vencimiento || 'No asignado'}</b></p>
+                    <p class="text-[11px] text-slate-400">${cond.vehiculo} (${cond.marca} - ${cond.cilindraje})</p>
                     <div class="flex space-x-2 pt-1">
                         ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold">Activar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold">Suspender</button>`}
                         <button onclick="editarConductorAdmin(${idx})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold">Editar</button>
@@ -1130,7 +1190,7 @@
             const vehiculo = document.getElementById('adm-c-vehiculo').value;
             const placa = document.getElementById('adm-c-placa').value.trim().toUpperCase();
             const marca = document.getElementById('adm-c-marca').value.trim();
-            const cilindraje = document.getElementById('adm-c-cilindraje').value.trim();
+            const vencimiento = document.getElementById('adm-c-vencimiento').value;
             const idx = parseInt(document.getElementById('admin-cond-idx').value);
 
             if (!nombre || !placa) {
@@ -1138,7 +1198,18 @@
                 return;
             }
 
-            const datosCond = { placa, nombre, doc: doc || "N/A", tel: tel || "N/A", vehiculo, marca: marca || "N/A", cilindraje: cilindraje || "N/A", municipio: "Acacías", estado: "Activo" };
+            const datosCond = { 
+                placa, 
+                nombre, 
+                doc: doc || "N/A", 
+                tel: tel || "N/A", 
+                vehiculo, 
+                marca: marca || "AKT", 
+                cilindraje: "200cc", 
+                municipio: "Acacías", 
+                estado: "Activo",
+                vencimiento: vencimiento || new Date().toISOString().split('T')[0]
+            };
 
             if (idx >= 0) {
                 state.conductores[idx] = datosCond;
@@ -1156,13 +1227,13 @@
         function editarConductorAdmin(idx) {
             const cond = state.conductores[idx];
             document.getElementById('admin-cond-idx').value = idx;
-            document.getElementById('adm-c-nombre').value = cond.nombre;
-            document.getElementById('adm-c-doc').value = cond.doc;
-            document.getElementById('adm-c-tel').value = cond.tel;
-            document.getElementById('adm-c-vehiculo').value = cond.vehiculo;
-            document.getElementById('adm-c-placa').value = cond.placa;
-            document.getElementById('adm-c-marca').value = cond.marca;
-            document.getElementById('adm-c-cilindraje').value = cond.cilindraje;
+            document.getElementById('adm-c-nombre').value = cond.nombre || "";
+            document.getElementById('adm-c-doc').value = cond.doc || "";
+            document.getElementById('adm-c-tel').value = cond.tel || "";
+            document.getElementById('adm-c-vehiculo').value = cond.vehiculo || "Motocarguero Sencillo";
+            document.getElementById('adm-c-placa').value = cond.placa || "";
+            document.getElementById('adm-c-marca').value = cond.marca || "";
+            document.getElementById('adm-c-vencimiento').value = cond.vencimiento || "";
             document.getElementById('admin-cond-form-title').innerText = "✏️ Editar Transportador (" + cond.placa + ")";
         }
 
@@ -1173,7 +1244,7 @@
             document.getElementById('adm-c-tel').value = "";
             document.getElementById('adm-c-placa').value = "";
             document.getElementById('adm-c-marca').value = "";
-            document.getElementById('adm-c-cilindraje').value = "";
+            document.getElementById('adm-c-vencimiento').value = "";
             document.getElementById('admin-cond-form-title').innerText = "➕ Registrar Nuevo Transportador";
         }
 
