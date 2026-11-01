@@ -30,7 +30,7 @@
                     <p class="text-[9px] text-orange-400 font-black tracking-wide">PLATAFORMA DE ACARREOS • META</p>
                 </div>
             </div>
-            <button onclick="mostrarSelectorRol()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-xl border border-slate-600 text-orange-400 font-black shadow-md cursor-pointer">Menú</button>
+            <button onclick="mostrarSelectorRol()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-xl border border-slate-600 text-orange-400 font-black shadow-md cursor-pointer">Menú / Accesos</button>
         </div>
     </header>
 
@@ -358,11 +358,15 @@
                             <input type="tel" id="af-tel" placeholder="314..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
                         </div>
                     </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-300">Municipio Base de Operación</label>
+                        <select id="af-municipio" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select>
+                    </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="text-[11px] font-bold text-slate-300">Tipo de Vehículo</label>
                             <select id="af-vehiculo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-black outline-none">
-                                <option value="Motocarguero Sencillo">Motocarguero Sencillo</option>
+                                <option value="Motocarguero sencillo">Motocarguero sencillo</option>
                                 <option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option>
                                 <option value="Camioneta">Camioneta</option>
                                 <option value="Camión">Camión</option>
@@ -375,12 +379,12 @@
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="text-[11px] font-bold text-slate-300">Marca Carguero</label>
-                            <input type="text" id="af-marca" placeholder="Ej: AKT, Bajaj" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                            <label class="text-[11px] font-bold text-slate-300">Marca</label>
+                            <input type="text" id="af-marca" placeholder="Ej: Camel, AKT" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
                         </div>
                         <div>
                             <label class="text-[11px] font-bold text-slate-300">Cilindraje</label>
-                            <input type="text" id="af-cilindraje" placeholder="Ej: 200cc, 300cc" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                            <input type="text" id="af-cilindraje" placeholder="Ej: 200cc" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
                         </div>
                     </div>
 
@@ -426,62 +430,59 @@
                     <div id="admin-lista-cargas" class="space-y-2.5"></div>
                 </div>
 
-                <!-- GESTIÓN FLOTA / SOCIOS -->
-                <div id="a-content-conductores" class="space-y-2.5 hidden">
+                <!-- GESTIÓN FLOTA / SOCIOS (FORMULARIO EXACTO SOLICITUD) -->
+                <div id="a-content-conductores" class="space-y-3 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs shadow-xl">
-                        <h3 class="font-black text-sm text-orange-400" id="admin-cond-form-title">➕ Registrar / Gestionar Transportador</h3>
+                        <h3 class="font-black text-sm text-orange-400" id="admin-cond-form-title">Registrar Nuevo Conductor</h3>
                         <input type="hidden" id="admin-cond-idx" value="-1">
                         
-                        <div class="space-y-2">
+                        <div class="space-y-2.5">
                             <div>
-                                <label class="text-[11px] font-bold text-slate-300">Nombre Completo</label>
-                                <input type="text" id="adm-c-nombre" placeholder="Nombre completo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                <label class="text-[11px] font-bold text-slate-300">Nombre del Conductor</label>
+                                <input type="text" id="adm-c-nombre" placeholder="Ej: Carlos Gómez" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Número de Cédula (Uso Interno Admin)</label>
+                                <input type="number" id="adm-c-doc" placeholder="Ej: 1122334455" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Municipio Base de Operación (Determina su lista de tarifas)</label>
+                                <select id="adm-c-municipio" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select>
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Tipo de Vehículo</label>
+                                <select id="adm-c-vehiculo" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
+                                    <option value="Motocarguero sencillo">Motocarguero sencillo</option>
+                                    <option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option>
+                                    <option value="Camioneta">Camioneta</option>
+                                    <option value="Camión">Camión</option>
+                                </select>
                             </div>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label class="text-[11px] font-bold text-slate-300">Cédula</label>
-                                    <input type="number" id="adm-c-doc" placeholder="Cédula" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                    <label class="text-[11px] font-bold text-slate-300">Marca (Ej: Camel, AKT)</label>
+                                    <input type="text" id="adm-c-marca" placeholder="Ej: Camel" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
                                 </div>
                                 <div>
-                                    <label class="text-[11px] font-bold text-slate-300">Teléfono</label>
-                                    <input type="tel" id="adm-c-tel" placeholder="Teléfono" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                    <label class="text-[11px] font-bold text-slate-300">Cilindraje (Ej: 200cc)</label>
+                                    <input type="text" id="adm-c-cilindraje" placeholder="Ej: 200cc" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label class="text-[11px] font-bold text-slate-300">Tipo Vehículo</label>
-                                    <select id="adm-c-vehiculo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
-                                        <option value="Motocarguero Sencillo">Motocarguero Sencillo</option>
-                                        <option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option>
-                                        <option value="Camioneta">Camioneta</option>
-                                        <option value="Camión">Camión</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="text-[11px] font-bold text-slate-300">Placa</label>
-                                    <input type="text" id="adm-c-placa" placeholder="Placa" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-black uppercase outline-none">
-                                </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Número de Placa</label>
+                                <input type="text" id="adm-c-placa" placeholder="EJ: 571 AGU" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-black uppercase outline-none">
                             </div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label class="text-[11px] font-bold text-slate-300">Vencimiento Suscripción</label>
-                                    <input type="date" id="adm-c-vencimiento" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
-                                </div>
-                                <div>
-                                    <label class="text-[11px] font-bold text-slate-300">Cilindraje / Marca</label>
-                                    <input type="text" id="adm-c-marca" placeholder="Ej: AKT 200cc" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
-                                </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Teléfono de Contacto</label>
+                                <input type="tel" id="adm-c-tel" placeholder="314..." class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
                             </div>
 
-                            <div class="flex space-x-2 pt-1">
-                                <button onclick="guardarConductorAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow cursor-pointer">💾 Guardar Transportador</button>
-                                <button onclick="limpiarFormConductorAdmin()" class="bg-slate-700 hover:bg-slate-600 px-3 py-2.5 rounded-xl text-slate-200 font-bold cursor-pointer">Limpiar</button>
-                            </div>
+                            <button onclick="guardarConductorAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3.5 rounded-xl text-white shadow cursor-pointer text-xs uppercase tracking-wider">Añadir al Directorio (1 Mes Activo)</button>
                         </div>
                     </div>
 
                     <div class="flex justify-between items-center pt-2">
-                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Flota Registrada / Preinscritos</h3>
+                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Directorio General de Transportadores</h3>
                     </div>
                     <div id="admin-lista-conductores" class="space-y-2"></div>
                 </div>
@@ -632,7 +633,7 @@
         let state = {
             cargas: JSON.parse(localStorage.getItem('kargass_cargas')) || [],
             conductores: JSON.parse(localStorage.getItem('kargass_conductores')) || [
-                { placa: "ABC123", nombre: "Pedro Gómez", doc: "11223344", tel: "3101234567", vehiculo: "Motocarguero Sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-11-30" }
+                { placa: "571 AGU", nombre: "Carlos Gómez", doc: "1122334455", tel: "3101234567", vehiculo: "Motocarguero sencillo", marca: "Camel", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01" }
             ],
             tarifas: JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || tarifasBaseAcacias,
             config: JSON.parse(localStorage.getItem('kargass_config_global')) || {
@@ -645,7 +646,7 @@
             },
             clienteActualDoc: null,
             transActualPlaca: null,
-            isAdmin: false, // Blindaje: La administración nunca se queda abierta
+            isAdmin: false,
             tipoZona: "Local (Urbano)",
             horarioTipo: "Inmediato",
             fotoBase64: null
@@ -730,7 +731,7 @@
                 document.getElementById('view-afiliacion').classList.remove('hidden');
             } else if (mod === 'central') {
                 document.getElementById('view-central').classList.remove('hidden');
-                state.isAdmin = false; // Exigir clave siempre
+                state.isAdmin = false;
                 document.getElementById('admin-pass').value = '';
                 document.getElementById('admin-login').classList.remove('hidden');
                 document.getElementById('admin-dashboard').classList.add('hidden');
@@ -1113,6 +1114,7 @@
             const nombre = document.getElementById('af-nombre').value.trim();
             const doc = document.getElementById('af-doc').value.trim();
             const tel = document.getElementById('af-tel').value.trim();
+            const municipio = document.getElementById('af-municipio').value;
             const vehiculo = document.getElementById('af-vehiculo').value;
             const placa = document.getElementById('af-placa').value.trim().toUpperCase();
             const marca = document.getElementById('af-marca').value.trim();
@@ -1133,7 +1135,7 @@
             fechaFutura.setDate(fechaFutura.getDate() + 30);
             const vencimientoStr = fechaFutura.toISOString().split('T')[0];
 
-            state.conductores.push({ placa, nombre, doc, tel, vehiculo, marca, cilindraje, municipio: "Acacías", estado: "Pendiente", vencimiento: vencimientoStr });
+            state.conductores.push({ placa, nombre, doc, tel, municipio, vehiculo, marca, cilindraje, estado: "Pendiente", vencimiento: vencimientoStr });
             guardarDatosLocal();
             alert("🚀 ¡Postulación enviada a la Central con éxito! Queda a la espera de aprobación.");
             
@@ -1238,7 +1240,8 @@
                         <p class="font-black text-white">${cond.nombre} (<span class="text-orange-400">${cond.placa}</span>)</p>
                         <span class="px-2 py-0.5 rounded text-[10px] font-bold ${cond.estado === 'Activo' ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}">${cond.estado}</span>
                     </div>
-                    <p class="text-[11px] text-slate-300">C.C: ${cond.doc} • Tel: ${cond.tel} • Vence: <b class="text-orange-400">${cond.vencimiento || 'No asignado'}</b></p>
+                    <p class="text-[11px] text-slate-300"><b>Ciudad:</b> <span class="text-orange-400 font-bold">${cond.municipio || 'Acacías'}</span> • C.C: ${cond.doc} • Tel: ${cond.tel}</p>
+                    <p class="text-[11px] text-slate-300">Vence: <b class="text-orange-400">${cond.vencimiento || 'No asignado'}</b></p>
                     <p class="text-[11px] text-slate-400">${cond.vehiculo} (${cond.marca} - ${cond.cilindraje})</p>
                     <div class="flex space-x-2 pt-1">
                         ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Aprobar / Activar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Suspender</button>`}
@@ -1252,11 +1255,12 @@
         function guardarConductorAdmin() {
             const nombre = document.getElementById('adm-c-nombre').value.trim();
             const doc = document.getElementById('adm-c-doc').value.trim();
-            const tel = document.getElementById('adm-c-tel').value.trim();
+            const municipio = document.getElementById('adm-c-municipio').value;
             const vehiculo = document.getElementById('adm-c-vehiculo').value;
-            const placa = document.getElementById('adm-c-placa').value.trim().toUpperCase();
             const marca = document.getElementById('adm-c-marca').value.trim();
-            const vencimiento = document.getElementById('adm-c-vencimiento').value;
+            const cilindraje = document.getElementById('adm-c-cilindraje').value.trim();
+            const placa = document.getElementById('adm-c-placa').value.trim().toUpperCase();
+            const tel = document.getElementById('adm-c-tel').value.trim();
             const idx = parseInt(document.getElementById('admin-cond-idx').value);
 
             if (!nombre || !placa) {
@@ -1264,25 +1268,31 @@
                 return;
             }
 
+            const fechaFutura = new Date();
+            fechaFutura.setDate(fechaFutura.getDate() + 30);
+            const vencimientoStr = fechaFutura.toISOString().split('T')[0];
+
             const datosCond = { 
                 placa, 
                 nombre, 
                 doc: doc || "N/A", 
                 tel: tel || "N/A", 
+                municipio,
                 vehiculo, 
-                marca: marca || "AKT", 
-                cilindraje: "200cc", 
-                municipio: "Acacías", 
+                marca: marca || "Akt", 
+                cilindraje: cilindraje || "200cc", 
                 estado: "Activo",
-                vencimiento: vencimiento || new Date().toISOString().split('T')[0]
+                vencimiento: vencimientoStr
             };
 
             if (idx >= 0) {
+                datosCond.vencimiento = state.conductores[idx].vencimiento || vencimientoStr;
+                datosCond.estado = state.conductores[idx].estado || "Activo";
                 state.conductores[idx] = datosCond;
-                alert("✅ Conductor actualizado");
+                alert("✅ Conductor actualizado con éxito");
             } else {
                 state.conductores.push(datosCond);
-                alert("✅ Conductor registrado y activado con éxito");
+                alert("✅ Conductor añadido al directorio con 1 mes activo");
             }
 
             guardarDatosLocal();
@@ -1295,11 +1305,12 @@
             document.getElementById('admin-cond-idx').value = idx;
             document.getElementById('adm-c-nombre').value = cond.nombre || "";
             document.getElementById('adm-c-doc').value = cond.doc || "";
-            document.getElementById('adm-c-tel').value = cond.tel || "";
-            document.getElementById('adm-c-vehiculo').value = cond.vehiculo || "Motocarguero Sencillo";
-            document.getElementById('adm-c-placa').value = cond.placa || "";
+            document.getElementById('adm-c-municipio').value = cond.municipio || "Acacías";
+            document.getElementById('adm-c-vehiculo').value = cond.vehiculo || "Motocarguero sencillo";
             document.getElementById('adm-c-marca').value = cond.marca || "";
-            document.getElementById('adm-c-vencimiento').value = cond.vencimiento || "";
+            document.getElementById('adm-c-cilindraje').value = cond.cilindraje || "";
+            document.getElementById('adm-c-placa').value = cond.placa || "";
+            document.getElementById('adm-c-tel').value = cond.tel || "";
             document.getElementById('admin-cond-form-title').innerText = "✏️ Editar Transportador (" + cond.placa + ")";
         }
 
@@ -1307,11 +1318,11 @@
             document.getElementById('admin-cond-idx').value = "-1";
             document.getElementById('adm-c-nombre').value = "";
             document.getElementById('adm-c-doc').value = "";
-            document.getElementById('adm-c-tel').value = "";
-            document.getElementById('adm-c-placa').value = "";
             document.getElementById('adm-c-marca').value = "";
-            document.getElementById('adm-c-vencimiento').value = "";
-            document.getElementById('admin-cond-form-title').innerText = "➕ Registrar / Gestionar Transportador";
+            document.getElementById('adm-c-cilindraje').value = "";
+            document.getElementById('adm-c-placa').value = "";
+            document.getElementById('adm-c-tel').value = "";
+            document.getElementById('admin-cond-form-title').innerText = "Registrar Nuevo Conductor";
         }
 
         function cambiarEstadoConductor(idx, nuevoEstado) {
