@@ -735,4 +735,803 @@
             document.getElementById('modal-selector').classList.add('hidden');
             document.getElementById('view-cliente').classList.add('hidden');
             document.getElementById('view-transportador').classList.add('hidden');
-            document.getElementById('view-af
+            document.getElementById('view-afiliacion').classList.add('hidden');
+            document.getElementById('view-central').classList.add('hidden');
+            poblarSelectMunicipios();
+            actualizarTextosGlobales();
+
+            if (mod === 'cliente') {
+                document.getElementById('view-cliente').classList.remove('hidden');
+                const guardadoDoc = localStorage.getItem('kargass_cliente_doc_memoria');
+                if (guardadoDoc) {
+                    document.getElementById('cli-doc-input').value = guardadoDoc;
+                    verificarClienteLoginMemoria(guardadoDoc);
+                } else {
+                    document.getElementById('cliente-login').classList.remove('hidden');
+                    document.getElementById('cliente-dashboard').classList.add('hidden');
+                }
+            } else if (mod === 'transportador') {
+                document.getElementById('view-transportador').classList.remove('hidden');
+                const guardadoPlaca = localStorage.getItem('kargass_trans_placa_memoria');
+                if (guardadoPlaca) {
+                    document.getElementById('trans-placa-input').value = guardadoPlaca;
+                    verificarTransportadorLoginMemoria(guardadoPlaca);
+                } else {
+                    document.getElementById('trans-login').classList.remove('hidden');
+                    document.getElementById('trans-dashboard').classList.add('hidden');
+                }
+            } else if (mod === 'afiliacion') {
+                document.getElementById('view-afiliacion').classList.remove('hidden');
+            } else if (mod === 'central') {
+                document.getElementById('view-central').classList.remove('hidden');
+                state.isAdmin = false;
+                document.getElementById('admin-pass').value = '';
+                document.getElementById('admin-login').classList.remove('hidden');
+                document.getElementById('admin-dashboard').classList.add('hidden');
+            }
+        }
+
+        // CLIENTE JS CON MEMORIA
+        function verificarClienteLogin() {
+            const doc = document.getElementById('cli-doc-input').value.trim();
+            if (!doc) { alert("Ingresa tu cédula"); return; }
+            verificarClienteLoginMemoria(doc);
+        }
+
+        function verificarClienteLoginMemoria(doc) {
+            state.clienteActualDoc = doc;
+            localStorage.setItem('kargass_cliente_doc_memoria', doc);
+            document.getElementById('cliente-login').classList.add('hidden');
+            document.getElementById('cliente-dashboard').classList.remove('hidden');
+            document.getElementById('cli-perfil-doc').innerText = doc;
+            const guardado = JSON.parse(localStorage.getItem('kargass_memoria_cli_' + doc));
+            if (guardado) {
+                document.getElementById('cli-nombre').value = guardado.nombre || "";
+                document.getElementById('cli-tel').value = guardado.tel || "";
+            }
+            renderHistorialCliente();
+        }
+
+        function cerrarSesionCliente() {
+            state.clienteActualDoc = null;
+            localStorage.removeItem('kargass_cliente_doc_memoria');
+            document.getElementById('cliente-dashboard').classList.add('hidden');
+            document.getElementById('cliente-login').classList.remove('hidden');
+        }
+
+        function setTipoZona(tipo) {
+            state.tipoZona = tipo;
+            const btnU = document.getElementById('btn-tipo-urbano');
+            const btnI = document.getElementById('btn-tipo-inter');
+            if (tipo === 'Local (Urbano)') {
+                btnU.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+                btnI.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+            } else {
+                btnI.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+                btnU.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+            }
+        }
+
+        function setHorario(horario) {
+            state.horarioTipo = horario;
+            const btnI = document.getElementById('btn-horario-inmediato');
+            const btnP = document.getElementById('btn-horario-programado');
+            const box = document.getElementById('box-hora-programada');
+            if (horario === 'Inmediato') {
+                btnI.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";
+                btnP.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";
+                box.classList.add('hidden');
+            } else {
+                btnP.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";
+                btnI.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";
+                box.classList.remove('hidden');
+            }
+        }
+
+        function obtenerGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    document.getElementById('cli-origen').value = `GPS: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
+                    alert("📍 Coordenadas capturadas");
+                }, () => alert("No se pudo obtener GPS"));
+            } else alert("GPS no soportado");
+        }
+
+        function capturarFoto(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    state.fotoBase64 = evt.target.result;
+                    document.getElementById('foto-estado').innerText = "¡Foto cargada!";
+                    document.getElementById('foto-estado').className = "text-[10px] text-green-400 font-bold";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function publicarSolicitudCliente() {
+            const nombre = document.getElementById('cli-nombre').value.trim();
+            const tel = document.getElementById('cli-tel').value.trim();
+            const peso = document.getElementById('cli-peso').value.trim();
+            const origen = document.getElementById('cli-origen').value.trim();
+            const destino = document.getElementById('cli-destino').value.trim();
+
+            if (!nombre || !tel || !peso || !origen || !destino) {
+                alert("Completa todos los campos requeridos"); return;
+            }
+
+            const btnPub = document.getElementById('btn-publicar-acarreo');
+            btnPub.disabled = true;
+            btnPub.classList.add('opacity-50');
+
+            localStorage.setItem('kargass_memoria_cli_' + state.clienteActualDoc, JSON.stringify({ nombre, tel }));
+            const horaCargue = state.horarioTipo === 'Inmediato' ? '⚡ Cargue Inmediato' : '⏰ Programado: ' + (document.getElementById('cli-hora-input').value || 'Acordado');
+
+            const nuevaCarga = {
+                id: Date.now(),
+                clienteDoc: state.clienteActualDoc,
+                clienteNombre: nombre,
+                clienteTel: tel,
+                tipoZona: state.tipoZona,
+                municipio: document.getElementById('cli-mun-local').value,
+                horario: horaCargue,
+                vehiculo: document.getElementById('cli-vehiculo').value,
+                peso: peso,
+                origen: origen,
+                destino: destino,
+                observaciones: document.getElementById('cli-obs').value.trim(),
+                foto: state.fotoBase64,
+                estado: "Recibiendo Cotizaciones",
+                ofertas: [],
+                fechaCreacion: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+
+            state.cargas.unshift(nuevaCarga);
+            guardarDatosLocal();
+            
+            alert("✅ ¡Solicitud enviada con éxito! Ya aparece en tu historial a la espera de cotizaciones.");
+            
+            document.getElementById('cli-peso').value = '';
+            document.getElementById('cli-origen').value = '';
+            document.getElementById('cli-destino').value = '';
+            document.getElementById('cli-obs').value = '';
+            document.getElementById('foto-estado').innerText = "Sin foto";
+            state.fotoBase64 = null;
+            
+            setTimeout(() => {
+                btnPub.disabled = false;
+                btnPub.classList.remove('opacity-50');
+            }, 1000);
+
+            renderHistorialCliente();
+        }
+
+        function renderHistorialCliente() {
+            const el = document.getElementById('lista-mis-cargas');
+            const mis = state.cargas.filter(c => c.clienteDoc === state.clienteActualDoc);
+            if (mis.length === 0) {
+                el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin solicitudes aún en el historial.</div>';
+                return;
+            }
+            el.innerHTML = mis.map(c => `
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-lg">
+                    <div class="flex justify-between items-start border-b border-slate-700 pb-1.5">
+                        <span class="bg-orange-500/20 text-orange-400 font-black px-2 py-0.5 rounded-lg text-[10px]">${c.tipoZona}</span>
+                        <span class="text-orange-400 font-black text-[11px]">${c.estado}</span>
+                    </div>
+                    <p class="font-black text-white">📦 ${c.origen} ➔ ${c.destino}</p>
+                    <p><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
+                    ${c.foto ? `<img src="${c.foto}" class="w-full h-24 object-cover rounded-xl border border-slate-700">` : ''}
+                    
+                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1.5">
+                        <p class="font-black text-orange-400">🏷️ Cotizaciones Recibidas (${c.ofertas ? c.ofertas.length : 0}):</p>
+                        ${(!c.ofertas || c.ofertas.length === 0) ? '<p class="text-slate-400 italic">Esperando cotizaciones de la flota...</p>' : c.ofertas.map((of, oIdx) => `
+                            <div class="flex justify-between items-center bg-slate-800 p-2 rounded-lg border border-slate-700">
+                                <div>
+                                    <p class="font-bold text-white">${of.conductorNombre} (${of.placa})</p>
+                                    <p class="text-[10px] text-slate-300">Tel: ${of.tel}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-black text-emerald-400 text-sm">$${Number(of.precio).toLocaleString('es-CO')}</span>
+                                    <button onclick="seleccionarOfertaCliente(${c.id}, ${oIdx})" class="block mt-1 bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1 rounded text-[10px] cursor-pointer">Seleccionar</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function seleccionarOfertaCliente(cargaId, ofertaIdx) {
+            let carga = state.cargas.find(c => c.id === cargaId);
+            if (carga && carga.ofertas[ofertaIdx]) {
+                const seleccionada = carga.ofertas[ofertaIdx];
+                carga.estado = `Asignado a ${seleccionada.conductorNombre} ($${Number(seleccionada.precio).toLocaleString('es-CO')})`;
+                guardarDatosLocal();
+                renderHistorialCliente();
+                alert(`✅ ¡Has seleccionado la cotización de ${seleccionada.conductorNombre}! Servicio asignado.`);
+            }
+        }
+
+        // TRANSPORTADOR JS CON MEMORIA
+        function verificarTransportadorLogin() {
+            const placa = document.getElementById('trans-placa-input').value.trim().toUpperCase();
+            if (!placa) { alert("Ingresa tu placa"); return; }
+            verificarTransportadorLoginMemoria(placa);
+        }
+
+        function verificarTransportadorLoginMemoria(placa) {
+            let cond = state.conductores.find(c => c.placa === placa);
+            if (!cond) {
+                alert("⚠️ Placa no encontrada o pendiente de aprobación en la Central.");
+                return;
+            }
+
+            if (cond.estado !== 'Activo') {
+                alert("⚠️ Tu cuenta se encuentra en estado: " + cond.estado);
+                return;
+            }
+
+            state.transActualPlaca = placa;
+            localStorage.setItem('kargass_trans_placa_memoria', placa);
+            cargarDashboardTrans(cond);
+        }
+
+        function cargarDashboardTrans(cond) {
+            document.getElementById('trans-login').classList.add('hidden');
+            document.getElementById('trans-dashboard').classList.remove('hidden');
+            
+            document.getElementById('trans-perfil-nombre').innerText = cond.nombre || "Conductor";
+            document.getElementById('trans-perfil-doc').innerText = cond.doc || "N/A";
+            document.getElementById('trans-perfil-tel').innerText = cond.tel || "N/A";
+            document.getElementById('trans-perfil-placa').innerText = cond.placa;
+            document.getElementById('trans-perfil-vehiculo').innerText = (cond.vehiculo || "Motocarguero") + ` (${cond.marca || 'AKT'} - ${cond.cilindraje || '200cc'})`;
+
+            calcularCuentaRegresivaSuscripcion(cond.vencimiento);
+            renderCargasDisponiblesTrans();
+            renderTarifasTransportador();
+            actualizarTextosGlobales();
+        }
+
+        function calcularCuentaRegresivaSuscripcion(fechaVencimientoStr) {
+            const elFechas = document.getElementById('trans-fechas-sus');
+            const elRegresiva = document.getElementById('trans-cuenta-regresiva');
+            const boxAlerta = document.getElementById('box-suscripcion-alerta');
+
+            if (!fechaVencimientoStr) {
+                elFechas.innerText = "Sin fecha registrada";
+                elRegresiva.innerText = "⚠️ Comunícate con la Central para activar vigencia";
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-slate-900 border-amber-500 text-amber-400";
+                return;
+            }
+
+            const hoy = new Date();
+            hoy.setHours(0,0,0,0);
+            const vencimiento = new Date(fechaVencimientoStr + 'T00:00:00');
+            const inicioVigencia = new Date(vencimiento);
+            inicioVigencia.setMonth(inicioVigencia.getMonth() - 1);
+
+            const formatoF = (f) => f.toLocaleDateString('es-CO', {day: '2-digit', month: 'short', year: 'numeric'});
+            elFechas.innerText = `${formatoF(inicioVigencia)} al ${formatoF(vencimiento)}`;
+
+            const diferenciaTiempo = vencimiento - hoy;
+            const diasRestantes = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24));
+
+            if (diasRestantes < 0) {
+                elRegresiva.innerText = "❌ ¡Suscripción Vencida! Servicio desactivado";
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-red-950/80 border-red-500 text-red-400 animate-pulse";
+            } else if (diasRestantes <= 5) {
+                elRegresiva.innerText = `🚨 ¡URGENTE! Te quedan ${diasRestantes} día(s) para vencerse`;
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-red-950/60 border-red-500 text-red-400";
+            } else {
+                elRegresiva.innerText = `✅ Suscripción Activa (${diasRestantes} días restantes)`;
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-slate-900 border-emerald-500/50 text-emerald-400";
+            }
+        }
+
+        function cerrarSesionTrans() {
+            state.transActualPlaca = null;
+            localStorage.removeItem('kargass_trans_placa_memoria');
+            document.getElementById('trans-dashboard').classList.add('hidden');
+            document.getElementById('trans-login').classList.remove('hidden');
+        }
+
+        function switchTabTrans(tab) {
+            ['servicios', 'tarifas', 'pico', 'sub', 'viajes'].forEach(t => {
+                document.getElementById('t-content-' + t).classList.add('hidden');
+                document.getElementById('tab-t-' + t).className = "text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate";
+            });
+            document.getElementById('t-content-' + tab).classList.remove('hidden');
+            document.getElementById('tab-t-' + tab).className = "bg-orange-500 text-white py-2 px-1 rounded-lg cursor-pointer truncate";
+        }
+
+        function switchSubTabTarifas(sub) {
+            ['urbano', 'veredas', 'municipios'].forEach(s => {
+                document.getElementById('subcontent-t-' + s).classList.add('hidden');
+                document.getElementById('subtab-t-' + s).className = "text-slate-400 py-1.5 rounded-lg cursor-pointer";
+            });
+            document.getElementById('subcontent-t-' + sub).classList.remove('hidden');
+            document.getElementById('subtab-t-' + sub).className = "bg-orange-500 text-white py-1.5 rounded-lg cursor-pointer";
+        }
+
+        function renderTarifasTransportador() {
+            ['urbano', 'veredas', 'municipios'].forEach(cat => {
+                const contenedor = document.getElementById(`contenedor-tarifas-${cat}`);
+                const items = state.tarifas[cat] || [];
+                if (items.length === 0) {
+                    contenedor.innerHTML = `<p class="text-slate-400 text-center py-2">Sin tarifas registradas.</p>`;
+                } else {
+                    contenedor.innerHTML = items.map(t => `
+                        <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700">
+                            <span>${t.ruta}</span>
+                            <span class="font-black text-orange-400">${t.valor}</span>
+                        </div>
+                    `).join('');
+                }
+            });
+        }
+
+        function renderCargasDisponiblesTrans() {
+            const el = document.getElementById('lista-cargas-disponibles');
+            const filtradas = state.cargas.filter(c => c.municipio === "Acacías" || c.tipoZona === "Intermunicipal");
+
+            if (filtradas.length === 0) {
+                el.innerHTML = '<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay acarreos disponibles.</div>';
+                return;
+            }
+            el.innerHTML = filtradas.map(c => `
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-md">
+                    <div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1">
+                        <span>📍 ${c.municipio} (${c.tipoZona})</span>
+                        <span>🛺 ${c.vehiculo}</span>
+                    </div>
+                    <p class="font-black text-white text-sm">${c.origen} ➔ ${c.destino}</p>
+                    <p class="text-slate-300"><b>Carga:</b> ${c.peso} | <b>Horario:</b> ${c.horario}</p>
+                    <p class="text-slate-400"><b>Cliente:</b> ${c.clienteNombre} (${c.clienteTel})</p>
+                    ${c.observaciones ? `<p class="text-slate-400 italic">"${c.observaciones}"</p>` : ''}
+                    ${c.foto ? `<img src="${c.foto}" class="w-full h-24 object-cover rounded-xl border border-slate-700">` : ''}
+                    
+                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2">
+                        <label class="font-bold text-slate-300">Enviar Cotización de Flete (COP):</label>
+                        <div class="flex space-x-2">
+                            <input type="number" id="input-oferta-${c.id}" placeholder="Ej: 35000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs">
+                            <button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Cotización</button>
+                        </div>
+                    </div>
+                    
+                    <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20vi%20tu%20acarreo%20en%20Kargass." target="_blank" class="block text-center bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white mt-1 shadow">💬 Contactar Directo por WhatsApp</a>
+                </div>
+            `).join('');
+        }
+
+        function enviarOfertaTransportador(cargaId) {
+            const inputVal = document.getElementById(`input-oferta-${cargaId}`).value.trim();
+            if (!inputVal || isNaN(inputVal)) {
+                alert("⚠️ Ingresa un valor numérico válido para tu cotización.");
+                return;
+            }
+
+            let carga = state.cargas.find(c => c.id === cargaId);
+            let cond = state.conductores.find(co => co.placa === state.transActualPlaca);
+
+            if (carga && cond) {
+                if (!carga.ofertas) carga.ofertas = [];
+                
+                let existente = carga.ofertas.find(o => o.placa === cond.placa);
+                if (existente) {
+                    existente.precio = inputVal;
+                } else {
+                    carga.ofertas.push({
+                        placa: cond.placa,
+                        conductorNombre: cond.nombre,
+                        tel: cond.tel,
+                        precio: inputVal
+                    });
+                }
+
+                guardarDatosLocal();
+                alert(`🚀 ¡Cotización de $${Number(inputVal).toLocaleString('es-CO')} enviada con éxito al cliente!`);
+                document.getElementById(`input-oferta-${cargaId}`).value = '';
+                renderCargasDisponiblesTrans();
+            }
+        }
+
+        function copiarNequi() {
+            navigator.clipboard.writeText(state.config.nequi);
+            alert("✅ Número Nequi copiado: " + state.config.nequi);
+        }
+
+        // AFILIACIÓN JS
+        function enviarPostulacion() {
+            const nombre = document.getElementById('af-nombre').value.trim();
+            const doc = document.getElementById('af-doc').value.trim();
+            const tel = document.getElementById('af-tel').value.trim();
+            const municipio = document.getElementById('af-municipio').value;
+            const vehiculo = document.getElementById('af-vehiculo').value;
+            const placa = document.getElementById('af-placa').value.trim().toUpperCase();
+            const marca = document.getElementById('af-marca').value.trim();
+            const cilindraje = document.getElementById('af-cilindraje').value.trim();
+            const acepto = document.getElementById('af-check-reglamento').checked;
+
+            if (!nombre || !doc || !tel || !placa || !marca || !cilindraje) {
+                alert("⚠️ Completa todos los campos.");
+                return;
+            }
+
+            if (!acepto) {
+                alert("⚠️ Debes aceptar el reglamento.");
+                return;
+            }
+
+            const fechaFutura = new Date();
+            fechaFutura.setDate(fechaFutura.getDate() + 30);
+            const vencimientoStr = fechaFutura.toISOString().split('T')[0];
+
+            state.conductores.push({ placa, nombre, doc, tel, municipio, vehiculo, marca, cilindraje, estado: "Pendiente", vencimiento: vencimientoStr });
+            guardarDatosLocal();
+            alert("🚀 ¡Postulación enviada a la Central con éxito! Queda a la espera de aprobación.");
+            
+            document.getElementById('af-nombre').value = '';
+            document.getElementById('af-doc').value = '';
+            document.getElementById('af-tel').value = '';
+            document.getElementById('af-placa').value = '';
+            document.getElementById('af-marca').value = '';
+            document.getElementById('af-cilindraje').value = '';
+            document.getElementById('af-check-reglamento').checked = false;
+            irModulo('transportador');
+        }
+
+        // CENTRAL / ADMIN JS (BLINDADO)
+        function verificarAdminLogin() {
+            const pass = document.getElementById('admin-pass').value.trim();
+            if (pass === state.config.adminPass) {
+                state.isAdmin = true;
+                document.getElementById('admin-login').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                renderAdminServicios();
+                renderAdminConductores();
+                renderAdminTarifas();
+                cargarAjustesGlobales();
+            } else alert("Clave incorrecta");
+        }
+
+        function toggleVerPasswordAdmin() {
+            const inputPass = document.getElementById('cfg-admin-pass');
+            if (inputPass.type === "password") {
+                inputPass.type = "text";
+            } else {
+                inputPass.type = "password";
+            }
+        }
+
+        function cerrarSesionAdmin() {
+            state.isAdmin = false;
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('admin-login').classList.remove('hidden');
+            document.getElementById('admin-pass').value = '';
+        }
+
+        function switchTabAdmin(tab) {
+            ['servicios', 'conductores', 'tarifas', 'ajustes'].forEach(t => {
+                const content = document.getElementById('a-content-' + t);
+                const btn = document.getElementById('tab-a-' + t);
+                if (content && btn) {
+                    if (t === tab) {
+                        content.classList.remove('hidden');
+                        btn.className = "bg-orange-500 text-white py-2 rounded-lg cursor-pointer font-black";
+                    } else {
+                        content.classList.add('hidden');
+                        btn.className = "text-slate-400 py-2 rounded-lg cursor-pointer";
+                    }
+                }
+            });
+        }
+
+        function renderAdminServicios() {
+            document.getElementById('admin-total-servicios').innerText = state.cargas.length;
+            const el = document.getElementById('admin-lista-cargas');
+            if (!state.cargas || state.cargas.length === 0) { 
+                el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin servicios registrados.</div>'; 
+                return; 
+            }
+
+            const listaConductoresActivos = state.conductores.filter(c => c.estado === 'Activo');
+
+            el.innerHTML = state.cargas.map(c => `
+                <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-2 shadow-md">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-1">
+                        <span class="font-bold text-orange-400">[${c.municipio}] ${c.clienteNombre} (${c.clienteTel})</span>
+                        <div class="space-x-1">
+                            <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20te%20contacto%20de%20la%20Central%20Kargass." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded text-white font-bold inline-block">WhatsApp</a>
+                            <button onclick="abrirEditarServicio(${c.id})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Editar</button>
+                            <button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button>
+                        </div>
+                    </div>
+                    ${c.foto ? `<img src="${c.foto}" class="w-full h-20 object-cover rounded-lg border border-slate-700">` : ''}
+                    <p class="text-white"><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
+                    <p class="text-slate-300"><b>Ruta:</b> ${c.origen} ➔ ${c.destino}</p>
+                    <p class="text-slate-400 font-bold">Estado: ${c.estado}</p>
+                    
+                    <!-- ASIGNAR CONDUCTOR DIRECTO -->
+                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 flex items-center space-x-2 pt-2">
+                        <select id="select-asignar-${c.id}" class="w-full p-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-[11px] font-bold">
+                            <option value="">-- Seleccionar Conductor Activo --</option>
+                            ${listaConductoresActivos.map(cond => `<option value="${cond.nombre} - ${cond.placa}">${cond.nombre} (${cond.placa} - ${cond.municipio})</option>`).join('')}
+                        </select>
+                        <button onclick="asignarConductorAdmin(${c.id})" class="bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-lg text-white font-bold whitespace-nowrap cursor-pointer">Asignar</button>
+                    </div>
+
+                    <p class="text-emerald-400 font-bold">Cotizaciones recibidas: ${c.ofertas ? c.ofertas.length : 0}</p>
+                </div>
+            `).join('');
+        }
+
+        function asignarConductorAdmin(cargaId) {
+            const selectEl = document.getElementById(`select-asignar-${cargaId}`);
+            const val = selectEl.value;
+            if (!val) { alert("⚠️ Selecciona un conductor activo"); return; }
+
+            let carga = state.cargas.find(c => c.id === cargaId);
+            if (carga) {
+                carga.estado = `Asignado por Central a: ${val}`;
+                guardarDatosLocal();
+                renderAdminServicios();
+                alert(`✅ Conductor asignado al servicio con éxito.`);
+            }
+        }
+
+        function abrirEditarServicio(id) {
+            const carga = state.cargas.find(c => c.id === id);
+            if (carga) {
+                document.getElementById('edit-serv-id').value = carga.id;
+                document.getElementById('edit-serv-origen').value = carga.origen || '';
+                document.getElementById('edit-serv-destino').value = carga.destino || '';
+                document.getElementById('edit-serv-peso').value = carga.peso || '';
+                document.getElementById('edit-serv-obs').value = carga.observaciones || '';
+                document.getElementById('modal-editar-servicio').classList.remove('hidden');
+            }
+        }
+
+        function cerrarModalEditarServicio() {
+            document.getElementById('modal-editar-servicio').classList.add('hidden');
+        }
+
+        function guardarEdicionServicio() {
+            const id = parseInt(document.getElementById('edit-serv-id').value);
+            let carga = state.cargas.find(c => c.id === id);
+            if (carga) {
+                carga.origen = document.getElementById('edit-serv-origen').value.trim();
+                carga.destino = document.getElementById('edit-serv-destino').value.trim();
+                carga.peso = document.getElementById('edit-serv-peso').value.trim();
+                carga.observaciones = document.getElementById('edit-serv-obs').value.trim();
+                guardarDatosLocal();
+                cerrarModalEditarServicio();
+                renderAdminServicios();
+                alert("✅ ¡Servicio actualizado con éxito!");
+            }
+        }
+
+        function eliminarCargaAdmin(id) {
+            if (confirm("¿Eliminar este servicio del sistema?")) {
+                state.cargas = state.cargas.filter(c => c.id !== id);
+                guardarDatosLocal();
+                renderAdminServicios();
+            }
+        }
+
+        function renderAdminConductores() {
+            const el = document.getElementById('admin-lista-conductores');
+            if (!state.conductores || state.conductores.length === 0) {
+                el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin transportadores registrados.</div>';
+                return;
+            }
+            el.innerHTML = state.conductores.map((cond, idx) => `
+                <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-1.5 shadow">
+                    <div class="flex justify-between items-center">
+                        <p class="font-black text-white">${cond.nombre} (<span class="text-orange-400">${cond.placa}</span>)</p>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${cond.estado === 'Activo' ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}">${cond.estado}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-300"><b>Ciudad:</b> <span class="text-orange-400 font-bold">${cond.municipio || 'Acacías'}</span> • C.C: ${cond.doc} • Tel: ${cond.tel}</p>
+                    <p class="text-[11px] text-slate-300">Vence: <b class="text-orange-400">${cond.vencimiento || 'No asignado'}</b></p>
+                    <p class="text-[11px] text-slate-400">${cond.vehiculo} (${cond.marca} - ${cond.cilindraje})</p>
+                    <div class="flex space-x-2 pt-1">
+                        ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Aprobar / Activar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Suspender</button>`}
+                        <button onclick="editarConductorAdmin(${idx})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Editar</button>
+                        <button onclick="eliminarConductorAdmin(${idx})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function guardarConductorAdmin() {
+            const nombre = document.getElementById('adm-c-nombre').value.trim();
+            const doc = document.getElementById('adm-c-doc').value.trim();
+            const municipio = document.getElementById('adm-c-municipio').value;
+            const vehiculo = document.getElementById('adm-c-vehiculo').value;
+            const marca = document.getElementById('adm-c-marca').value.trim();
+            const cilindraje = document.getElementById('adm-c-cilindraje').value.trim();
+            const placa = document.getElementById('adm-c-placa').value.trim().toUpperCase();
+            const tel = document.getElementById('adm-c-tel').value.trim();
+            const idx = parseInt(document.getElementById('admin-cond-idx').value);
+
+            if (!nombre || !placa) {
+                alert("Ingresa como mínimo el Nombre y la Placa");
+                return;
+            }
+
+            const fechaFutura = new Date();
+            fechaFutura.setDate(fechaFutura.getDate() + 30);
+            const vencimientoStr = fechaFutura.toISOString().split('T')[0];
+
+            const datosCond = { 
+                placa, 
+                nombre, 
+                doc: doc || "N/A", 
+                tel: tel || "N/A", 
+                municipio,
+                vehiculo, 
+                marca: marca || "Akt", 
+                cilindraje: cilindraje || "200cc", 
+                estado: "Activo",
+                vencimiento: vencimientoStr
+            };
+
+            if (idx >= 0) {
+                datosCond.vencimiento = state.conductores[idx].vencimiento || vencimientoStr;
+                datosCond.estado = state.conductores[idx].estado || "Activo";
+                state.conductores[idx] = datosCond;
+                alert("✅ Conductor actualizado con éxito");
+            } else {
+                state.conductores.push(datosCond);
+                alert("✅ Conductor añadido al directorio con 1 mes activo");
+            }
+
+            guardarDatosLocal();
+            limpiarFormConductorAdmin();
+            renderAdminConductores();
+        }
+
+        function editarConductorAdmin(idx) {
+            const cond = state.conductores[idx];
+            document.getElementById('admin-cond-idx').value = idx;
+            document.getElementById('adm-c-nombre').value = cond.nombre || "";
+            document.getElementById('adm-c-doc').value = cond.doc || "";
+            document.getElementById('adm-c-municipio').value = cond.municipio || "Acacías";
+            document.getElementById('adm-c-vehiculo').value = cond.vehiculo || "Motocarguero sencillo";
+            document.getElementById('adm-c-marca').value = cond.marca || "";
+            document.getElementById('adm-c-cilindraje').value = cond.cilindraje || "";
+            document.getElementById('adm-c-placa').value = cond.placa || "";
+            document.getElementById('adm-c-tel').value = cond.tel || "";
+            document.getElementById('admin-cond-form-title').innerText = "✏️ Editar Transportador (" + cond.placa + ")";
+        }
+
+        function limpiarFormConductorAdmin() {
+            document.getElementById('admin-cond-idx').value = "-1";
+            document.getElementById('adm-c-nombre').value = "";
+            document.getElementById('adm-c-doc').value = "";
+            document.getElementById('adm-c-marca').value = "";
+            document.getElementById('adm-c-cilindraje').value = "";
+            document.getElementById('adm-c-placa').value = "";
+            document.getElementById('adm-c-tel').value = "";
+            document.getElementById('admin-cond-form-title').innerText = "Registrar Nuevo Conductor";
+        }
+
+        function cambiarEstadoConductor(idx, nuevoEstado) {
+            state.conductores[idx].estado = nuevoEstado;
+            guardarDatosLocal();
+            renderAdminConductores();
+            alert("✅ Estado actualizado a: " + nuevoEstado);
+        }
+
+        function eliminarConductorAdmin(idx) {
+            if (confirm("¿Eliminar transportador?")) {
+                state.conductores.splice(idx, 1);
+                guardarDatosLocal();
+                renderAdminConductores();
+            }
+        }
+
+        function guardarNuevaTarifaAdmin() {
+            const cat = document.getElementById('admin-tarifa-cat').value;
+            const ruta = document.getElementById('admin-tarifa-nombre').value.trim();
+            const val = document.getElementById('admin-tarifa-val').value.trim();
+            const editIdx = parseInt(document.getElementById('admin-tarifa-edit-idx').value);
+
+            if (!ruta || !val) { alert("Completa ruta y valor"); return; }
+            
+            if (editIdx >= 0) {
+                state.tarifas[cat][editIdx] = { id: Date.now(), ruta, valor: val };
+                alert("✅ Tarifa actualizada con éxito");
+            } else {
+                state.tarifas[cat].push({ id: Date.now(), ruta, valor: val });
+                alert("✅ Tarifa registrada con éxito");
+            }
+
+            guardarDatosLocal();
+            limpiarFormTarifaAdmin();
+            renderAdminTarifas();
+            renderTarifasTransportador();
+        }
+
+        function editarTarifaAdmin(cat, idx) {
+            const tarifa = state.tarifas[cat][idx];
+            document.getElementById('admin-tarifa-cat').value = cat;
+            document.getElementById('admin-tarifa-nombre').value = tarifa.ruta;
+            document.getElementById('admin-tarifa-val').value = tarifa.valor;
+            document.getElementById('admin-tarifa-edit-cat').value = cat;
+            document.getElementById('admin-tarifa-edit-idx').value = idx;
+            document.getElementById('admin-tarifa-form-title').innerText = "✏️ Editar Tarifa Oficial";
+        }
+
+        function limpiarFormTarifaAdmin() {
+            document.getElementById('admin-tarifa-nombre').value = '';
+            document.getElementById('admin-tarifa-val').value = '';
+            document.getElementById('admin-tarifa-edit-idx').value = '-1';
+            document.getElementById('admin-tarifa-form-title').innerText = "⚙️ Editor de Tarifas Oficiales";
+        }
+
+        function renderAdminTarifas() {
+            const el = document.getElementById('admin-lista-tarifas');
+            if(!el) return;
+            let html = '';
+            ['urbano', 'veredas', 'municipios'].forEach(cat => {
+                const items = state.tarifas[cat] || [];
+                html += `<p class="font-bold text-orange-400 capitalize mt-2">📂 Categoría: ${cat}</p>`;
+                if (items.length === 0) {
+                    html += `<p class="text-slate-400 text-[11px]">Sin tarifas.</p>`;
+                } else {
+                    html += items.map((t, tIdx) => `
+                        <div class="flex justify-between items-center bg-slate-900 p-2 rounded border border-slate-700 text-[11px]">
+                            <span>${t.ruta} - <b class="text-orange-400">${t.valor}</b></span>
+                            <div class="space-x-1">
+                                <button onclick="editarTarifaAdmin('${cat}', ${tIdx})" class="bg-blue-600 hover:bg-blue-700 px-2 py-0.5 rounded text-white font-bold cursor-pointer">Editar</button>
+                                <button onclick="eliminarTarifaAdmin('${cat}', ${tIdx})" class="bg-red-600 hover:bg-red-700 px-2 py-0.5 rounded text-white font-bold cursor-pointer">Eliminar</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            });
+            el.innerHTML = html;
+        }
+
+        function eliminarTarifaAdmin(cat, idx) {
+            if (confirm("¿Eliminar esta tarifa?")) {
+                state.tarifas[cat].splice(idx, 1);
+                guardarDatosLocal();
+                renderAdminTarifas();
+                renderTarifasTransportador();
+            }
+        }
+
+        function cargarAjustesGlobales() {
+            document.getElementById('cfg-admin-pass').value = state.config.adminPass;
+            document.getElementById('cfg-valor-sus').value = state.config.valorSuscripcion;
+            document.getElementById('cfg-nequi').value = state.config.nequi;
+            document.getElementById('cfg-whatsapp').value = state.config.whatsapp;
+            document.getElementById('cfg-pico-placa').value = state.config.picoPlacaTexto || picoPlacaPorDefecto;
+            document.getElementById('cfg-reglamento').value = state.config.reglamentoTexto || reglamentoPorDefecto;
+        }
+
+        function guardarAjustesGlobales() {
+            const nuevaPass = document.getElementById('cfg-admin-pass').value.trim();
+            if (nuevaPass) state.config.adminPass = nuevaPass;
+            
+            state.config.valorSuscripcion = parseInt(document.getElementById('cfg-valor-sus').value) || 45000;
+            state.config.nequi = document.getElementById('cfg-nequi').value.trim() || "3143842007";
+            state.config.whatsapp = document.getElementById('cfg-whatsapp').value.trim() || "3507690951";
+            state.config.picoPlacaTexto = document.getElementById('cfg-pico-placa').value.trim() || picoPlacaPorDefecto;
+            state.config.reglamentoTexto = document.getElementById('cfg-reglamento').value.trim() || reglamentoPorDefecto;
+            
+            guardarDatosLocal();
+            actualizarTextosGlobales();
+            alert("✅ ¡Ajustes globales guardados con éxito!");
+        }
+
+        window.onload = function() {
+            poblarSelectMunicipios();
+            actualizarTextosGlobales();
+        };
+    </script>
+</body>
+</html>
