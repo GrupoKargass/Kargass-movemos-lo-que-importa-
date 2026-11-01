@@ -380,11 +380,11 @@
                     <div class="grid grid-cols-2 gap-2">
                         <div>
                             <label class="text-[11px] font-bold text-slate-300">Marca</label>
-                            <input type="text" id="af-marca" placeholder="Ej: Camel, AKT" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                            <input type="text" id="af-marca" placeholder="Ej: Camello, AKT" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
                         </div>
                         <div>
                             <label class="text-[11px] font-bold text-slate-300">Cilindraje</label>
-                            <input type="text" id="af-cilindraje" placeholder="Ej: 200cc" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
+                            <input type="text" id="af-cilindraje" placeholder="Ej: 250cc" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
                         </div>
                     </div>
 
@@ -421,7 +421,7 @@
                     <button onclick="switchTabAdmin('ajustes')" id="tab-a-ajustes" class="text-slate-400 py-2 rounded-lg cursor-pointer">Ajustes</button>
                 </div>
 
-                <!-- CALL CENTER (CON ASIGNAR, EDITAR Y ELIMINAR) -->
+                <!-- CALL CENTER -->
                 <div id="a-content-servicios" class="space-y-2.5">
                     <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
                         <span class="font-bold text-slate-300">Servicios Totales en Sistema</span>
@@ -430,7 +430,7 @@
                     <div id="admin-lista-cargas" class="space-y-2.5"></div>
                 </div>
 
-                <!-- GESTIÓN FLOTA / SOCIOS (FORMULARIO Y DIRECTORIO UNIFICADO) -->
+                <!-- GESTIÓN FLOTA / SOCIOS -->
                 <div id="a-content-conductores" class="space-y-3 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs shadow-xl">
                         <h3 class="font-black text-sm text-orange-400" id="admin-cond-form-title">Registrar Nuevo Conductor</h3>
@@ -446,7 +446,7 @@
                                 <input type="number" id="adm-c-doc" placeholder="Ej: 1122334455" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
                             </div>
                             <div>
-                                <label class="text-[11px] font-bold text-slate-300">Municipio Base de Operación (Determina su lista de tarifas)</label>
+                                <label class="text-[11px] font-bold text-slate-300">Municipio Base de Operación</label>
                                 <select id="adm-c-municipio" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select>
                             </div>
                             <div>
@@ -460,11 +460,11 @@
                             </div>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label class="text-[11px] font-bold text-slate-300">Marca (Ej: Camello, AKT)</label>
+                                    <label class="text-[11px] font-bold text-slate-300">Marca</label>
                                     <input type="text" id="adm-c-marca" placeholder="Ej: Camello" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
                                 </div>
                                 <div>
-                                    <label class="text-[11px] font-bold text-slate-300">Cilindraje (Ej: 250cc)</label>
+                                    <label class="text-[11px] font-bold text-slate-300">Cilindraje</label>
                                     <input type="text" id="adm-c-cilindraje" placeholder="Ej: 250cc" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
                                 </div>
                             </div>
@@ -487,7 +487,7 @@
                     <div id="admin-lista-conductores" class="space-y-2"></div>
                 </div>
 
-                <!-- GESTIÓN DINÁMICA DE TARIFAS (CON OPCIÓN DE EDITAR) -->
+                <!-- GESTIÓN DINÁMICA DE TARIFAS -->
                 <div id="a-content-tarifas" class="space-y-2.5 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
                         <h3 class="font-black text-sm text-orange-400" id="admin-tarifa-form-title">⚙️ Editor de Tarifas Oficiales</h3>
@@ -568,7 +568,7 @@
 
     </main>
 
-    <!-- MODAL EDITAR SERVICIO (CALL CENTER) -->
+    <!-- MODAL EDITAR SERVICIO -->
     <div id="modal-editar-servicio" class="fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-800 border border-slate-700 p-5 rounded-3xl max-w-sm w-full space-y-3 shadow-2xl text-xs">
             <h3 class="font-black text-sm text-orange-400 text-center">✏️ Editar Detalles del Acarreo</h3>
@@ -605,6 +605,15 @@
             </div>
             <div id="modal-reglamento-texto" class="space-y-2 text-xs text-slate-800 font-medium whitespace-pre-line"></div>
             <button onclick="cerrarReglamentoModal()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white text-xs cursor-pointer">Entendido y Cerrado</button>
+        </div>
+    </div>
+
+    <!-- MODAL PARA VER FOTO COMPLETA AMPLIADA -->
+    <div id="modal-ver-foto" class="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4 hidden" onclick="cerrarModalFoto()">
+        <div class="relative max-w-lg w-full max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="cerrarModalFoto()" class="absolute -top-10 right-0 bg-orange-500 hover:bg-orange-600 text-white font-black px-3 py-1 rounded-full text-xs shadow-lg cursor-pointer">✕ Cerrar</button>
+            <img id="imagen-ampliada" src="" class="w-full max-h-[80vh] object-contain rounded-2xl border-2 border-slate-700 bg-black shadow-2xl">
+            <p class="text-xs text-slate-300 mt-2 text-center font-bold">Toca fuera de la imagen o en el botón para cerrar</p>
         </div>
     </div>
 
@@ -678,8 +687,8 @@
                 picoPlacaTexto: picoPlacaPorDefecto,
                 reglamentoTexto: reglamentoPorDefecto
             },
-            clienteActualDoc: null,
-            transActualPlaca: null,
+            clienteActualDoc: localStorage.getItem('kargass_cliente_doc_memoria') || null,
+            transActualPlaca: localStorage.getItem('kargass_trans_placa_memoria') || null,
             isAdmin: false,
             tipoZona: "Local (Urbano)",
             horarioTipo: "Inmediato",
@@ -687,10 +696,15 @@
         };
 
         function guardarDatosLocal() {
-            localStorage.setItem('kargass_cargas', JSON.stringify(state.cargas));
-            localStorage.setItem('kargass_conductores', JSON.stringify(state.conductores));
-            localStorage.setItem('kargass_tarifas_oficiales', JSON.stringify(state.tarifas));
-            localStorage.setItem('kargass_config_global', JSON.stringify(state.config));
+            try {
+                localStorage.setItem('kargass_cargas', JSON.stringify(state.cargas));
+                localStorage.setItem('kargass_conductores', JSON.stringify(state.conductores));
+                localStorage.setItem('kargass_tarifas_oficiales', JSON.stringify(state.tarifas));
+                localStorage.setItem('kargass_config_global', JSON.stringify(state.config));
+            } catch (e) {
+                console.error("Error al guardar en localStorage (posible exceso de espacio por foto):", e);
+                alert("⚠️ La foto es demasiado pesada para la memoria del navegador. Intenta con una imagen más liviana.");
+            }
         }
 
         function poblarSelectMunicipios() {
@@ -732,6 +746,15 @@
             document.getElementById('modal-reglamento').classList.add('hidden');
         }
 
+        function ampliarFoto(urlFoto) {
+            document.getElementById('imagen-ampliada').src = urlFoto;
+            document.getElementById('modal-ver-foto').classList.remove('hidden');
+        }
+
+        function cerrarModalFoto() {
+            document.getElementById('modal-ver-foto').classList.add('hidden');
+        }
+
         function irModulo(mod) {
             document.getElementById('modal-selector').classList.add('hidden');
             document.getElementById('view-cliente').classList.add('hidden');
@@ -743,20 +766,18 @@
 
             if (mod === 'cliente') {
                 document.getElementById('view-cliente').classList.remove('hidden');
-                const guardadoDoc = localStorage.getItem('kargass_cliente_doc_memoria');
-                if (guardadoDoc) {
-                    document.getElementById('cli-doc-input').value = guardadoDoc;
-                    verificarClienteLoginMemoria(guardadoDoc);
+                if (state.clienteActualDoc) {
+                    document.getElementById('cli-doc-input').value = state.clienteActualDoc;
+                    verificarClienteLoginMemoria(state.clienteActualDoc);
                 } else {
                     document.getElementById('cliente-login').classList.remove('hidden');
                     document.getElementById('cliente-dashboard').classList.add('hidden');
                 }
             } else if (mod === 'transportador') {
                 document.getElementById('view-transportador').classList.remove('hidden');
-                const guardadoPlaca = localStorage.getItem('kargass_trans_placa_memoria');
-                if (guardadoPlaca) {
-                    document.getElementById('trans-placa-input').value = guardadoPlaca;
-                    verificarTransportadorLoginMemoria(guardadoPlaca);
+                if (state.transActualPlaca) {
+                    document.getElementById('trans-placa-input').value = state.transActualPlaca;
+                    verificarTransportadorLoginMemoria(state.transActualPlaca);
                 } else {
                     document.getElementById('trans-login').classList.remove('hidden');
                     document.getElementById('trans-dashboard').classList.add('hidden');
@@ -772,7 +793,7 @@
             }
         }
 
-        // CLIENTE JS CON MEMORIA
+        // CLIENTE JS
         function verificarClienteLogin() {
             const doc = document.getElementById('cli-doc-input').value.trim();
             if (!doc) { alert("Ingresa tu cédula"); return; }
@@ -843,9 +864,34 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(evt) {
-                    state.fotoBase64 = evt.target.result;
-                    document.getElementById('foto-estado').innerText = "¡Foto cargada!";
-                    document.getElementById('foto-estado').className = "text-[10px] text-green-400 font-bold";
+                    const img = new Image();
+                    img.src = evt.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 800;
+                        const MAX_HEIGHT = 800;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        state.fotoBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                        document.getElementById('foto-estado').innerText = "¡Foto cargada completa!";
+                        document.getElementById('foto-estado').className = "text-[10px] text-green-400 font-bold";
+                    };
                 };
                 reader.readAsDataURL(file);
             }
@@ -859,12 +905,9 @@
             const destino = document.getElementById('cli-destino').value.trim();
 
             if (!nombre || !tel || !peso || !origen || !destino) {
-                alert("Completa todos los campos requeridos"); return;
+                alert("⚠️ Completa todos los campos requeridos para publicar el acarreo."); 
+                return;
             }
-
-            const btnPub = document.getElementById('btn-publicar-acarreo');
-            btnPub.disabled = true;
-            btnPub.classList.add('opacity-50');
 
             localStorage.setItem('kargass_memoria_cli_' + state.clienteActualDoc, JSON.stringify({ nombre, tel }));
             const horaCargue = state.horarioTipo === 'Inmediato' ? '⚡ Cargue Inmediato' : '⏰ Programado: ' + (document.getElementById('cli-hora-input').value || 'Acordado');
@@ -888,10 +931,11 @@
                 fechaCreacion: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
+            state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
             state.cargas.unshift(nuevaCarga);
             guardarDatosLocal();
             
-            alert("✅ ¡Solicitud enviada con éxito! Ya aparece en tu historial a la espera de cotizaciones.");
+            alert("✅ ¡Solicitud publicada con éxito y enviada a la flota!");
             
             document.getElementById('cli-peso').value = '';
             document.getElementById('cli-origen').value = '';
@@ -899,18 +943,16 @@
             document.getElementById('cli-obs').value = '';
             document.getElementById('foto-estado').innerText = "Sin foto";
             state.fotoBase64 = null;
-            
-            setTimeout(() => {
-                btnPub.disabled = false;
-                btnPub.classList.remove('opacity-50');
-            }, 1000);
 
             renderHistorialCliente();
         }
 
         function renderHistorialCliente() {
+            state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
             const el = document.getElementById('lista-mis-cargas');
+            if(!el) return;
             const mis = state.cargas.filter(c => c.clienteDoc === state.clienteActualDoc);
+            
             if (mis.length === 0) {
                 el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin solicitudes aún en el historial.</div>';
                 return;
@@ -923,7 +965,12 @@
                     </div>
                     <p class="font-black text-white">📦 ${c.origen} ➔ ${c.destino}</p>
                     <p><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
-                    ${c.foto ? `<img src="${c.foto}" class="w-full h-24 object-cover rounded-xl border border-slate-700">` : ''}
+                    ${c.foto ? `
+                        <div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')">
+                            <img src="${c.foto}" class="w-full h-40 object-contain bg-slate-950 rounded-xl border border-slate-700">
+                            <div class="absolute bottom-2 right-2 bg-slate-900/80 text-orange-400 font-bold text-[10px] px-2 py-1 rounded-lg border border-slate-700">🔍 Toca para ampliar foto</div>
+                        </div>
+                    ` : ''}
                     
                     <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1.5">
                         <p class="font-black text-orange-400">🏷️ Cotizaciones Recibidas (${c.ofertas ? c.ofertas.length : 0}):</p>
@@ -945,17 +992,19 @@
         }
 
         function seleccionarOfertaCliente(cargaId, ofertaIdx) {
-            let carga = state.cargas.find(c => c.id === cargaId);
+            state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
+            let carga = state.cargas.find(c => Number(c.id) === Number(cargaId));
             if (carga && carga.ofertas[ofertaIdx]) {
                 const seleccionada = carga.ofertas[ofertaIdx];
                 carga.estado = `Asignado a ${seleccionada.conductorNombre} ($${Number(seleccionada.precio).toLocaleString('es-CO')})`;
+                carga.conductorAsignadoPlaca = seleccionada.placa; // Guardamos la placa ganadora
                 guardarDatosLocal();
                 renderHistorialCliente();
                 alert(`✅ ¡Has seleccionado la cotización de ${seleccionada.conductorNombre}! Servicio asignado.`);
             }
         }
 
-        // TRANSPORTADOR JS CON MEMORIA
+        // TRANSPORTADOR JS
         function verificarTransportadorLogin() {
             const placa = document.getElementById('trans-placa-input').value.trim().toUpperCase();
             if (!placa) { alert("Ingresa tu placa"); return; }
@@ -963,6 +1012,7 @@
         }
 
         function verificarTransportadorLoginMemoria(placa) {
+            state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
             let cond = state.conductores.find(c => c.placa === placa);
             if (!cond) {
                 alert("⚠️ Placa no encontrada o pendiente de aprobación en la Central.");
@@ -1040,25 +1090,37 @@
 
         function switchTabTrans(tab) {
             ['servicios', 'tarifas', 'pico', 'sub', 'viajes'].forEach(t => {
-                document.getElementById('t-content-' + t).classList.add('hidden');
-                document.getElementById('tab-t-' + t).className = "text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate";
+                const elContent = document.getElementById('t-content-' + t);
+                const elTab = document.getElementById('tab-t-' + t);
+                if (elContent) elContent.classList.add('hidden');
+                if (elTab) elTab.className = "text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate";
             });
-            document.getElementById('t-content-' + tab).classList.remove('hidden');
-            document.getElementById('tab-t-' + tab).className = "bg-orange-500 text-white py-2 px-1 rounded-lg cursor-pointer truncate";
+            const targetContent = document.getElementById('t-content-' + tab);
+            const targetTab = document.getElementById('tab-t-' + tab);
+            if (targetContent) targetContent.classList.remove('hidden');
+            if (targetTab) targetTab.className = "bg-orange-500 text-white py-2 px-1 rounded-lg cursor-pointer truncate";
+
+            if (tab === 'servicios') renderCargasDisponiblesTrans();
         }
 
         function switchSubTabTarifas(sub) {
             ['urbano', 'veredas', 'municipios'].forEach(s => {
-                document.getElementById('subcontent-t-' + s).classList.add('hidden');
-                document.getElementById('subtab-t-' + s).className = "text-slate-400 py-1.5 rounded-lg cursor-pointer";
+                const c = document.getElementById('subcontent-t-' + s);
+                const b = document.getElementById('subtab-t-' + s);
+                if (c) c.classList.add('hidden');
+                if (b) b.className = "text-slate-400 py-1.5 rounded-lg cursor-pointer";
             });
-            document.getElementById('subcontent-t-' + sub).classList.remove('hidden');
-            document.getElementById('subtab-t-' + sub).className = "bg-orange-500 text-white py-1.5 rounded-lg cursor-pointer";
+            const sc = document.getElementById('subcontent-t-' + sub);
+            const sb = document.getElementById('subtab-t-' + sub);
+            if (sc) sc.classList.remove('hidden');
+            if (sb) sb.className = "bg-orange-500 text-white py-1.5 rounded-lg cursor-pointer";
         }
 
         function renderTarifasTransportador() {
+            state.tarifas = JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || state.tarifas;
             ['urbano', 'veredas', 'municipios'].forEach(cat => {
                 const contenedor = document.getElementById(`contenedor-tarifas-${cat}`);
+                if (!contenedor) return;
                 const items = state.tarifas[cat] || [];
                 if (items.length === 0) {
                     contenedor.innerHTML = `<p class="text-slate-400 text-center py-2">Sin tarifas registradas.</p>`;
@@ -1074,14 +1136,20 @@
         }
 
         function renderCargasDisponiblesTrans() {
+            state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
             const el = document.getElementById('lista-cargas-disponibles');
-            const filtradas = state.cargas.filter(c => c.municipio === "Acacías" || c.tipoZona === "Intermunicipal");
-
-            if (filtradas.length === 0) {
-                el.innerHTML = '<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay acarreos disponibles.</div>';
+            if (!el) return;
+            
+            if (state.cargas.length === 0) {
+                el.innerHTML = '<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay acarreos disponibles en este momento.</div>';
                 return;
             }
-            el.innerHTML = filtradas.map(c => `
+
+            el.innerHTML = state.cargas.map(c => {
+                // Verificamos si este transportador específico fue el asignado por el cliente
+                const esAsignadoAceptado = (c.conductorAsignadoPlaca === state.transActualPlaca);
+
+                return `
                 <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-md">
                     <div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1">
                         <span>📍 ${c.municipio} (${c.tipoZona})</span>
@@ -1089,9 +1157,14 @@
                     </div>
                     <p class="font-black text-white text-sm">${c.origen} ➔ ${c.destino}</p>
                     <p class="text-slate-300"><b>Carga:</b> ${c.peso} | <b>Horario:</b> ${c.horario}</p>
-                    <p class="text-slate-400"><b>Cliente:</b> ${c.clienteNombre} (${c.clienteTel})</p>
+                    <p class="text-orange-300 font-bold">Estado actual: ${c.estado}</p>
                     ${c.observaciones ? `<p class="text-slate-400 italic">"${c.observaciones}"</p>` : ''}
-                    ${c.foto ? `<img src="${c.foto}" class="w-full h-24 object-cover rounded-xl border border-slate-700">` : ''}
+                    ${c.foto ? `
+                        <div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')">
+                            <img src="${c.foto}" class="w-full h-44 object-contain bg-slate-950 rounded-xl border border-slate-700">
+                            <div class="absolute bottom-2 right-2 bg-slate-900/90 text-orange-400 font-bold text-[10px] px-2 py-1 rounded-lg border border-slate-700">🔍 Toca para ver foto completa</div>
+                        </div>
+                    ` : ''}
                     
                     <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2">
                         <label class="font-bold text-slate-300">Enviar Cotización de Flete (COP):</label>
@@ -1101,9 +1174,16 @@
                         </div>
                     </div>
                     
-                    <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20vi%20tu%20acarreo%20en%20Kargass." target="_blank" class="block text-center bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white mt-1 shadow">💬 Contactar Directo por WhatsApp</a>
+                    <!-- EL BOTÓN DE WHATSAPP SOLO APARECE SI EL CLIENTE ACEPTÓ A ESTE CONDUCTOR -->
+                    ${esAsignadoAceptado ? `
+                        <div class="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/50 space-y-1 mt-2 text-center">
+                            <p class="text-emerald-400 font-black">🎉 ¡Tu oferta fue aceptada por el cliente!</p>
+                            <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20fui%20el%20transportador%20seleccionado%20en%20Kargass%20para%20tu%20acarreo." target="_blank" class="block bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white shadow cursor-pointer">💬 Iniciar WhatsApp Directo con el Cliente</a>
+                        </div>
+                    ` : ''}
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
         function enviarOfertaTransportador(cargaId) {
@@ -1113,7 +1193,10 @@
                 return;
             }
 
-            let carga = state.cargas.find(c => c.id === cargaId);
+            state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
+            state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
+
+            let carga = state.cargas.find(c => Number(c.id) === Number(cargaId));
             let cond = state.conductores.find(co => co.placa === state.transActualPlaca);
 
             if (carga && cond) {
@@ -1135,6 +1218,8 @@
                 alert(`🚀 ¡Cotización de $${Number(inputVal).toLocaleString('es-CO')} enviada con éxito al cliente!`);
                 document.getElementById(`input-oferta-${cargaId}`).value = '';
                 renderCargasDisponiblesTrans();
+            } else {
+                alert("⚠️ Error: No se encontró la carga o el conductor activo.");
             }
         }
 
@@ -1183,7 +1268,7 @@
             irModulo('central');
         }
 
-        // CENTRAL / ADMIN JS (BLINDADO Y SIN ERRORES DE PESTAÑA)
+        // CENTRAL / ADMIN JS
         function verificarAdminLogin() {
             const pass = document.getElementById('admin-pass').value.trim();
             if (pass === state.config.adminPass) {
@@ -1251,8 +1336,11 @@
         }
 
         function renderAdminServicios() {
-            document.getElementById('admin-total-servicios').innerText = state.cargas.length;
+            state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
+            const elTotal = document.getElementById('admin-total-servicios');
+            if (elTotal) elTotal.innerText = state.cargas.length;
             const el = document.getElementById('admin-lista-cargas');
+            if (!el) return;
             if (!state.cargas || state.cargas.length === 0) { 
                 el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin servicios registrados.</div>'; 
                 return; 
@@ -1270,12 +1358,16 @@
                             <button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button>
                         </div>
                     </div>
-                    ${c.foto ? `<img src="${c.foto}" class="w-full h-20 object-cover rounded-lg border border-slate-700">` : ''}
+                    ${c.foto ? `
+                        <div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')">
+                            <img src="${c.foto}" class="w-full h-36 object-contain bg-slate-950 rounded-lg border border-slate-700">
+                            <div class="absolute bottom-2 right-2 bg-slate-900/90 text-orange-400 font-bold text-[10px] px-2 py-1 rounded border border-slate-700">🔍 Ampliar foto</div>
+                        </div>
+                    ` : ''}
                     <p class="text-white"><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
                     <p class="text-slate-300"><b>Ruta:</b> ${c.origen} ➔ ${c.destino}</p>
                     <p class="text-slate-400 font-bold">Estado: ${c.estado}</p>
                     
-                    <!-- ASIGNAR CONDUCTOR DIRECTO -->
                     <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 flex items-center space-x-2 pt-2">
                         <select id="select-asignar-${c.id}" class="w-full p-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-[11px] font-bold">
                             <option value="">-- Seleccionar Conductor Activo --</option>
@@ -1290,11 +1382,12 @@
         }
 
         function asignarConductorAdmin(cargaId) {
+            state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
             const selectEl = document.getElementById(`select-asignar-${cargaId}`);
             const val = selectEl.value;
             if (!val) { alert("⚠️ Selecciona un conductor activo"); return; }
 
-            let carga = state.cargas.find(c => c.id === cargaId);
+            let carga = state.cargas.find(c => Number(c.id) === Number(cargaId));
             if (carga) {
                 carga.estado = `Asignado por Central a: ${val}`;
                 guardarDatosLocal();
@@ -1304,7 +1397,8 @@
         }
 
         function abrirEditarServicio(id) {
-            const carga = state.cargas.find(c => c.id === id);
+            state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
+            const carga = state.cargas.find(c => Number(c.id) === Number(id));
             if (carga) {
                 document.getElementById('edit-serv-id').value = carga.id;
                 document.getElementById('edit-serv-origen').value = carga.origen || '';
@@ -1321,7 +1415,8 @@
 
         function guardarEdicionServicio() {
             const id = parseInt(document.getElementById('edit-serv-id').value);
-            let carga = state.cargas.find(c => c.id === id);
+            state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
+            let carga = state.cargas.find(c => Number(c.id) === Number(id));
             if (carga) {
                 carga.origen = document.getElementById('edit-serv-origen').value.trim();
                 carga.destino = document.getElementById('edit-serv-destino').value.trim();
@@ -1336,13 +1431,15 @@
 
         function eliminarCargaAdmin(id) {
             if (confirm("¿Eliminar este servicio del sistema?")) {
-                state.cargas = state.cargas.filter(c => c.id !== id);
+                state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
+                state.cargas = state.cargas.filter(c => Number(c.id) !== Number(id));
                 guardarDatosLocal();
                 renderAdminServicios();
             }
         }
 
         function renderAdminConductores() {
+            state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
             const el = document.getElementById('admin-lista-conductores');
             if (!el) return;
             if (!state.conductores || state.conductores.length === 0) {
@@ -1383,6 +1480,7 @@
                 return;
             }
 
+            state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
             const fechaFutura = new Date();
             fechaFutura.setDate(fechaFutura.getDate() + 30);
             const vencimientoStr = fechaFutura.toISOString().split('T')[0];
@@ -1416,6 +1514,7 @@
         }
 
         function editarConductorAdmin(idx) {
+            state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
             const cond = state.conductores[idx];
             document.getElementById('admin-cond-idx').value = idx;
             document.getElementById('adm-c-nombre').value = cond.nombre || "";
@@ -1441,6 +1540,7 @@
         }
 
         function cambiarEstadoConductor(idx, nuevoEstado) {
+            state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
             state.conductores[idx].estado = nuevoEstado;
             guardarDatosLocal();
             renderAdminConductores();
@@ -1449,6 +1549,7 @@
 
         function eliminarConductorAdmin(idx) {
             if (confirm("¿Eliminar transportador?")) {
+                state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
                 state.conductores.splice(idx, 1);
                 guardarDatosLocal();
                 renderAdminConductores();
@@ -1463,6 +1564,7 @@
 
             if (!ruta || !val) { alert("Completa ruta y valor"); return; }
             
+            state.tarifas = JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || state.tarifas;
             if (editIdx >= 0) {
                 state.tarifas[cat][editIdx] = { id: Date.now(), ruta, valor: val };
                 alert("✅ Tarifa actualizada con éxito");
@@ -1478,6 +1580,7 @@
         }
 
         function editarTarifaAdmin(cat, idx) {
+            state.tarifas = JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || state.tarifas;
             const tarifa = state.tarifas[cat][idx];
             document.getElementById('admin-tarifa-cat').value = cat;
             document.getElementById('admin-tarifa-nombre').value = tarifa.ruta;
@@ -1495,6 +1598,7 @@
         }
 
         function renderAdminTarifas() {
+            state.tarifas = JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || state.tarifas;
             const el = document.getElementById('admin-lista-tarifas');
             if(!el) return;
             let html = '';
@@ -1520,6 +1624,7 @@
 
         function eliminarTarifaAdmin(cat, idx) {
             if (confirm("¿Eliminar esta tarifa?")) {
+                state.tarifas = JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || state.tarifas;
                 state.tarifas[cat].splice(idx, 1);
                 guardarDatosLocal();
                 renderAdminTarifas();
@@ -1528,12 +1633,20 @@
         }
 
         function cargarAjustesGlobales() {
-            document.getElementById('cfg-admin-pass').value = state.config.adminPass;
-            document.getElementById('cfg-valor-sus').value = state.config.valorSuscripcion;
-            document.getElementById('cfg-nequi').value = state.config.nequi;
-            document.getElementById('cfg-whatsapp').value = state.config.whatsapp;
-            document.getElementById('cfg-pico-placa').value = state.config.picoPlacaTexto || picoPlacaPorDefecto;
-            document.getElementById('cfg-reglamento').value = state.config.reglamentoTexto || reglamentoPorDefecto;
+            state.config = JSON.parse(localStorage.getItem('kargass_config_global')) || state.config;
+            const elPass = document.getElementById('cfg-admin-pass');
+            const elVal = document.getElementById('cfg-valor-sus');
+            const elNeq = document.getElementById('cfg-nequi');
+            const elWapp = document.getElementById('cfg-whatsapp');
+            const elPico = document.getElementById('cfg-pico-placa');
+            const elReg = document.getElementById('cfg-reglamento');
+
+            if (elPass) elPass.value = state.config.adminPass;
+            if (elVal) elVal.value = state.config.valorSuscripcion;
+            if (elNeq) elNeq.value = state.config.nequi;
+            if (elWapp) elWapp.value = state.config.whatsapp;
+            if (elPico) elPico.value = state.config.picoPlacaTexto || picoPlacaPorDefecto;
+            if (elReg) elReg.value = state.config.reglamentoTexto || reglamentoPorDefecto;
         }
 
         function guardarAjustesGlobales() {
@@ -1551,14 +1664,23 @@
             alert("✅ ¡Ajustes globales guardados con éxito!");
         }
 
-        // PREVENIR REINICIO ACCIDENTAL AL HACER PULL-TO-REFRESH EN MÓVILES
-        document.addEventListener('touchmove', function(e) {
-            // Permite el desplazamiento normal dentro de contenedores con scroll, pero evita el gesto de recarga del navegador si está arriba del todo
-        }, { passive: true });
-
         window.onload = function() {
             poblarSelectMunicipios();
             actualizarTextosGlobales();
+
+            if (state.clienteActualDoc) {
+                const elDoc = document.getElementById('cli-doc-input');
+                if (elDoc) elDoc.value = state.clienteActualDoc;
+                document.getElementById('modal-selector').classList.add('hidden');
+                document.getElementById('view-cliente').classList.remove('hidden');
+                verificarClienteLoginMemoria(state.clienteActualDoc);
+            } else if (state.transActualPlaca) {
+                const elPlaca = document.getElementById('trans-placa-input');
+                if (elPlaca) elPlaca.value = state.transActualPlaca;
+                document.getElementById('modal-selector').classList.add('hidden');
+                document.getElementById('view-transportador').classList.remove('hidden');
+                verificarTransportadorLoginMemoria(state.transActualPlaca);
+            }
         };
     </script>
 </body>
