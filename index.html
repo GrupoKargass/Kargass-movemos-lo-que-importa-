@@ -416,7 +416,7 @@
 
                 <div class="grid grid-cols-4 gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700 text-[10px] font-black text-center">
                     <button onclick="switchTabAdmin('servicios')" id="tab-a-servicios" class="bg-orange-500 text-white py-2 rounded-lg cursor-pointer">Call Center</button>
-                    <button onclick="switchTabAdmin('conductores')" id="tab-a-cond" class="text-slate-400 py-2 rounded-lg cursor-pointer">Flota</button>
+                    <button onclick="switchTabAdmin('conductores')" id="tab-a-conductores" class="text-slate-400 py-2 rounded-lg cursor-pointer">Flota</button>
                     <button onclick="switchTabAdmin('tarifas')" id="tab-a-tarifas" class="text-slate-400 py-2 rounded-lg cursor-pointer">Tarifas</button>
                     <button onclick="switchTabAdmin('ajustes')" id="tab-a-ajustes" class="text-slate-400 py-2 rounded-lg cursor-pointer">Ajustes</button>
                 </div>
@@ -430,7 +430,7 @@
                     <div id="admin-lista-cargas" class="space-y-2.5"></div>
                 </div>
 
-                <!-- GESTIÓN FLOTA / SOCIOS (FORMULARIO EXACTO REQUERIDO) -->
+                <!-- GESTIÓN FLOTA / SOCIOS (FORMULARIO Y DIRECTORIO UNIFICADO) -->
                 <div id="a-content-conductores" class="space-y-3 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs shadow-xl">
                         <h3 class="font-black text-sm text-orange-400" id="admin-cond-form-title">Registrar Nuevo Conductor</h3>
@@ -460,12 +460,12 @@
                             </div>
                             <div class="grid grid-cols-2 gap-2">
                                 <div>
-                                    <label class="text-[11px] font-bold text-slate-300">Marca (Ej: Camel, AKT)</label>
-                                    <input type="text" id="adm-c-marca" placeholder="Ej: Camel" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
+                                    <label class="text-[11px] font-bold text-slate-300">Marca (Ej: Camello, AKT)</label>
+                                    <input type="text" id="adm-c-marca" placeholder="Ej: Camello" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
                                 </div>
                                 <div>
-                                    <label class="text-[11px] font-bold text-slate-300">Cilindraje (Ej: 200cc)</label>
-                                    <input type="text" id="adm-c-cilindraje" placeholder="Ej: 200cc" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
+                                    <label class="text-[11px] font-bold text-slate-300">Cilindraje (Ej: 250cc)</label>
+                                    <input type="text" id="adm-c-cilindraje" placeholder="Ej: 250cc" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
                                 </div>
                             </div>
                             <div>
@@ -666,7 +666,8 @@
         let state = {
             cargas: JSON.parse(localStorage.getItem('kargass_cargas')) || [],
             conductores: JSON.parse(localStorage.getItem('kargass_conductores')) || [
-                { placa: "571 AGU", nombre: "Carlos Gómez", doc: "1122334455", tel: "3101234567", vehiculo: "Motocarguero sencillo", marca: "Camel", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01" }
+                { placa: "ABC123", nombre: "Conductor de Prueba ABC", doc: "99999999", tel: "3100000000", vehiculo: "Motocarguero sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01" },
+                { placa: "571 AGU", nombre: "Dani David Martínez", doc: "1122124473", tel: "3143842007", vehiculo: "Motocarguero sencillo", marca: "Camello", cilindraje: "250cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01" }
             ],
             tarifas: JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || tarifasBaseAcacias,
             config: JSON.parse(localStorage.getItem('kargass_config_global')) || {
@@ -1179,10 +1180,10 @@
             document.getElementById('af-marca').value = '';
             document.getElementById('af-cilindraje').value = '';
             document.getElementById('af-check-reglamento').checked = false;
-            irModulo('transportador');
+            irModulo('central');
         }
 
-        // CENTRAL / ADMIN JS (BLINDADO)
+        // CENTRAL / ADMIN JS (BLINDADO Y SIN ERRORES DE PESTAÑA)
         function verificarAdminLogin() {
             const pass = document.getElementById('admin-pass').value.trim();
             if (pass === state.config.adminPass) {
@@ -1213,9 +1214,26 @@
         }
 
         function switchTabAdmin(tab) {
-            ['servicios', 'conductores', 'tarifas', 'ajustes'].forEach(t => {
-                const content = document.getElementById('a-content-' + t);
-                const btn = document.getElementById('tab-a-' + t);
+            const mapaContenedores = {
+                'servicios': 'a-content-servicios',
+                'conductores': 'a-content-conductores',
+                'tarifas': 'a-content-tarifas',
+                'ajustes': 'a-content-ajustes'
+            };
+
+            const mapaBotones = {
+                'servicios': 'tab-a-servicios',
+                'conductores': 'tab-a-conductores',
+                'tarifas': 'tab-a-tarifas',
+                'ajustes': 'tab-a-ajustes'
+            };
+
+            Object.keys(mapaContenedores).forEach(t => {
+                const contentId = mapaContenedores[t];
+                const btnId = mapaBotones[t];
+                const content = document.getElementById(contentId);
+                const btn = document.getElementById(btnId);
+
                 if (content && btn) {
                     if (t === tab) {
                         content.classList.remove('hidden');
@@ -1226,6 +1244,10 @@
                     }
                 }
             });
+
+            if (tab === 'conductores') renderAdminConductores();
+            if (tab === 'servicios') renderAdminServicios();
+            if (tab === 'tarifas') renderAdminTarifas();
         }
 
         function renderAdminServicios() {
@@ -1322,6 +1344,7 @@
 
         function renderAdminConductores() {
             const el = document.getElementById('admin-lista-conductores');
+            if (!el) return;
             if (!state.conductores || state.conductores.length === 0) {
                 el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin transportadores registrados.</div>';
                 return;
@@ -1527,6 +1550,11 @@
             actualizarTextosGlobales();
             alert("✅ ¡Ajustes globales guardados con éxito!");
         }
+
+        // PREVENIR REINICIO ACCIDENTAL AL HACER PULL-TO-REFRESH EN MÓVILES
+        document.addEventListener('touchmove', function(e) {
+            // Permite el desplazamiento normal dentro de contenedores con scroll, pero evita el gesto de recarga del navegador si está arriba del todo
+        }, { passive: true });
 
         window.onload = function() {
             poblarSelectMunicipios();
