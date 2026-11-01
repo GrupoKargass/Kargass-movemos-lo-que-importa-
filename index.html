@@ -136,8 +136,8 @@
                             <select id="cli-vehiculo" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black outline-none">
                                 <option value="Motocarguero Sencillo">🛺 Motocarguero Sencillo</option>
                                 <option value="Motocarguero Doble Pacha">🚛 Motocarguero Doble Pacha</option>
-                                <option value="Camioneta sencilla">🚙 Camioneta sencilla</option>
-                                <option value="Camión doble pacha">🚚 Camión doble pacha</option>
+                                <option value="Camioneta">🚙 Camioneta</option>
+                                <option value="Camión">🚚 Camión</option>
                             </select>
                         </div>
 
@@ -273,17 +273,12 @@
                         <div class="flex items-center space-x-2 border-b border-slate-700 pb-2">
                             <span class="text-2xl">⚠️</span>
                             <div>
-                                <h3 class="font-black text-sm text-orange-400">Pico y Placa (Villavicencio 2026)</h3>
-                                <p class="text-[10px] text-slate-300 font-bold">Decreto oficial vigente</p>
+                                <h3 class="font-black text-sm text-orange-400">Pico y Placa Vigente</h3>
+                                <p class="text-[10px] text-slate-300 font-bold">Información oficial actualizada por la Central</p>
                             </div>
                         </div>
                         <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2 text-slate-200">
-                            <p><b>📅 Periodo:</b> 26 de enero al 22 de diciembre de 2026.</p>
-                            <p><b>⏰ Horarios:</b> De <b>6:30 a.m. a 9:30 a.m.</b> y de <b>5:00 p.m. a 8:00 p.m.</b></p>
-                            <p><b>🗓️ Regla:</b> Lunes a viernes (excepto días festivos). Fines de semana y festivos <b>no aplica</b>.</p>
-                            <div id="pico-placa-hoy" class="pt-2 border-t border-slate-700 text-orange-400 font-bold text-sm">
-                                Cargando restricción de hoy...
-                            </div>
+                            <div id="pico-placa-dinamico" class="text-slate-200 font-medium whitespace-pre-line text-xs"></div>
                         </div>
                     </div>
                 </div>
@@ -369,8 +364,8 @@
                             <select id="af-vehiculo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-black outline-none">
                                 <option value="Motocarguero Sencillo">Motocarguero Sencillo</option>
                                 <option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option>
-                                <option value="Camioneta sencilla">Camioneta sencilla</option>
-                                <option value="Camión doble pacha">Camión doble pacha</option>
+                                <option value="Camioneta">Camioneta</option>
+                                <option value="Camión">Camión</option>
                             </select>
                         </div>
                         <div>
@@ -422,6 +417,7 @@
                     <button onclick="switchTabAdmin('ajustes')" id="tab-a-ajustes" class="text-slate-400 py-2 rounded-lg cursor-pointer">Ajustes</button>
                 </div>
 
+                <!-- CALL CENTER -->
                 <div id="a-content-servicios" class="space-y-2.5">
                     <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
                         <span class="font-bold text-slate-300">Servicios Totales en Sistema</span>
@@ -430,50 +426,131 @@
                     <div id="admin-lista-cargas" class="space-y-2.5"></div>
                 </div>
 
+                <!-- GESTIÓN FLOTA / SOCIOS -->
                 <div id="a-content-conductores" class="space-y-2.5 hidden">
-                    <div class="flex justify-between items-center">
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs shadow-xl">
+                        <h3 class="font-black text-sm text-orange-400" id="admin-cond-form-title">➕ Registrar Nuevo Transportador</h3>
+                        <input type="hidden" id="admin-cond-idx" value="-1">
+                        
+                        <div class="space-y-2">
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Nombre Completo</label>
+                                <input type="text" id="adm-c-nombre" placeholder="Nombre completo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-300">Cédula</label>
+                                    <input type="number" id="adm-c-doc" placeholder="Cédula" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-300">Teléfono</label>
+                                    <input type="tel" id="adm-c-tel" placeholder="Teléfono" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-300">Tipo Vehículo</label>
+                                    <select id="adm-c-vehiculo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                        <option value="Motocarguero Sencillo">Motocarguero Sencillo</option>
+                                        <option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option>
+                                        <option value="Camioneta">Camioneta</option>
+                                        <option value="Camión">Camión</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-300">Placa</label>
+                                    <input type="text" id="adm-c-placa" placeholder="Placa" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-black uppercase outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-300">Vencimiento Suscripción</label>
+                                    <input type="date" id="adm-c-vencimiento" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-300">Cilindraje / Marca</label>
+                                    <input type="text" id="adm-c-marca" placeholder="Ej: AKT 200cc" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                                </div>
+                            </div>
+
+                            <div class="flex space-x-2 pt-1">
+                                <button onclick="guardarConductorAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow cursor-pointer">💾 Guardar Transportador</button>
+                                <button onclick="limpiarFormConductorAdmin()" class="bg-slate-700 hover:bg-slate-600 px-3 py-2.5 rounded-xl text-slate-200 font-bold cursor-pointer">Limpiar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-2">
                         <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Flota Registrada</h3>
-                        <button onclick="document.getElementById('modal-admin-conductor').classList.remove('hidden')" class="bg-orange-500 text-white font-bold text-xs px-3 py-1.5 rounded-lg shadow">➕ Registrar Nuevo</button>
                     </div>
-                    <div id="admin-lista-conductores" class="space-y-2.5"></div>
+                    <div id="admin-lista-conductores" class="space-y-2"></div>
                 </div>
 
+                <!-- GESTIÓN DINÁMICA DE TARIFAS -->
                 <div id="a-content-tarifas" class="space-y-2.5 hidden">
-                    <div id="a-tarifas-urbano" class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
-                        <h3 class="font-black text-sm text-orange-400">Urbanos</h3>
-                        <div id="admin-lista-tarifas-urbano" class="space-y-2.5"></div>
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
+                        <h3 class="font-black text-sm text-orange-400">⚙️ Editor de Tarifas Oficiales</h3>
+                        <p class="text-slate-300">Agrega o edita tarifas específicas por categoría:</p>
+                        <div class="space-y-2">
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Categoría de Ruta</label>
+                                <select id="admin-tarifa-cat" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                                    <option value="urbano">Urbanos</option>
+                                    <option value="veredas">Veredas</option>
+                                    <option value="municipios">Municipios</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Nombre de la Ruta / Destino</label>
+                                <input type="text" id="admin-tarifa-nombre" placeholder="Ej: Vereda La Palmita" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-300">Valor Flete (COP)</label>
+                                <input type="text" id="admin-tarifa-val" placeholder="Ej: $45.000" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                            </div>
+                            <button onclick="guardarNuevaTarifaAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow cursor-pointer">💾 Registrar Nueva Tarifa</button>
+                        </div>
                     </div>
-                    <div id="a-tarifas-veredas" class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
-                        <h3 class="font-black text-sm text-orange-400">Veredas</h3>
-                        <div id="admin-lista-tarifas-veredas" class="space-y-2.5"></div>
-                    </div>
-                    <div id="a-tarifas-municipios" class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
-                        <h3 class="font-black text-sm text-orange-400">Municipios</h3>
-                        <div id="admin-lista-tarifas-municipios" class="space-y-2.5"></div>
+
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
+                        <h3 class="font-black text-sm text-orange-400">📋 Listado de Tarifas Actuales</h3>
+                        <div id="admin-lista-tarifas" class="space-y-2"></div>
                     </div>
                 </div>
 
-                <div id="a-content-ajustes" class="space-y-2.5 hidden">
+                <!-- AJUSTES GLOBALES -->
+                <div id="a-content-ajustes" class="space-y-3 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
                         <h3 class="font-black text-sm text-orange-400">⚙️ Ajustes y Configuración Global</h3>
                         <div>
                             <label class="text-slate-300 font-bold">Clave de Administrador</label>
-                            <input type="password" id="cfg-admin-pass" value="1234" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                            <input type="password" id="cfg-admin-pass" value="1234" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
                         </div>
                         <div>
                             <label class="text-slate-300 font-bold">Valor Suscripción Mensual (COP)</label>
-                            <input type="number" id="cfg-valor-sus" value="45000" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                            <input type="number" id="cfg-valor-sus" value="45000" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
                         </div>
                         <div>
                             <label class="text-slate-300 font-bold">Número Nequi Oficial</label>
-                            <input type="text" id="cfg-nequi" value="3143842007" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                            <input type="text" id="cfg-nequi" value="3143842007" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
                         </div>
                         <div>
                             <label class="text-slate-300 font-bold">WhatsApp Central de Soporte</label>
-                            <input type="text" id="cfg-whatsapp" value="3507690951" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                            <input type="text" id="cfg-whatsapp" value="3507690951" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
                         </div>
-                        <button onclick="guardarAjustesGlobales()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-2.5 rounded-xl text-white shadow cursor-pointer mt-1">💾 Guardar Ajustes</button>
                     </div>
+
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-2 text-xs">
+                        <h3 class="font-black text-sm text-orange-400">🚗 Editor de Pico y Placa</h3>
+                        <textarea id="cfg-pico-placa" rows="4" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium outline-none text-xs"></textarea>
+                    </div>
+
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-2 text-xs">
+                        <h3 class="font-black text-sm text-orange-400">📜 Editor del Reglamento Operativo</h3>
+                        <textarea id="cfg-reglamento" rows="6" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium outline-none text-xs"></textarea>
+                    </div>
+
+                    <button onclick="guardarAjustesGlobales()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white shadow cursor-pointer uppercase tracking-wider">💾 Guardar Todos los Ajustes</button>
                 </div>
             </div>
         </div>
@@ -487,68 +564,834 @@
                 <h3 class="text-lg font-black text-orange-600">REGLAMENTO OPERATIVO</h3>
                 <p class="text-[11px] text-slate-600 font-bold">Normas de la Comunidad Kargass</p>
             </div>
-            <div class="space-y-2 text-xs text-slate-800 font-medium">
-                <p>1. Datos Reales: Mantener la documentación y datos de su vehículo al día.</p>
-                <p>2. Puntualidad: Compromiso absoluto con el horario y cuidado de la carga.</p>
-                <p>3. Respeto Tarifario: Cumplimiento estricto de las tarifas oficiales.</p>
-                <p>4. Suscripción: Pago puntual de la membresía mensual.</p>
-            </div>
+            <div id="modal-reglamento-texto" class="space-y-2 text-xs text-slate-800 font-medium whitespace-pre-line"></div>
             <button onclick="cerrarReglamentoModal()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white text-xs cursor-pointer">Entendido y Cerrado</button>
         </div>
     </div>
 
-    <!-- MODAL REGISTRO CONDUCTOR ADMIN -->
-    <div id="modal-admin-conductor" class="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4 overflow-y-auto hidden">
-        <div class="bg-slate-800 border-2 border-slate-700 p-5 rounded-3xl max-w-sm w-full space-y-4 shadow-2xl my-auto text-xs">
-            <div class="flex justify-between items-center border-b border-slate-700 pb-2">
-                <h3 class="font-black text-lg text-white">Registrar Conductor</h3>
-                <button onclick="document.getElementById('modal-admin-conductor').classList.add('hidden')" class="text-slate-400 font-black px-2 py-1">X</button>
-            </div>
-            <div class="space-y-2.5">
-                <input type="hidden" id="adm-c-idx" value="-1">
-                <div>
-                    <label class="text-slate-300 font-bold">Nombre Completo</label>
-                    <input type="text" id="adm-c-nombre" placeholder="Nombre completo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+    <script>
+        const listaMunicipiosMeta = [
+            "Villavicencio", "Acacías", "Barranca de Upía", "Cabuyaro", "Castilla la Nueva",
+            "Cubarral", "Cumaral", "El Calvario", "El Castillo", "El Dorado",
+            "Fuente de Oro", "Granada", "Guamal", "La Macarena", "La Uribe",
+            "Lejanías", "Mapiripán", "Mesetas", "Puerto Concordia", "Puerto Gaitán",
+            "Puerto Lleras", "Puerto López", "Puerto Rico", "Restrepo",
+            "San Carlos de Guaroa", "San Juan de Arama", "San Juanito", "San Martín", "Vista Hermosa"
+        ];
+
+        const tarifasBaseAcacias = {
+            urbano: [
+                { id: 1, ruta: "Urbano", valor: "$25.000" },
+                { id: 2, ruta: "Cobalto", valor: "$40.000" },
+                { id: 3, ruta: "Trasteos", valor: "$40.000" },
+                { id: 4, ruta: "Escombros", valor: "$40.000" }
+            ],
+            veredas: [
+                { id: 5, ruta: "Vereda San Nicolas", valor: "$35.000" },
+                { id: 6, ruta: "Vereda El Centro", valor: "$35.000" },
+                { id: 7, ruta: "Vereda El Dimante", valor: "$35.000" },
+                { id: 8, ruta: "Vereda Monte Bello", valor: "$50.000" },
+                { id: 9, ruta: "Vereda la Esmeralda", valor: "$50.000 - $60.000" },
+                { id: 10, ruta: "Vereda Montelibano", valor: "$60.000" },
+                { id: 11, ruta: "Vereda San Calletano", valor: "$60.000" }
+            ],
+            municipios: [
+                { id: 12, ruta: "Guamal", valor: "$60.000" },
+                { id: 13, ruta: "Chichimene", valor: "$60.000" },
+                { id: 14, ruta: "Violeta", valor: "$80.000" },
+                { id: 15, ruta: "Santa Rosa", valor: "$80.000" },
+                { id: 16, ruta: "Castilla", valor: "$100.000" },
+                { id: 17, ruta: "Puerto Canecas", valor: "$100.000" },
+                { id: 18, ruta: "San Martin", valor: "$130.000" },
+                { id: 19, ruta: "Cubarral", valor: "$130.000" },
+                { id: 20, ruta: "Dinamarca", valor: "$130.000" },
+                { id: 21, ruta: "Patio Bonito", valor: "$130.000" },
+                { id: 22, ruta: "Villavicencio", valor: "$130.000" },
+                { id: 23, ruta: "San Lorenzo", valor: "$150.000" },
+                { id: 24, ruta: "El Dorado", valor: "$160.000" },
+                { id: 25, ruta: "Granada", valor: "$190.000 - $220.000" },
+                { id: 26, ruta: "Sancarlos de guaroba", valor: "$250.000" },
+                { id: 27, ruta: "Surimena", valor: "$250.000" }
+            ]
+        };
+
+        const reglamentoPorDefecto = `1. Datos Reales: Mantener la documentación y datos de su vehículo al día.
+2. Puntualidad: Compromiso absoluto con el horario y cuidado de la carga.
+3. Respeto Tarifario: Cumplimiento estricto de las tarifas oficiales.
+4. Suscripción: Pago puntual de la membresía mensual.`;
+
+        const picoPlacaPorDefecto = `📅 Periodo: Vigente 2026.
+⏰ Horarios: De 6:30 a.m. a 9:30 a.m. y de 5:00 p.m. a 8:00 p.m.
+🗓️ Regla: Lunes a viernes (excepto festivos).`;
+
+        let state = {
+            cargas: JSON.parse(localStorage.getItem('kargass_cargas')) || [
+                { id: 1711200, clienteDoc: "123456", clienteNombre: "David Martínez", clienteTel: "3143842007", tipoZona: "Local (Urbano)", municipio: "Acacías", horario: "⚡ Cargue Inmediato", vehiculo: "Motocarguero Sencillo", peso: "250 kg", origen: "Calle 10A 32-07 (Acacías)", destino: "Calle 14#32-45 (Acacías)", observaciones: "Caja frágil", foto: null, estado: "Recibiendo Ofertas", ofertas: [], fechaCreacion: "10:00 AM" }
+            ],
+            conductores: JSON.parse(localStorage.getItem('kargass_conductores')) || [
+                { placa: "ABC123", nombre: "Pedro Gómez", doc: "11223344", tel: "3101234567", vehiculo: "Motocarguero Sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-11-30" }
+            ],
+            tarifas: JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || tarifasBaseAcacias,
+            config: JSON.parse(localStorage.getItem('kargass_config_global')) || {
+                adminPass: "1234",
+                valorSuscripcion: 45000,
+                nequi: "3143842007",
+                whatsapp: "3507690951",
+                picoPlacaTexto: picoPlacaPorDefecto,
+                reglamentoTexto: reglamentoPorDefecto
+            },
+            clienteActualDoc: localStorage.getItem('kargass_cliente_doc') || null,
+            transActualPlaca: localStorage.getItem('kargass_trans_placa') || null,
+            isAdmin: localStorage.getItem('kargass_is_admin') === 'true',
+            tipoZona: "Local (Urbano)",
+            horarioTipo: "Inmediato",
+            fotoBase64: null
+        };
+
+        function guardarDatosLocal() {
+            localStorage.setItem('kargass_cargas', JSON.stringify(state.cargas));
+            localStorage.setItem('kargass_conductores', JSON.stringify(state.conductores));
+            localStorage.setItem('kargass_tarifas_oficiales', JSON.stringify(state.tarifas));
+            localStorage.setItem('kargass_config_global', JSON.stringify(state.config));
+            if (state.clienteActualDoc) localStorage.setItem('kargass_cliente_doc', state.clienteActualDoc);
+            else localStorage.removeItem('kargass_cliente_doc');
+            if (state.transActualPlaca) localStorage.setItem('kargass_trans_placa', state.transActualPlaca);
+            else localStorage.removeItem('kargass_trans_placa');
+            localStorage.setItem('kargass_is_admin', state.isAdmin);
+        }
+
+        function poblarSelectMunicipios() {
+            document.querySelectorAll('.select-municipios').forEach(sel => {
+                const actual = sel.value || "Acacías";
+                sel.innerHTML = listaMunicipiosMeta.map(m => `<option value="${m}">${m}</option>`).join('');
+                sel.value = actual;
+            });
+        }
+
+        function actualizarTextosGlobales() {
+            document.getElementById('sub-valor-text').innerText = `$${Number(state.config.valorSuscripcion).toLocaleString('es-CO')} COP`;
+            document.getElementById('sub-nequi-text').innerText = state.config.nequi;
+            document.getElementById('af-valor-sub').innerText = `$${Number(state.config.valorSuscripcion).toLocaleString('es-CO')} COP`;
+            document.getElementById('af-nequi-num').innerText = state.config.nequi;
+            
+            const msgSub = encodeURIComponent("Hola Central, envío el comprobante de pago de mi suscripción mensual Kargass.");
+            document.getElementById('sub-wa-btn').href = `https://wa.me/57${state.config.whatsapp}?text=${msgSub}`;
+            
+            const msgAf = encodeURIComponent("Hola Central, quiero afiliarme a Kargass. Adjunto mis datos y pago.");
+            document.getElementById('af-wa-btn').href = `https://wa.me/57${state.config.whatsapp}?text=${msgAf}`;
+
+            const elPico = document.getElementById('pico-placa-dinamico');
+            if (elPico) elPico.innerText = state.config.picoPlacaTexto || picoPlacaPorDefecto;
+
+            const elReg = document.getElementById('modal-reglamento-texto');
+            if (elReg) elReg.innerText = state.config.reglamentoTexto || reglamentoPorDefecto;
+        }
+
+        function mostrarSelectorRol() {
+            document.getElementById('modal-selector').classList.remove('hidden');
+        }
+
+        function abrirReglamentoModal() {
+            document.getElementById('modal-reglamento').classList.remove('hidden');
+        }
+
+        function cerrarReglamentoModal() {
+            document.getElementById('modal-reglamento').classList.add('hidden');
+        }
+
+        function irModulo(mod) {
+            document.getElementById('modal-selector').classList.add('hidden');
+            document.getElementById('view-cliente').classList.add('hidden');
+            document.getElementById('view-transportador').classList.add('hidden');
+            document.getElementById('view-afiliacion').classList.add('hidden');
+            document.getElementById('view-central').classList.add('hidden');
+            poblarSelectMunicipios();
+            actualizarTextosGlobales();
+
+            if (mod === 'cliente') {
+                document.getElementById('view-cliente').classList.remove('hidden');
+                if (state.clienteActualDoc) cargarPerfilCliente(state.clienteActualDoc);
+                else {
+                    document.getElementById('cliente-login').classList.remove('hidden');
+                    document.getElementById('cliente-dashboard').classList.add('hidden');
+                }
+            } else if (mod === 'transportador') {
+                document.getElementById('view-transportador').classList.remove('hidden');
+                if (state.transActualPlaca) {
+                    let cond = state.conductores.find(c => c.placa === state.transActualPlaca);
+                    if (cond) cargarDashboardTrans(cond);
+                    else {
+                        document.getElementById('trans-login').classList.remove('hidden');
+                        document.getElementById('trans-dashboard').classList.add('hidden');
+                    }
+                } else {
+                    document.getElementById('trans-login').classList.remove('hidden');
+                    document.getElementById('trans-dashboard').classList.add('hidden');
+                }
+            } else if (mod === 'afiliacion') {
+                document.getElementById('view-afiliacion').classList.remove('hidden');
+            } else if (mod === 'central') {
+                document.getElementById('view-central').classList.remove('hidden');
+                if (state.isAdmin) {
+                    document.getElementById('admin-login').classList.add('hidden');
+                    document.getElementById('admin-dashboard').classList.remove('hidden');
+                    renderAdminServicios();
+                    renderAdminConductores();
+                    renderAdminTarifas();
+                    cargarAjustesGlobales();
+                } else {
+                    document.getElementById('admin-login').classList.remove('hidden');
+                    document.getElementById('admin-dashboard').classList.add('hidden');
+                }
+            }
+        }
+
+        // CLIENTE JS
+        function verificarClienteLogin() {
+            const doc = document.getElementById('cli-doc-input').value.trim();
+            if (!doc) { alert("Ingresa tu cédula"); return; }
+            state.clienteActualDoc = doc;
+            guardarDatosLocal();
+            cargarPerfilCliente(doc);
+        }
+
+        function cargarPerfilCliente(doc) {
+            document.getElementById('cliente-login').classList.add('hidden');
+            document.getElementById('cliente-dashboard').classList.remove('hidden');
+            document.getElementById('cli-perfil-doc').innerText = doc;
+            const guardado = JSON.parse(localStorage.getItem('kargass_memoria_cli_' + doc));
+            if (guardado) {
+                document.getElementById('cli-nombre').value = guardado.nombre || "";
+                document.getElementById('cli-tel').value = guardado.tel || "";
+            }
+            renderHistorialCliente();
+        }
+
+        function cerrarSesionCliente() {
+            state.clienteActualDoc = null;
+            guardarDatosLocal();
+            document.getElementById('cliente-dashboard').classList.add('hidden');
+            document.getElementById('cliente-login').classList.remove('hidden');
+        }
+
+        function setTipoZona(tipo) {
+            state.tipoZona = tipo;
+            const btnU = document.getElementById('btn-tipo-urbano');
+            const btnI = document.getElementById('btn-tipo-inter');
+            if (tipo === 'Local (Urbano)') {
+                btnU.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+                btnI.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+            } else {
+                btnI.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+                btnU.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+            }
+        }
+
+        function setHorario(horario) {
+            state.horarioTipo = horario;
+            const btnI = document.getElementById('btn-horario-inmediato');
+            const btnP = document.getElementById('btn-horario-programado');
+            const box = document.getElementById('box-hora-programada');
+            if (horario === 'Inmediato') {
+                btnI.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";
+                btnP.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";
+                box.classList.add('hidden');
+            } else {
+                btnP.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";
+                btnI.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";
+                box.classList.remove('hidden');
+            }
+        }
+
+        function obtenerGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    document.getElementById('cli-origen').value = `GPS: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
+                    alert("📍 Coordenadas capturadas");
+                }, () => alert("No se pudo obtener GPS"));
+            } else alert("GPS no soportado");
+        }
+
+        function capturarFoto(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    state.fotoBase64 = evt.target.result;
+                    document.getElementById('foto-estado').innerText = "¡Foto cargada!";
+                    document.getElementById('foto-estado').className = "text-[10px] text-green-400 font-bold";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function publicarSolicitudCliente() {
+            const nombre = document.getElementById('cli-nombre').value.trim();
+            const tel = document.getElementById('cli-tel').value.trim();
+            const peso = document.getElementById('cli-peso').value.trim();
+            const origen = document.getElementById('cli-origen').value.trim();
+            const destino = document.getElementById('cli-destino').value.trim();
+
+            if (!nombre || !tel || !peso || !origen || !destino) {
+                alert("Completa todos los campos requeridos"); return;
+            }
+
+            localStorage.setItem('kargass_memoria_cli_' + state.clienteActualDoc, JSON.stringify({ nombre, tel }));
+            const horaCargue = state.horarioTipo === 'Inmediato' ? '⚡ Cargue Inmediato' : '⏰ Programado: ' + (document.getElementById('cli-hora-input').value || 'Acordado');
+
+            const nuevaCarga = {
+                id: Date.now(),
+                clienteDoc: state.clienteActualDoc,
+                clienteNombre: nombre,
+                clienteTel: tel,
+                tipoZona: state.tipoZona,
+                municipio: document.getElementById('cli-mun-local').value,
+                horario: horaCargue,
+                vehiculo: document.getElementById('cli-vehiculo').value,
+                peso: peso,
+                origen: origen,
+                destino: destino,
+                observaciones: document.getElementById('cli-obs').value.trim(),
+                foto: state.fotoBase64,
+                estado: "Recibiendo Ofertas",
+                ofertas: [],
+                fechaCreacion: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+            };
+
+            state.cargas.unshift(nuevaCarga);
+            guardarDatosLocal();
+            alert("🚀 ¡Solicitud publicada con éxito!");
+            document.getElementById('cli-peso').value = '';
+            document.getElementById('cli-origen').value = '';
+            document.getElementById('cli-destino').value = '';
+            document.getElementById('cli-obs').value = '';
+            document.getElementById('foto-estado').innerText = "Sin foto";
+            state.fotoBase64 = null;
+            renderHistorialCliente();
+        }
+
+        function renderHistorialCliente() {
+            const el = document.getElementById('lista-mis-cargas');
+            const mis = state.cargas.filter(c => c.clienteDoc === state.clienteActualDoc);
+            if (mis.length === 0) {
+                el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin solicitudes aún.</div>';
+                return;
+            }
+            el.innerHTML = mis.map(c => `
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-lg">
+                    <div class="flex justify-between items-start border-b border-slate-700 pb-1.5">
+                        <span class="bg-orange-500/20 text-orange-400 font-black px-2 py-0.5 rounded-lg text-[10px]">${c.tipoZona}</span>
+                        <span class="text-orange-400 font-black text-[11px]">${c.estado}</span>
+                    </div>
+                    <p class="font-black text-white">📦 ${c.origen} ➔ ${c.destino}</p>
+                    <p><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
+                    ${c.foto ? `<img src="${c.foto}" class="w-full h-24 object-cover rounded-xl border border-slate-700">` : ''}
+                    
+                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1.5">
+                        <p class="font-black text-orange-400">🏷️ Ofertas Recibidas (${c.ofertas ? c.ofertas.length : 0}):</p>
+                        ${(!c.ofertas || c.ofertas.length === 0) ? '<p class="text-slate-400 italic">Esperando ofertas de transportadores...</p>' : c.ofertas.map((of, oIdx) => `
+                            <div class="flex justify-between items-center bg-slate-800 p-2 rounded-lg border border-slate-700">
+                                <div>
+                                    <p class="font-bold text-white">${of.conductorNombre} (${of.placa})</p>
+                                    <p class="text-[10px] text-slate-300">Tel: ${of.tel}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-black text-emerald-400 text-sm">$${Number(of.precio).toLocaleString('es-CO')}</span>
+                                    <button onclick="seleccionarOfertaCliente(${c.id}, ${oIdx})" class="block mt-1 bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1 rounded text-[10px] cursor-pointer">Seleccionar</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-slate-300 font-bold">Cédula</label>
-                        <input type="number" id="adm-c-doc" placeholder="Número cédula" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+            `).join('');
+        }
+
+        function seleccionarOfertaCliente(cargaId, ofertaIdx) {
+            let carga = state.cargas.find(c => c.id === cargaId);
+            if (carga && carga.ofertas[ofertaIdx]) {
+                const seleccionada = carga.ofertas[ofertaIdx];
+                carga.estado = `Asignado a ${seleccionada.conductorNombre} ($${Number(seleccionada.precio).toLocaleString('es-CO')})`;
+                guardarDatosLocal();
+                renderHistorialCliente();
+                alert(`✅ ¡Has seleccionado la oferta de ${seleccionada.conductorNombre}!`);
+            }
+        }
+
+        // TRANSPORTADOR JS
+        function verificarTransportadorLogin() {
+            const placa = document.getElementById('trans-placa-input').value.trim().toUpperCase();
+            if (!placa) { alert("Ingresa tu placa"); return; }
+            
+            let cond = state.conductores.find(c => c.placa === placa);
+            if (!cond) {
+                alert("⚠️ Placa no encontrada o pendiente de aprobación en la Central.");
+                return;
+            }
+
+            if (cond.estado !== 'Activo') {
+                alert("⚠️ Tu cuenta se encuentra en estado: " + cond.estado);
+                return;
+            }
+
+            state.transActualPlaca = placa;
+            guardarDatosLocal();
+            cargarDashboardTrans(cond);
+        }
+
+        function cargarDashboardTrans(cond) {
+            document.getElementById('trans-login').classList.add('hidden');
+            document.getElementById('trans-dashboard').classList.remove('hidden');
+            
+            document.getElementById('trans-perfil-nombre').innerText = cond.nombre || "Conductor";
+            document.getElementById('trans-perfil-doc').innerText = cond.doc || "N/A";
+            document.getElementById('trans-perfil-tel').innerText = cond.tel || "N/A";
+            document.getElementById('trans-perfil-placa').innerText = cond.placa;
+            document.getElementById('trans-perfil-vehiculo').innerText = (cond.vehiculo || "Motocarguero") + ` (${cond.marca || 'AKT'} - ${cond.cilindraje || '200cc'})`;
+
+            calcularCuentaRegresivaSuscripcion(cond.vencimiento);
+            renderCargasDisponiblesTrans();
+            renderTarifasTransportador();
+            actualizarTextosGlobales();
+        }
+
+        function calcularCuentaRegresivaSuscripcion(fechaVencimientoStr) {
+            const elFechas = document.getElementById('trans-fechas-sus');
+            const elRegresiva = document.getElementById('trans-cuenta-regresiva');
+            const boxAlerta = document.getElementById('box-suscripcion-alerta');
+
+            if (!fechaVencimientoStr) {
+                elFechas.innerText = "Sin fecha registrada";
+                elRegresiva.innerText = "⚠️ Comunícate con la Central para activar vigencia";
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-slate-900 border-amber-500 text-amber-400";
+                return;
+            }
+
+            const hoy = new Date();
+            hoy.setHours(0,0,0,0);
+            const vencimiento = new Date(fechaVencimientoStr + 'T00:00:00');
+            const inicioVigencia = new Date(vencimiento);
+            inicioVigencia.setMonth(inicioVigencia.getMonth() - 1);
+
+            const formatoF = (f) => f.toLocaleDateString('es-CO', {day: '2-digit', month: 'short', year: 'numeric'});
+            elFechas.innerText = `${formatoF(inicioVigencia)} al ${formatoF(vencimiento)}`;
+
+            const diferenciaTiempo = vencimiento - hoy;
+            const diasRestantes = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24));
+
+            if (diasRestantes < 0) {
+                elRegresiva.innerText = "❌ ¡Suscripción Vencida! Actualiza tu pago";
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-red-950/80 border-red-500 text-red-400 animate-pulse";
+            } else if (diasRestantes <= 5) {
+                elRegresiva.innerText = `🚨 ¡URGENTE! Te quedan ${diasRestantes} día(s) para vencerse`;
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-red-950/60 border-red-500 text-red-400";
+            } else if (diasRestantes <= 10) {
+                elRegresiva.innerText = `⚠️ ¡Atención! Te quedan ${diasRestantes} días de suscripción`;
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-amber-950/60 border-amber-500 text-amber-400";
+            } else {
+                elRegresiva.innerText = `✅ Suscripción Activa (${diasRestantes} días restantes)`;
+                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-slate-900 border-emerald-500/50 text-emerald-400";
+            }
+        }
+
+        function cerrarSesionTrans() {
+            state.transActualPlaca = null;
+            guardarDatosLocal();
+            document.getElementById('trans-dashboard').classList.add('hidden');
+            document.getElementById('trans-login').classList.remove('hidden');
+        }
+
+        function switchTabTrans(tab) {
+            ['servicios', 'tarifas', 'pico', 'sub', 'viajes'].forEach(t => {
+                document.getElementById('t-content-' + t).classList.add('hidden');
+                document.getElementById('tab-t-' + t).className = "text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate";
+            });
+            document.getElementById('t-content-' + tab).classList.remove('hidden');
+            document.getElementById('tab-t-' + tab).className = "bg-orange-500 text-white py-2 px-1 rounded-lg cursor-pointer truncate";
+        }
+
+        function switchSubTabTarifas(sub) {
+            ['urbano', 'veredas', 'municipios'].forEach(s => {
+                document.getElementById('subcontent-t-' + s).classList.add('hidden');
+                document.getElementById('subtab-t-' + s).className = "text-slate-400 py-1.5 rounded-lg cursor-pointer";
+            });
+            document.getElementById('subcontent-t-' + sub).classList.remove('hidden');
+            document.getElementById('subtab-t-' + sub).className = "bg-orange-500 text-white py-1.5 rounded-lg cursor-pointer";
+        }
+
+        function renderTarifasTransportador() {
+            ['urbano', 'veredas', 'municipios'].forEach(cat => {
+                const contenedor = document.getElementById(`contenedor-tarifas-${cat}`);
+                const items = state.tarifas[cat] || [];
+                if (items.length === 0) {
+                    contenedor.innerHTML = `<p class="text-slate-400 text-center py-2">Sin tarifas registradas.</p>`;
+                } else {
+                    contenedor.innerHTML = items.map(t => `
+                        <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700">
+                            <span>${t.ruta}</span>
+                            <span class="font-black text-orange-400">${t.valor}</span>
+                        </div>
+                    `).join('');
+                }
+            });
+        }
+
+        function renderCargasDisponiblesTrans() {
+            const el = document.getElementById('lista-cargas-disponibles');
+            const filtradas = state.cargas.filter(c => c.municipio === "Acacías" || c.tipoZona === "Intermunicipal");
+
+            if (filtradas.length === 0) {
+                el.innerHTML = '<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay acarreos disponibles.</div>';
+                return;
+            }
+            el.innerHTML = filtradas.map(c => `
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-md">
+                    <div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1">
+                        <span>📍 ${c.municipio} (${c.tipoZona})</span>
+                        <span>🛺 ${c.vehiculo}</span>
                     </div>
-                    <div>
-                        <label class="text-slate-300 font-bold">Teléfono</label>
-                        <input type="tel" id="adm-c-tel" placeholder="Número teléfono" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
+                    <p class="font-black text-white text-sm">${c.origen} ➔ ${c.destino}</p>
+                    <p class="text-slate-300"><b>Carga:</b> ${c.peso} | <b>Horario:</b> ${c.horario}</p>
+                    <p class="text-slate-400"><b>Cliente:</b> ${c.clienteNombre} (${c.clienteTel})</p>
+                    ${c.observaciones ? `<p class="text-slate-400 italic">"${c.observaciones}"</p>` : ''}
+                    ${c.foto ? `<img src="${c.foto}" class="w-full h-24 object-cover rounded-xl border border-slate-700">` : ''}
+                    
+                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2">
+                        <label class="font-bold text-slate-300">Mi propuesta de flete (COP):</label>
+                        <div class="flex space-x-2">
+                            <input type="number" id="input-oferta-${c.id}" placeholder="Ej: 35000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs">
+                            <button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Puja</button>
+                        </div>
                     </div>
+                    
+                    <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20vi%20tu%20acarreo%20en%20Kargass." target="_blank" class="block text-center bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white mt-1 shadow">💬 Contactar Directo por WhatsApp</a>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-slate-300 font-bold">Tipo Vehículo</label>
-                        <select id="adm-c-vehiculo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
-                            <option value="Motocarguero Sencillo">Motocarguero Sencillo</option>
-                            <option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option>
-                            <option value="Camioneta sencilla">Camioneta sencilla</option>
-                            <option value="Camión doble pacha">Camión doble pacha</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-slate-300 font-bold">Placa</label>
-                        <input type="text" id="adm-c-placa" placeholder="Placa" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-black uppercase outline-none">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-slate-300 font-bold">Marca</label>
-                        <input type="text" id="adm-c-marca" placeholder="Ej: AKT, Bajaj" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
-                    </div>
-                    <div>
-                        <label class="text-slate-300 font-bold">Cilindraje</label>
-                        <input type="text" id="adm-c-cilindraje" placeholder="Ej: 200cc, 300cc" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
-                    </div>
-                </div>
-                <div>
-                    <label class="text-slate-300 font-bold">Vencimiento Suscripción</label>
-                    <input type="date" id="adm-c-vencimiento" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold outline-none">
-                </div>
+            `).join('');
+        }
+
+        function enviarOfertaTransportador(cargaId) {
+            const inputVal = document.getElementById(`input-oferta-${cargaId}`).value.trim();
+            if (!inputVal || isNaN(inputVal)) {
+                alert("⚠️ Ingresa un valor numérico válido para tu oferta.");
+                return;
+            }
+
+            let carga = state.cargas.find(c => c.id === cargaId);
+            let cond = state.conductores.find(co => co.placa === state.transActualPlaca);
+
+            if (carga && cond) {
+                if (!carga.ofertas) carga.ofertas = [];
                 
-                <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
-                    <div class="flex items
+                let existente = carga.ofertas.find(o => o.placa === cond.placa);
+                if (existente) {
+                    existente.precio = inputVal;
+                } else {
+                    carga.ofertas.push({
+                        placa: cond.placa,
+                        conductorNombre: cond.nombre,
+                        tel: cond.tel,
+                        precio: inputVal
+                    });
+                }
+
+                guardarDatosLocal();
+                alert(`🚀 ¡Oferta de $${Number(inputVal).toLocaleString('es-CO')} enviada con éxito al cliente!`);
+                document.getElementById(`input-oferta-${cargaId}`).value = '';
+                renderCargasDisponiblesTrans();
+            }
+        }
+
+        function copiarNequi() {
+            navigator.clipboard.writeText(state.config.nequi);
+            alert("✅ Número Nequi copiado: " + state.config.nequi);
+        }
+
+        // AFILIACIÓN JS
+        function enviarPostulacion() {
+            const nombre = document.getElementById('af-nombre').value.trim();
+            const doc = document.getElementById('af-doc').value.trim();
+            const tel = document.getElementById('af-tel').value.trim();
+            const vehiculo = document.getElementById('af-vehiculo').value;
+            const placa = document.getElementById('af-placa').value.trim().toUpperCase();
+            const marca = document.getElementById('af-marca').value.trim();
+            const cilindraje = document.getElementById('af-cilindraje').value.trim();
+            const acepto = document.getElementById('af-check-reglamento').checked;
+
+            if (!nombre || !doc || !tel || !placa || !marca || !cilindraje) {
+                alert("⚠️ Completa todos los campos.");
+                return;
+            }
+
+            if (!acepto) {
+                alert("⚠️ Debes aceptar el reglamento.");
+                return;
+            }
+
+            const fechaFutura = new Date();
+            fechaFutura.setDate(fechaFutura.getDate() + 30);
+            const vencimientoStr = fechaFutura.toISOString().split('T')[0];
+
+            state.conductores.push({ placa, nombre, doc, tel, vehiculo, marca, cilindraje, municipio: "Acacías", estado: "Activo", vencimiento: vencimientoStr });
+            guardarDatosLocal();
+            alert("🚀 ¡Postulación y activación completada con éxito!");
+            
+            document.getElementById('af-nombre').value = '';
+            document.getElementById('af-doc').value = '';
+            document.getElementById('af-tel').value = '';
+            document.getElementById('af-placa').value = '';
+            document.getElementById('af-marca').value = '';
+            document.getElementById('af-cilindraje').value = '';
+            document.getElementById('af-check-reglamento').checked = false;
+            irModulo('transportador');
+        }
+
+        // CENTRAL / ADMIN JS
+        function verificarAdminLogin() {
+            const pass = document.getElementById('admin-pass').value.trim();
+            if (pass === state.config.adminPass) {
+                state.isAdmin = true;
+                guardarDatosLocal();
+                document.getElementById('admin-login').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                renderAdminServicios();
+                renderAdminConductores();
+                renderAdminTarifas();
+                cargarAjustesGlobales();
+            } else alert("Clave incorrecta");
+        }
+
+        function cerrarSesionAdmin() {
+            state.isAdmin = false;
+            guardarDatosLocal();
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('admin-login').classList.remove('hidden');
+        }
+
+        function switchTabAdmin(tab) {
+            ['servicios', 'conductores', 'tarifas', 'ajustes'].forEach(t => {
+                const content = document.getElementById('a-content-' + t);
+                const btn = document.getElementById('tab-a-' + t);
+                if (content && btn) {
+                    if (t === tab) {
+                        content.classList.remove('hidden');
+                        btn.className = "bg-orange-500 text-white py-2 rounded-lg cursor-pointer font-black";
+                    } else {
+                        content.classList.add('hidden');
+                        btn.className = "text-slate-400 py-2 rounded-lg cursor-pointer";
+                    }
+                }
+            });
+        }
+
+        function renderAdminServicios() {
+            document.getElementById('admin-total-servicios').innerText = state.cargas.length;
+            const el = document.getElementById('admin-lista-cargas');
+            if (!state.cargas || state.cargas.length === 0) { 
+                el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin servicios registrados.</div>'; 
+                return; 
+            }
+            el.innerHTML = state.cargas.map(c => `
+                <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-2 shadow-md">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-1">
+                        <span class="font-bold text-orange-400">[${c.municipio}] ${c.clienteNombre} (${c.clienteTel})</span>
+                        <div class="space-x-1">
+                            <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20te%20contacto%20de%20la%20Central%20Kargass." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded text-white font-bold inline-block">WhatsApp</a>
+                            <button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button>
+                        </div>
+                    </div>
+                    ${c.foto ? `<img src="${c.foto}" class="w-full h-20 object-cover rounded-lg border border-slate-700">` : ''}
+                    <p class="text-white"><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
+                    <p class="text-slate-300"><b>Ruta:</b> ${c.origen} ➔ ${c.destino}</p>
+                    <p class="text-slate-400 font-bold">Estado: ${c.estado}</p>
+                    <p class="text-emerald-400 font-bold">Ofertas recibidas: ${c.ofertas ? c.ofertas.length : 0}</p>
+                </div>
+            `).join('');
+        }
+
+        function eliminarCargaAdmin(id) {
+            if (confirm("¿Eliminar este servicio del sistema?")) {
+                state.cargas = state.cargas.filter(c => c.id !== id);
+                guardarDatosLocal();
+                renderAdminServicios();
+            }
+        }
+
+        function renderAdminConductores() {
+            const el = document.getElementById('admin-lista-conductores');
+            if (!state.conductores || state.conductores.length === 0) {
+                el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin transportadores registrados.</div>';
+                return;
+            }
+            el.innerHTML = state.conductores.map((cond, idx) => `
+                <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-1.5 shadow">
+                    <div class="flex justify-between items-center">
+                        <p class="font-black text-white">${cond.nombre} (<span class="text-orange-400">${cond.placa}</span>)</p>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${cond.estado === 'Activo' ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}">${cond.estado}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-300">C.C: ${cond.doc} • Tel: ${cond.tel} • Vence: <b class="text-orange-400">${cond.vencimiento || 'No asignado'}</b></p>
+                    <p class="text-[11px] text-slate-400">${cond.vehiculo} (${cond.marca} - ${cond.cilindraje})</p>
+                    <div class="flex space-x-2 pt-1">
+                        ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Activar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Suspender</button>`}
+                        <button onclick="editarConductorAdmin(${idx})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Editar</button>
+                        <button onclick="eliminarConductorAdmin(${idx})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function guardarConductorAdmin() {
+            const nombre = document.getElementById('adm-c-nombre').value.trim();
+            const doc = document.getElementById('adm-c-doc').value.trim();
+            const tel = document.getElementById('adm-c-tel').value.trim();
+            const vehiculo = document.getElementById('adm-c-vehiculo').value;
+            const placa = document.getElementById('adm-c-placa').value.trim().toUpperCase();
+            const marca = document.getElementById('adm-c-marca').value.trim();
+            const vencimiento = document.getElementById('adm-c-vencimiento').value;
+            const idx = parseInt(document.getElementById('admin-cond-idx').value);
+
+            if (!nombre || !placa) {
+                alert("Ingresa como mínimo el Nombre y la Placa");
+                return;
+            }
+
+            const datosCond = { 
+                placa, 
+                nombre, 
+                doc: doc || "N/A", 
+                tel: tel || "N/A", 
+                vehiculo, 
+                marca: marca || "AKT", 
+                cilindraje: "200cc", 
+                municipio: "Acacías", 
+                estado: "Activo",
+                vencimiento: vencimiento || new Date().toISOString().split('T')[0]
+            };
+
+            if (idx >= 0) {
+                state.conductores[idx] = datosCond;
+                alert("✅ Conductor actualizado");
+            } else {
+                state.conductores.push(datosCond);
+                alert("✅ Conductor registrado y activado");
+            }
+
+            guardarDatosLocal();
+            limpiarFormConductorAdmin();
+            renderAdminConductores();
+        }
+
+        function editarConductorAdmin(idx) {
+            const cond = state.conductores[idx];
+            document.getElementById('admin-cond-idx').value = idx;
+            document.getElementById('adm-c-nombre').value = cond.nombre || "";
+            document.getElementById('adm-c-doc').value = cond.doc || "";
+            document.getElementById('adm-c-tel').value = cond.tel || "";
+            document.getElementById('adm-c-vehiculo').value = cond.vehiculo || "Motocarguero Sencillo";
+            document.getElementById('adm-c-placa').value = cond.placa || "";
+            document.getElementById('adm-c-marca').value = cond.marca || "";
+            document.getElementById('adm-c-vencimiento').value = cond.vencimiento || "";
+            document.getElementById('admin-cond-form-title').innerText = "✏️ Editar Transportador (" + cond.placa + ")";
+        }
+
+        function limpiarFormConductorAdmin() {
+            document.getElementById('admin-cond-idx').value = "-1";
+            document.getElementById('adm-c-nombre').value = "";
+            document.getElementById('adm-c-doc').value = "";
+            document.getElementById('adm-c-tel').value = "";
+            document.getElementById('adm-c-placa').value = "";
+            document.getElementById('adm-c-marca').value = "";
+            document.getElementById('adm-c-vencimiento').value = "";
+            document.getElementById('admin-cond-form-title').innerText = "➕ Registrar Nuevo Transportador";
+        }
+
+        function cambiarEstadoConductor(idx, nuevoEstado) {
+            state.conductores[idx].estado = nuevoEstado;
+            guardarDatosLocal();
+            renderAdminConductores();
+            alert("✅ Estado actualizado a: " + nuevoEstado);
+        }
+
+        function eliminarConductorAdmin(idx) {
+            if (confirm("¿Eliminar transportador?")) {
+                state.conductores.splice(idx, 1);
+                guardarDatosLocal();
+                renderAdminConductores();
+            }
+        }
+
+        function guardarNuevaTarifaAdmin() {
+            const cat = document.getElementById('admin-tarifa-cat').value;
+            const ruta = document.getElementById('admin-tarifa-nombre').value.trim();
+            const val = document.getElementById('admin-tarifa-val').value.trim();
+            if (!ruta || !val) { alert("Completa ruta y valor"); return; }
+            
+            state.tarifas[cat].push({ id: Date.now(), ruta, valor: val });
+            guardarDatosLocal();
+            document.getElementById('admin-tarifa-nombre').value = '';
+            document.getElementById('admin-tarifa-val').value = '';
+            renderAdminTarifas();
+            renderTarifasTransportador();
+            alert("✅ Tarifa guardada con éxito");
+        }
+
+        function renderAdminTarifas() {
+            const el = document.getElementById('admin-lista-tarifas');
+            if(!el) return;
+            let html = '';
+            ['urbano', 'veredas', 'municipios'].forEach(cat => {
+                const items = state.tarifas[cat] || [];
+                html += `<p class="font-bold text-orange-400 capitalize mt-2">📂 Categoría: ${cat}</p>`;
+                if (items.length === 0) {
+                    html += `<p class="text-slate-400 text-[11px]">Sin tarifas.</p>`;
+                } else {
+                    html += items.map((t, tIdx) => `
+                        <div class="flex justify-between items-center bg-slate-900 p-2 rounded border border-slate-700 text-[11px]">
+                            <span>${t.ruta} - <b class="text-orange-400">${t.valor}</b></span>
+                            <button onclick="eliminarTarifaAdmin('${cat}', ${tIdx})" class="bg-red-600 hover:bg-red-700 px-2 py-0.5 rounded text-white font-bold cursor-pointer">Eliminar</button>
+                        </div>
+                    `).join('');
+                }
+            });
+            el.innerHTML = html;
+        }
+
+        function eliminarTarifaAdmin(cat, idx) {
+            if (confirm("¿Eliminar esta tarifa?")) {
+                state.tarifas[cat].splice(idx, 1);
+                guardarDatosLocal();
+                renderAdminTarifas();
+                renderTarifasTransportador();
+            }
+        }
+
+        function cargarAjustesGlobales() {
+            document.getElementById('cfg-admin-pass').value = state.config.adminPass;
+            document.getElementById('cfg-valor-sus').value = state.config.valorSuscripcion;
+            document.getElementById('cfg-nequi').value = state.config.nequi;
+            document.getElementById('cfg-whatsapp').value = state.config.whatsapp;
+            document.getElementById('cfg-pico-placa').value = state.config.picoPlacaTexto || picoPlacaPorDefecto;
+            document.getElementById('cfg-reglamento').value = state.config.reglamentoTexto || reglamentoPorDefecto;
+        }
+
+        function guardarAjustesGlobales() {
+            state.config.adminPass = document.getElementById('cfg-admin-pass').value.trim() || "1234";
+            state.config.valorSuscripcion = parseInt(document.getElementById('cfg-valor-sus').value) || 45000;
+            state.config.nequi = document.getElementById('cfg-nequi').value.trim() || "3143842007";
+            state.config.whatsapp = document.getElementById('cfg-whatsapp').value.trim() || "3507690951";
+            state.config.picoPlacaTexto = document.getElementById('cfg-pico-placa').value.trim() || picoPlacaPorDefecto;
+            state.config.reglamentoTexto = document.getElementById('cfg-reglamento').value.trim() || reglamentoPorDefecto;
+            
+            guardarDatosLocal();
+            actualizarTextosGlobales();
+            alert("✅ ¡Ajustes guardados con éxito!");
+        }
+
+        window.onload = function() {
+            poblarSelectMunicipios();
+            actualizarTextosGlobales();
+            if (state.isAdmin) {
+                irModulo('central');
+            }
+        };
+    </script>
+</body>
+</html>
