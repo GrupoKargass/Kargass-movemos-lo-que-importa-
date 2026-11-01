@@ -176,14 +176,14 @@
                             <button type="button" onclick="document.getElementById('cli-foto-input').click()" class="bg-slate-800 hover:bg-slate-700 px-2.5 py-1.5 rounded-lg border border-slate-600 text-orange-400 font-bold text-[11px] cursor-pointer">Cámara / Galería</button>
                         </div>
 
-                        <button onclick="publicarSolicitudCliente()" class="w-full bg-gradient-to-r from-orange-500 to-amber-500 font-black py-3.5 rounded-xl text-white text-xs shadow-xl uppercase tracking-wider border border-orange-400 cursor-pointer mt-2">
+                        <button id="btn-publicar-acarreo" onclick="publicarSolicitudCliente()" class="w-full bg-gradient-to-r from-orange-500 to-amber-500 font-black py-3.5 rounded-xl text-white text-xs shadow-xl uppercase tracking-wider border border-orange-400 cursor-pointer mt-2">
                             🚀 Publicar mi Solicitud
                         </button>
                     </div>
                 </div>
 
                 <div class="space-y-2 pt-2">
-                    <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📋 Mis Solicitudes y Ofertas Recibidas</h3>
+                    <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📋 Historial de Mis Solicitudes (En Espera de Cotizaciones)</h3>
                     <div id="lista-mis-cargas" class="space-y-2.5"></div>
                 </div>
             </div>
@@ -235,7 +235,7 @@
 
                 <div id="t-content-servicios" class="space-y-3">
                     <div class="flex justify-between items-center">
-                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📦 Oferta de Servicios y Puja</h3>
+                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📦 Oferta de Servicios y Cotizaciones</h3>
                         <span class="text-[10px] bg-orange-500/20 text-orange-400 font-black px-2 py-0.5 rounded border border-orange-500/30">Acacías y Zona</span>
                     </div>
                     <div id="lista-cargas-disponibles" class="space-y-3"></div>
@@ -407,7 +407,7 @@
             <div id="admin-dashboard" class="hidden space-y-3">
                 <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 flex justify-between items-center text-xs shadow-lg">
                     <p class="font-black text-orange-400">🛠️ Panel de Control Central</p>
-                    <button onclick="cerrarSesionAdmin()" class="bg-slate-700 hover:bg-slate-600 px-2.5 py-1.5 rounded-lg text-slate-200 font-black cursor-pointer">Cerrar</button>
+                    <button onclick="cerrarSesionAdmin()" class="bg-slate-700 hover:bg-slate-600 px-2.5 py-1.5 rounded-lg text-slate-200 font-black cursor-pointer">Cerrar Sesión</button>
                 </div>
 
                 <div class="grid grid-cols-4 gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700 text-[10px] font-black text-center">
@@ -429,7 +429,7 @@
                 <!-- GESTIÓN FLOTA / SOCIOS -->
                 <div id="a-content-conductores" class="space-y-2.5 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs shadow-xl">
-                        <h3 class="font-black text-sm text-orange-400" id="admin-cond-form-title">➕ Registrar Nuevo Transportador</h3>
+                        <h3 class="font-black text-sm text-orange-400" id="admin-cond-form-title">➕ Registrar / Gestionar Transportador</h3>
                         <input type="hidden" id="admin-cond-idx" value="-1">
                         
                         <div class="space-y-2">
@@ -481,7 +481,7 @@
                     </div>
 
                     <div class="flex justify-between items-center pt-2">
-                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Flota Registrada</h3>
+                        <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Flota Registrada / Preinscritos</h3>
                     </div>
                     <div id="admin-lista-conductores" class="space-y-2"></div>
                 </div>
@@ -522,21 +522,26 @@
                 <div id="a-content-ajustes" class="space-y-3 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
                         <h3 class="font-black text-sm text-orange-400">⚙️ Ajustes y Configuración Global</h3>
+                        
                         <div>
                             <label class="text-slate-300 font-bold">Clave de Administrador</label>
-                            <input type="password" id="cfg-admin-pass" value="1234" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                            <div class="relative mt-1">
+                                <input type="password" id="cfg-admin-pass" class="w-full p-2 pr-10 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                                <button type="button" onclick="toggleVerPasswordAdmin()" class="absolute right-2 top-2 text-slate-400 hover:text-white cursor-pointer text-base">👁️</button>
+                            </div>
                         </div>
+
                         <div>
                             <label class="text-slate-300 font-bold">Valor Suscripción Mensual (COP)</label>
-                            <input type="number" id="cfg-valor-sus" value="45000" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                            <input type="number" id="cfg-valor-sus" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
                         </div>
                         <div>
                             <label class="text-slate-300 font-bold">Número Nequi Oficial</label>
-                            <input type="text" id="cfg-nequi" value="3143842007" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                            <input type="text" id="cfg-nequi" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
                         </div>
                         <div>
                             <label class="text-slate-300 font-bold">WhatsApp Central de Soporte</label>
-                            <input type="text" id="cfg-whatsapp" value="3507690951" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
+                            <input type="text" id="cfg-whatsapp" class="w-full mt-1 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
                         </div>
                     </div>
 
@@ -625,9 +630,7 @@
 🗓️ Regla: Lunes a viernes (excepto festivos).`;
 
         let state = {
-            cargas: JSON.parse(localStorage.getItem('kargass_cargas')) || [
-                { id: 1711200, clienteDoc: "123456", clienteNombre: "David Martínez", clienteTel: "3143842007", tipoZona: "Local (Urbano)", municipio: "Acacías", horario: "⚡ Cargue Inmediato", vehiculo: "Motocarguero Sencillo", peso: "250 kg", origen: "Calle 10A 32-07 (Acacías)", destino: "Calle 14#32-45 (Acacías)", observaciones: "Caja frágil", foto: null, estado: "Recibiendo Ofertas", ofertas: [], fechaCreacion: "10:00 AM" }
-            ],
+            cargas: JSON.parse(localStorage.getItem('kargass_cargas')) || [],
             conductores: JSON.parse(localStorage.getItem('kargass_conductores')) || [
                 { placa: "ABC123", nombre: "Pedro Gómez", doc: "11223344", tel: "3101234567", vehiculo: "Motocarguero Sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-11-30" }
             ],
@@ -640,9 +643,9 @@
                 picoPlacaTexto: picoPlacaPorDefecto,
                 reglamentoTexto: reglamentoPorDefecto
             },
-            clienteActualDoc: localStorage.getItem('kargass_cliente_doc') || null,
-            transActualPlaca: localStorage.getItem('kargass_trans_placa') || null,
-            isAdmin: localStorage.getItem('kargass_is_admin') === 'true',
+            clienteActualDoc: null,
+            transActualPlaca: null,
+            isAdmin: false, // Blindaje: La administración nunca se queda abierta
             tipoZona: "Local (Urbano)",
             horarioTipo: "Inmediato",
             fotoBase64: null
@@ -653,11 +656,6 @@
             localStorage.setItem('kargass_conductores', JSON.stringify(state.conductores));
             localStorage.setItem('kargass_tarifas_oficiales', JSON.stringify(state.tarifas));
             localStorage.setItem('kargass_config_global', JSON.stringify(state.config));
-            if (state.clienteActualDoc) localStorage.setItem('kargass_cliente_doc', state.clienteActualDoc);
-            else localStorage.removeItem('kargass_cliente_doc');
-            if (state.transActualPlaca) localStorage.setItem('kargass_trans_placa', state.transActualPlaca);
-            else localStorage.removeItem('kargass_trans_placa');
-            localStorage.setItem('kargass_is_admin', state.isAdmin);
         }
 
         function poblarSelectMunicipios() {
@@ -710,20 +708,20 @@
 
             if (mod === 'cliente') {
                 document.getElementById('view-cliente').classList.remove('hidden');
-                if (state.clienteActualDoc) cargarPerfilCliente(state.clienteActualDoc);
-                else {
+                const guardadoDoc = localStorage.getItem('kargass_cliente_doc_memoria');
+                if (guardadoDoc) {
+                    document.getElementById('cli-doc-input').value = guardadoDoc;
+                    verificarClienteLoginMemoria(guardadoDoc);
+                } else {
                     document.getElementById('cliente-login').classList.remove('hidden');
                     document.getElementById('cliente-dashboard').classList.add('hidden');
                 }
             } else if (mod === 'transportador') {
                 document.getElementById('view-transportador').classList.remove('hidden');
-                if (state.transActualPlaca) {
-                    let cond = state.conductores.find(c => c.placa === state.transActualPlaca);
-                    if (cond) cargarDashboardTrans(cond);
-                    else {
-                        document.getElementById('trans-login').classList.remove('hidden');
-                        document.getElementById('trans-dashboard').classList.add('hidden');
-                    }
+                const guardadoPlaca = localStorage.getItem('kargass_trans_placa_memoria');
+                if (guardadoPlaca) {
+                    document.getElementById('trans-placa-input').value = guardadoPlaca;
+                    verificarTransportadorLoginMemoria(guardadoPlaca);
                 } else {
                     document.getElementById('trans-login').classList.remove('hidden');
                     document.getElementById('trans-dashboard').classList.add('hidden');
@@ -732,30 +730,23 @@
                 document.getElementById('view-afiliacion').classList.remove('hidden');
             } else if (mod === 'central') {
                 document.getElementById('view-central').classList.remove('hidden');
-                if (state.isAdmin) {
-                    document.getElementById('admin-login').classList.add('hidden');
-                    document.getElementById('admin-dashboard').classList.remove('hidden');
-                    renderAdminServicios();
-                    renderAdminConductores();
-                    renderAdminTarifas();
-                    cargarAjustesGlobales();
-                } else {
-                    document.getElementById('admin-login').classList.remove('hidden');
-                    document.getElementById('admin-dashboard').classList.add('hidden');
-                }
+                state.isAdmin = false; // Exigir clave siempre
+                document.getElementById('admin-pass').value = '';
+                document.getElementById('admin-login').classList.remove('hidden');
+                document.getElementById('admin-dashboard').classList.add('hidden');
             }
         }
 
-        // CLIENTE JS
+        // CLIENTE JS CON MEMORIA
         function verificarClienteLogin() {
             const doc = document.getElementById('cli-doc-input').value.trim();
             if (!doc) { alert("Ingresa tu cédula"); return; }
-            state.clienteActualDoc = doc;
-            guardarDatosLocal();
-            cargarPerfilCliente(doc);
+            verificarClienteLoginMemoria(doc);
         }
 
-        function cargarPerfilCliente(doc) {
+        function verificarClienteLoginMemoria(doc) {
+            state.clienteActualDoc = doc;
+            localStorage.setItem('kargass_cliente_doc_memoria', doc);
             document.getElementById('cliente-login').classList.add('hidden');
             document.getElementById('cliente-dashboard').classList.remove('hidden');
             document.getElementById('cli-perfil-doc').innerText = doc;
@@ -769,7 +760,7 @@
 
         function cerrarSesionCliente() {
             state.clienteActualDoc = null;
-            guardarDatosLocal();
+            localStorage.removeItem('kargass_cliente_doc_memoria');
             document.getElementById('cliente-dashboard').classList.add('hidden');
             document.getElementById('cliente-login').classList.remove('hidden');
         }
@@ -836,6 +827,10 @@
                 alert("Completa todos los campos requeridos"); return;
             }
 
+            const btnPub = document.getElementById('btn-publicar-acarreo');
+            btnPub.disabled = true;
+            btnPub.classList.add('opacity-50');
+
             localStorage.setItem('kargass_memoria_cli_' + state.clienteActualDoc, JSON.stringify({ nombre, tel }));
             const horaCargue = state.horarioTipo === 'Inmediato' ? '⚡ Cargue Inmediato' : '⏰ Programado: ' + (document.getElementById('cli-hora-input').value || 'Acordado');
 
@@ -853,20 +848,28 @@
                 destino: destino,
                 observaciones: document.getElementById('cli-obs').value.trim(),
                 foto: state.fotoBase64,
-                estado: "Recibiendo Ofertas",
+                estado: "Recibiendo Cotizaciones",
                 ofertas: [],
                 fechaCreacion: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
             state.cargas.unshift(nuevaCarga);
             guardarDatosLocal();
-            alert("🚀 ¡Solicitud publicada con éxito!");
+            
+            alert("✅ ¡Solicitud enviada con éxito! Ya aparece en tu historial a la espera de cotizaciones.");
+            
             document.getElementById('cli-peso').value = '';
             document.getElementById('cli-origen').value = '';
             document.getElementById('cli-destino').value = '';
             document.getElementById('cli-obs').value = '';
             document.getElementById('foto-estado').innerText = "Sin foto";
             state.fotoBase64 = null;
+            
+            setTimeout(() => {
+                btnPub.disabled = false;
+                btnPub.classList.remove('opacity-50');
+            }, 1000);
+
             renderHistorialCliente();
         }
 
@@ -874,7 +877,7 @@
             const el = document.getElementById('lista-mis-cargas');
             const mis = state.cargas.filter(c => c.clienteDoc === state.clienteActualDoc);
             if (mis.length === 0) {
-                el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin solicitudes aún.</div>';
+                el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin solicitudes aún en el historial.</div>';
                 return;
             }
             el.innerHTML = mis.map(c => `
@@ -888,8 +891,8 @@
                     ${c.foto ? `<img src="${c.foto}" class="w-full h-24 object-cover rounded-xl border border-slate-700">` : ''}
                     
                     <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1.5">
-                        <p class="font-black text-orange-400">🏷️ Ofertas Recibidas (${c.ofertas ? c.ofertas.length : 0}):</p>
-                        ${(!c.ofertas || c.ofertas.length === 0) ? '<p class="text-slate-400 italic">Esperando ofertas de transportadores...</p>' : c.ofertas.map((of, oIdx) => `
+                        <p class="font-black text-orange-400">🏷️ Cotizaciones Recibidas (${c.ofertas ? c.ofertas.length : 0}):</p>
+                        ${(!c.ofertas || c.ofertas.length === 0) ? '<p class="text-slate-400 italic">Esperando cotizaciones de la flota...</p>' : c.ofertas.map((of, oIdx) => `
                             <div class="flex justify-between items-center bg-slate-800 p-2 rounded-lg border border-slate-700">
                                 <div>
                                     <p class="font-bold text-white">${of.conductorNombre} (${of.placa})</p>
@@ -913,15 +916,18 @@
                 carga.estado = `Asignado a ${seleccionada.conductorNombre} ($${Number(seleccionada.precio).toLocaleString('es-CO')})`;
                 guardarDatosLocal();
                 renderHistorialCliente();
-                alert(`✅ ¡Has seleccionado la oferta de ${seleccionada.conductorNombre}!`);
+                alert(`✅ ¡Has seleccionado la cotización de ${seleccionada.conductorNombre}! Servicio asignado.`);
             }
         }
 
-        // TRANSPORTADOR JS
+        // TRANSPORTADOR JS CON MEMORIA
         function verificarTransportadorLogin() {
             const placa = document.getElementById('trans-placa-input').value.trim().toUpperCase();
             if (!placa) { alert("Ingresa tu placa"); return; }
-            
+            verificarTransportadorLoginMemoria(placa);
+        }
+
+        function verificarTransportadorLoginMemoria(placa) {
             let cond = state.conductores.find(c => c.placa === placa);
             if (!cond) {
                 alert("⚠️ Placa no encontrada o pendiente de aprobación en la Central.");
@@ -934,7 +940,7 @@
             }
 
             state.transActualPlaca = placa;
-            guardarDatosLocal();
+            localStorage.setItem('kargass_trans_placa_memoria', placa);
             cargarDashboardTrans(cond);
         }
 
@@ -979,14 +985,11 @@
             const diasRestantes = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24));
 
             if (diasRestantes < 0) {
-                elRegresiva.innerText = "❌ ¡Suscripción Vencida! Actualiza tu pago";
+                elRegresiva.innerText = "❌ ¡Suscripción Vencida! Servicio desactivado";
                 boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-red-950/80 border-red-500 text-red-400 animate-pulse";
             } else if (diasRestantes <= 5) {
                 elRegresiva.innerText = `🚨 ¡URGENTE! Te quedan ${diasRestantes} día(s) para vencerse`;
                 boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-red-950/60 border-red-500 text-red-400";
-            } else if (diasRestantes <= 10) {
-                elRegresiva.innerText = `⚠️ ¡Atención! Te quedan ${diasRestantes} días de suscripción`;
-                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-amber-950/60 border-amber-500 text-amber-400";
             } else {
                 elRegresiva.innerText = `✅ Suscripción Activa (${diasRestantes} días restantes)`;
                 boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-slate-900 border-emerald-500/50 text-emerald-400";
@@ -995,7 +998,7 @@
 
         function cerrarSesionTrans() {
             state.transActualPlaca = null;
-            guardarDatosLocal();
+            localStorage.removeItem('kargass_trans_placa_memoria');
             document.getElementById('trans-dashboard').classList.add('hidden');
             document.getElementById('trans-login').classList.remove('hidden');
         }
@@ -1056,10 +1059,10 @@
                     ${c.foto ? `<img src="${c.foto}" class="w-full h-24 object-cover rounded-xl border border-slate-700">` : ''}
                     
                     <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2">
-                        <label class="font-bold text-slate-300">Mi propuesta de flete (COP):</label>
+                        <label class="font-bold text-slate-300">Enviar Cotización de Flete (COP):</label>
                         <div class="flex space-x-2">
                             <input type="number" id="input-oferta-${c.id}" placeholder="Ej: 35000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs">
-                            <button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Puja</button>
+                            <button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Cotización</button>
                         </div>
                     </div>
                     
@@ -1071,7 +1074,7 @@
         function enviarOfertaTransportador(cargaId) {
             const inputVal = document.getElementById(`input-oferta-${cargaId}`).value.trim();
             if (!inputVal || isNaN(inputVal)) {
-                alert("⚠️ Ingresa un valor numérico válido para tu oferta.");
+                alert("⚠️ Ingresa un valor numérico válido para tu cotización.");
                 return;
             }
 
@@ -1094,7 +1097,7 @@
                 }
 
                 guardarDatosLocal();
-                alert(`🚀 ¡Oferta de $${Number(inputVal).toLocaleString('es-CO')} enviada con éxito al cliente!`);
+                alert(`🚀 ¡Cotización de $${Number(inputVal).toLocaleString('es-CO')} enviada con éxito al cliente!`);
                 document.getElementById(`input-oferta-${cargaId}`).value = '';
                 renderCargasDisponiblesTrans();
             }
@@ -1130,9 +1133,9 @@
             fechaFutura.setDate(fechaFutura.getDate() + 30);
             const vencimientoStr = fechaFutura.toISOString().split('T')[0];
 
-            state.conductores.push({ placa, nombre, doc, tel, vehiculo, marca, cilindraje, municipio: "Acacías", estado: "Activo", vencimiento: vencimientoStr });
+            state.conductores.push({ placa, nombre, doc, tel, vehiculo, marca, cilindraje, municipio: "Acacías", estado: "Pendiente", vencimiento: vencimientoStr });
             guardarDatosLocal();
-            alert("🚀 ¡Postulación y activación completada con éxito!");
+            alert("🚀 ¡Postulación enviada a la Central con éxito! Queda a la espera de aprobación.");
             
             document.getElementById('af-nombre').value = '';
             document.getElementById('af-doc').value = '';
@@ -1144,12 +1147,11 @@
             irModulo('transportador');
         }
 
-        // CENTRAL / ADMIN JS
+        // CENTRAL / ADMIN JS (BLINDADO)
         function verificarAdminLogin() {
             const pass = document.getElementById('admin-pass').value.trim();
             if (pass === state.config.adminPass) {
                 state.isAdmin = true;
-                guardarDatosLocal();
                 document.getElementById('admin-login').classList.add('hidden');
                 document.getElementById('admin-dashboard').classList.remove('hidden');
                 renderAdminServicios();
@@ -1159,11 +1161,20 @@
             } else alert("Clave incorrecta");
         }
 
+        function toggleVerPasswordAdmin() {
+            const inputPass = document.getElementById('cfg-admin-pass');
+            if (inputPass.type === "password") {
+                inputPass.type = "text";
+            } else {
+                inputPass.type = "password";
+            }
+        }
+
         function cerrarSesionAdmin() {
             state.isAdmin = false;
-            guardarDatosLocal();
             document.getElementById('admin-dashboard').classList.add('hidden');
             document.getElementById('admin-login').classList.remove('hidden');
+            document.getElementById('admin-pass').value = '';
         }
 
         function switchTabAdmin(tab) {
@@ -1202,7 +1213,7 @@
                     <p class="text-white"><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
                     <p class="text-slate-300"><b>Ruta:</b> ${c.origen} ➔ ${c.destino}</p>
                     <p class="text-slate-400 font-bold">Estado: ${c.estado}</p>
-                    <p class="text-emerald-400 font-bold">Ofertas recibidas: ${c.ofertas ? c.ofertas.length : 0}</p>
+                    <p class="text-emerald-400 font-bold">Cotizaciones recibidas: ${c.ofertas ? c.ofertas.length : 0}</p>
                 </div>
             `).join('');
         }
@@ -1230,7 +1241,7 @@
                     <p class="text-[11px] text-slate-300">C.C: ${cond.doc} • Tel: ${cond.tel} • Vence: <b class="text-orange-400">${cond.vencimiento || 'No asignado'}</b></p>
                     <p class="text-[11px] text-slate-400">${cond.vehiculo} (${cond.marca} - ${cond.cilindraje})</p>
                     <div class="flex space-x-2 pt-1">
-                        ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Activar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Suspender</button>`}
+                        ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Aprobar / Activar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Suspender</button>`}
                         <button onclick="editarConductorAdmin(${idx})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Editar</button>
                         <button onclick="eliminarConductorAdmin(${idx})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button>
                     </div>
@@ -1271,7 +1282,7 @@
                 alert("✅ Conductor actualizado");
             } else {
                 state.conductores.push(datosCond);
-                alert("✅ Conductor registrado y activado");
+                alert("✅ Conductor registrado y activado con éxito");
             }
 
             guardarDatosLocal();
@@ -1300,7 +1311,7 @@
             document.getElementById('adm-c-placa').value = "";
             document.getElementById('adm-c-marca').value = "";
             document.getElementById('adm-c-vencimiento').value = "";
-            document.getElementById('admin-cond-form-title').innerText = "➕ Registrar Nuevo Transportador";
+            document.getElementById('admin-cond-form-title').innerText = "➕ Registrar / Gestionar Transportador";
         }
 
         function cambiarEstadoConductor(idx, nuevoEstado) {
@@ -1373,7 +1384,9 @@
         }
 
         function guardarAjustesGlobales() {
-            state.config.adminPass = document.getElementById('cfg-admin-pass').value.trim() || "1234";
+            const nuevaPass = document.getElementById('cfg-admin-pass').value.trim();
+            if (nuevaPass) state.config.adminPass = nuevaPass;
+            
             state.config.valorSuscripcion = parseInt(document.getElementById('cfg-valor-sus').value) || 45000;
             state.config.nequi = document.getElementById('cfg-nequi').value.trim() || "3143842007";
             state.config.whatsapp = document.getElementById('cfg-whatsapp').value.trim() || "3507690951";
@@ -1382,15 +1395,12 @@
             
             guardarDatosLocal();
             actualizarTextosGlobales();
-            alert("✅ ¡Ajustes guardados con éxito!");
+            alert("✅ ¡Ajustes globales guardados con éxito!");
         }
 
         window.onload = function() {
             poblarSelectMunicipios();
             actualizarTextosGlobales();
-            if (state.isAdmin) {
-                irModulo('central');
-            }
         };
     </script>
 </body>
