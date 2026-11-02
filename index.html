@@ -30,12 +30,12 @@
                     <p class="text-[9px] text-orange-400 font-black tracking-wide">PLATAFORMA DE ACARREOS • META</p>
                 </div>
             </div>
-            <button onclick="mostrarSelectorRol()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-xl border border-slate-600 text-orange-400 font-black shadow-md cursor-pointer">Menú / Accesos</button>
+            <button onclick="mostrarSelectorRolManual()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-xl border border-slate-600 text-orange-400 font-black shadow-md cursor-pointer">Menú / Accesos</button>
         </div>
     </header>
 
     <!-- PANTALLA PRINCIPAL / MENÚ INICIAL -->
-    <div id="modal-selector" class="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div id="modal-selector" class="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4 overflow-y-auto hidden">
         <div class="bg-slate-800 border-2 border-slate-700 p-5 rounded-3xl max-w-sm w-full text-center space-y-4 shadow-2xl my-auto">
             <div class="w-16 h-16 mx-auto rounded-2xl bg-orange-500/20 border-2 border-orange-500/50 flex items-center justify-center text-3xl shadow-lg">
                 🛺
@@ -87,7 +87,7 @@
             <div id="cliente-dashboard" class="hidden space-y-4">
                 <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
                     <span class="font-bold">Cliente C.C: <b id="cli-perfil-doc" class="text-orange-400">--</b></span>
-                    <button onclick="cerrarSesionCliente()" class="bg-slate-700 hover:bg-slate-600 px-2.5 py-1.5 rounded-lg text-slate-200 font-black cursor-pointer">Cambiar Cédula</button>
+                    <button onclick="cambiarCedulaCliente()" class="bg-slate-700 hover:bg-slate-600 px-2.5 py-1.5 rounded-lg text-slate-200 font-black cursor-pointer">Cambiar Cédula</button>
                 </div>
 
                 <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 shadow-xl space-y-4">
@@ -219,7 +219,7 @@
                             <p class="font-black text-white text-sm" id="trans-perfil-nombre">Conductor</p>
                             <p class="text-[11px] text-slate-300">C.C: <span id="trans-perfil-doc">--</span> | Tel: <span id="trans-perfil-tel">--</span></p>
                         </div>
-                        <button onclick="cerrarSesionTrans()" class="bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded-lg text-slate-200 font-bold text-xs cursor-pointer">Salir</button>
+                        <button onclick="cambiarPlacaTrans()" class="bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded-lg text-slate-200 font-bold text-xs cursor-pointer">Cambiar Placa</button>
                     </div>
                     
                     <div class="pt-2 border-t border-slate-700 grid grid-cols-2 gap-2 text-xs">
@@ -740,6 +740,7 @@
                 picoPlacaTexto: picoPlacaPorDefecto,
                 reglamentoTexto: reglamentoEsencialPorDefecto
             },
+            rolGuardado: localStorage.getItem('kargass_rol_activo_memoria') || null,
             clienteActualDoc: localStorage.getItem('kargass_cliente_doc_memoria') || null,
             transActualPlaca: localStorage.getItem('kargass_trans_placa_memoria') || null,
             isAdmin: false,
@@ -787,7 +788,7 @@
             if (elReg) elReg.innerText = state.config.reglamentoTexto || reglamentoEsencialPorDefecto;
         }
 
-        function mostrarSelectorRol() {
+        function mostrarSelectorRolManual() {
             document.getElementById('modal-selector').classList.remove('hidden');
         }
 
@@ -809,6 +810,9 @@
         }
 
         function irModulo(mod) {
+            state.rolGuardado = mod;
+            localStorage.setItem('kargass_rol_activo_memoria', mod);
+
             document.getElementById('modal-selector').classList.add('hidden');
             document.getElementById('view-cliente').classList.add('hidden');
             document.getElementById('view-transportador').classList.add('hidden');
@@ -839,10 +843,14 @@
                 document.getElementById('view-afiliacion').classList.remove('hidden');
             } else if (mod === 'central') {
                 document.getElementById('view-central').classList.remove('hidden');
-                state.isAdmin = false;
-                document.getElementById('admin-pass').value = '';
-                document.getElementById('admin-login').classList.remove('hidden');
-                document.getElementById('admin-dashboard').classList.add('hidden');
+                if(state.isAdmin) {
+                    document.getElementById('admin-login').classList.add('hidden');
+                    document.getElementById('admin-dashboard').classList.remove('hidden');
+                } else {
+                    document.getElementById('admin-pass').value = '';
+                    document.getElementById('admin-login').classList.remove('hidden');
+                    document.getElementById('admin-dashboard').classList.add('hidden');
+                }
             }
         }
 
@@ -867,11 +875,12 @@
             renderHistorialCliente();
         }
 
-        function cerrarSesionCliente() {
+        function cambiarCedulaCliente() {
             state.clienteActualDoc = null;
             localStorage.removeItem('kargass_cliente_doc_memoria');
             document.getElementById('cliente-dashboard').classList.add('hidden');
             document.getElementById('cliente-login').classList.remove('hidden');
+            document.getElementById('cli-doc-input').value = '';
         }
 
         function setTipoZona(tipo) {
@@ -1145,6 +1154,14 @@
             cargarDashboardTrans(cond);
         }
 
+        function cambiarPlacaTrans() {
+            state.transActualPlaca = null;
+            localStorage.removeItem('kargass_trans_placa_memoria');
+            document.getElementById('trans-dashboard').classList.add('hidden');
+            document.getElementById('trans-login').classList.remove('hidden');
+            document.getElementById('trans-placa-input').value = '';
+        }
+
         function cargarDashboardTrans(cond) {
             document.getElementById('trans-login').classList.add('hidden');
             document.getElementById('trans-dashboard').classList.remove('hidden');
@@ -1206,13 +1223,6 @@
                 elRegresiva.innerText = `💎 Quedan ${diasRestantes} Días Pendientes`;
                 boxAlerta.className = "mt-3 p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-slate-900 border-emerald-500/50 text-emerald-400";
             }
-        }
-
-        function cerrarSesionTrans() {
-            state.transActualPlaca = null;
-            localStorage.removeItem('kargass_trans_placa_memoria');
-            document.getElementById('trans-dashboard').classList.add('hidden');
-            document.getElementById('trans-login').classList.remove('hidden');
         }
 
         function switchTabTrans(tab) {
@@ -2024,18 +2034,17 @@
             poblarSelectMunicipios();
             actualizarTextosGlobales();
 
-            if (state.clienteActualDoc) {
-                const elDoc = document.getElementById('cli-doc-input');
-                if (elDoc) elDoc.value = state.clienteActualDoc;
-                document.getElementById('modal-selector').classList.add('hidden');
-                document.getElementById('view-cliente').classList.remove('hidden');
-                verificarClienteLoginMemoria(state.clienteActualDoc);
-            } else if (state.transActualPlaca) {
-                const elPlaca = document.getElementById('trans-placa-input');
-                if (elPlaca) elPlaca.value = state.transActualPlaca;
-                document.getElementById('modal-selector').classList.add('hidden');
-                document.getElementById('view-transportador').classList.remove('hidden');
-                verificarTransportadorLoginMemoria(state.transActualPlaca);
+            // MANTENER LA VISTA EXACTA AL REFRESCAR LA PÁGINA
+            if (state.rolGuardado === 'cliente') {
+                irModulo('cliente');
+            } else if (state.rolGuardado === 'transportador') {
+                irModulo('transportador');
+            } else if (state.rolGuardado === 'central') {
+                irModulo('central');
+            } else if (state.rolGuardado === 'afiliacion') {
+                irModulo('afiliacion');
+            } else {
+                mostrarSelectorRolManual();
             }
         };
     </script>
