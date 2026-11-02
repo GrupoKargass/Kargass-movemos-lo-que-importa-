@@ -200,6 +200,19 @@
             </div>
 
             <div id="trans-dashboard" class="hidden space-y-3">
+                
+                <!-- BANNER DE FELICITACIÓN / BONO ACTIVO PARA EL TRANSPORTADOR -->
+                <div id="trans-banner-premio" class="hidden bg-gradient-to-r from-amber-600/30 to-orange-600/30 border-2 border-amber-500 p-4 rounded-2xl shadow-xl space-y-1 text-center">
+                    <p class="text-sm font-black text-amber-400">🎉 ¡Felicitaciones! Bono Estrellas Recibido</p>
+                    <p id="trans-texto-premio" class="text-xs text-slate-200 font-medium">La Central te ha premiado con días adicionales por tu excelente servicio.</p>
+                </div>
+
+                <!-- BANNER PROFESIONAL DE MOTIVACIÓN COLECTIVA -->
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 shadow-md text-xs space-y-1 text-center">
+                    <p class="font-black text-orange-400">📊 Reconocimiento a la Excelencia Kargass</p>
+                    <p class="text-[11px] text-slate-300 font-medium">Durante este periodo, varios transportadores alcanzaron el estándar de 5 estrellas ⭐ y acceso a bonificaciones. ¡Tú también puedes sumar días extra manteniendo un servicio de primera calidad!</p>
+                </div>
+
                 <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-2 shadow-lg">
                     <div class="flex justify-between items-start">
                         <div>
@@ -214,14 +227,14 @@
                         <p class="text-orange-400 font-bold">Vehículo: <span id="trans-perfil-vehiculo" class="text-white">--</span></p>
                     </div>
 
-                    <div id="box-suscripcion-alerta" class="mt-2 p-3 rounded-xl border text-xs space-y-1 bg-slate-900 border-slate-700">
-                        <div class="flex justify-between items-center font-bold">
-                            <span class="text-slate-300">💎 Suscripción Activa:</span>
-                            <span id="trans-fechas-sus" class="text-white text-[11px]">-- al --</span>
+                    <!-- BOTÓN GRANDE DE DÍAS RESTANTES DE SUSCRIPCIÓN -->
+                    <div id="box-suscripcion-alerta" class="mt-3 p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-slate-900 border-slate-700">
+                        <p class="text-[11px] uppercase font-bold text-slate-400 tracking-wider">Estado de Suscripción Mensual</p>
+                        <div id="trans-cuenta-regresiva" class="font-black text-lg text-orange-400 py-1">
+                            Calculando días...
                         </div>
-                        <div id="trans-cuenta-regresiva" class="font-black text-center pt-1 text-xs">
-                            Calculando días restantes...
-                        </div>
+                        <p id="trans-fechas-sus" class="text-[11px] text-slate-300 font-medium">Vigencia: -- al --</p>
+                        <p class="text-[10px] text-amber-400 font-bold pt-1">⭐ Calificación Promedio: <span id="trans-promedio-estrellas">5.0</span> / 5.0</p>
                     </div>
                 </div>
 
@@ -304,7 +317,7 @@
                 </div>
 
                 <div id="t-content-viajes" class="space-y-3 hidden">
-                    <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📋 Historial de Mis Viajes Realizados</h3>
+                    <h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📋 Historial de Mis Viajes Realizados y Calificaciones</h3>
                     <div id="lista-mis-viajes-trans" class="space-y-2">
                         <div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin viajes completados en este dispositivo.</div>
                     </div>
@@ -338,7 +351,7 @@
 
                 <div class="pt-1">
                     <button type="button" onclick="abrirReglamentoModal()" class="w-full bg-slate-900 hover:bg-slate-950 text-orange-400 font-black py-2.5 rounded-xl border border-orange-500/40 text-xs cursor-pointer flex items-center justify-center space-x-2">
-                        <span>📜</span><span>Leer Reglamento Operativo Obligatorio</span>
+                        <span>📜</span><span>Leer Reglamento Operativo Esencial</span>
                     </button>
                 </div>
 
@@ -390,7 +403,7 @@
 
                     <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex items-center space-x-2 mt-2">
                         <input type="checkbox" id="af-check-reglamento" class="w-4 h-4 accent-orange-500 cursor-pointer">
-                        <label for="af-check-reglamento" class="text-[11px] text-slate-200 font-bold cursor-pointer">He leído y acepto el reglamento operativo obligatorio</label>
+                        <label for="af-check-reglamento" class="text-[11px] text-slate-200 font-bold cursor-pointer">He leído y acepto el reglamento operativo esencial</label>
                     </div>
 
                     <button onclick="enviarPostulacion()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white uppercase tracking-wider cursor-pointer mt-1">Enviar Solicitud a la Central</button>
@@ -476,8 +489,12 @@
                                 <label class="text-[11px] font-bold text-slate-300">Teléfono de Contacto</label>
                                 <input type="tel" id="adm-c-tel" placeholder="314..." class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
                             </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-orange-400">📅 Fecha de Vencimiento de Suscripción</label>
+                                <input type="date" id="adm-c-vencimiento" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
+                            </div>
 
-                            <button onclick="guardarConductorAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3.5 rounded-xl text-white shadow cursor-pointer text-xs uppercase tracking-wider">Añadir al Directorio (1 Mes Activo)</button>
+                            <button onclick="guardarConductorAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3.5 rounded-xl text-white shadow cursor-pointer text-xs uppercase tracking-wider">Añadir o Actualizar Conductor</button>
                         </div>
                     </div>
 
@@ -557,7 +574,7 @@
                     </div>
 
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-2 text-xs">
-                        <h3 class="font-black text-sm text-orange-400">📜 Editor del Reglamento Operativo</h3>
+                        <h3 class="font-black text-sm text-orange-400">📜 Editor del Reglamento Operativo Esencial</h3>
                         <textarea id="cfg-reglamento" rows="6" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium outline-none text-xs"></textarea>
                     </div>
 
@@ -596,12 +613,12 @@
         </div>
     </div>
 
-    <!-- VENTANA MODAL REGLAMENTO OBLIGATORIO -->
+    <!-- VENTANA MODAL REGLAMENTO ESENCIAL -->
     <div id="modal-reglamento" class="fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white text-slate-900 p-5 rounded-3xl max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto">
             <div class="text-center">
                 <h3 class="text-lg font-black text-orange-600">REGLAMENTO OPERATIVO</h3>
-                <p class="text-[11px] text-slate-600 font-bold">Normas de la Comunidad Kargass</p>
+                <p class="text-[11px] text-slate-600 font-bold">Normas Esenciales de la Comunidad Kargass</p>
             </div>
             <div id="modal-reglamento-texto" class="space-y-2 text-xs text-slate-800 font-medium whitespace-pre-line"></div>
             <button onclick="cerrarReglamentoModal()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white text-xs cursor-pointer">Entendido y Cerrado</button>
@@ -663,10 +680,11 @@
             ]
         };
 
-        const reglamentoPorDefecto = `1. Datos Reales: Mantener la documentación y datos de su vehículo al día.
-2. Puntualidad: Compromiso absoluto con el horario y cuidado de la carga.
-3. Respeto Tarifario: Cumplimiento estricto de las tarifas oficiales.
-4. Suscripción: Pago puntual de la membresía mensual.`;
+        const reglamentoEsencialPorDefecto = `1. Compromiso y Puntualidad: Atender el servicio aceptado en el horario acordado con el cliente, evitando demoras injustificadas.
+2. Cero Cancelaciones Injustificadas: Una vez aceptada la solicitud, el transportador se compromete a realizar el servicio sin cancelaciones de último momento.
+3. Cuidado y Respeto de la Carga: Manipular los artículos o mercancía con precaución para entregarlos en óptimas condiciones.
+4. Transparencia en la Tarifa: Respetar estrictamente el valor acordado a través de la cotización en la plataforma.
+5. Sistema de Estrellas y Beneficios: Mantener un excelente servicio respaldado por las calificaciones de los clientes para acceder a bonificaciones y días adicionales de suscripción.`;
 
         const picoPlacaPorDefecto = `📅 Periodo: Vigente 2026.
 ⏰ Horarios: De 6:30 a.m. a 9:30 a.m. y de 5:00 p.m. a 8:00 p.m.
@@ -675,8 +693,8 @@
         let state = {
             cargas: JSON.parse(localStorage.getItem('kargass_cargas')) || [],
             conductores: JSON.parse(localStorage.getItem('kargass_conductores')) || [
-                { placa: "ABC123", nombre: "Conductor de Prueba ABC", doc: "99999999", tel: "3100000000", vehiculo: "Motocarguero sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01" },
-                { placa: "571 AGU", nombre: "Dani David Martínez", doc: "1122124473", tel: "3143842007", vehiculo: "Motocarguero sencillo", marca: "Camello", cilindraje: "250cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01" }
+                { placa: "ABC123", nombre: "Conductor de Prueba ABC", doc: "99999999", tel: "3100000000", vehiculo: "Motocarguero sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01", calificacion: 5.0, serviciosCalificados: 0, bonoNotificacion: null },
+                { placa: "571 AGU", nombre: "Dani David Martínez", doc: "1122124473", tel: "3143842007", vehiculo: "Motocarguero sencillo", marca: "Camello", cilindraje: "250cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01", calificacion: 5.0, serviciosCalificados: 0, bonoNotificacion: null }
             ],
             tarifas: JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || tarifasBaseAcacias,
             config: JSON.parse(localStorage.getItem('kargass_config_global')) || {
@@ -685,7 +703,7 @@
                 nequi: "3143842007",
                 whatsapp: "3507690951",
                 picoPlacaTexto: picoPlacaPorDefecto,
-                reglamentoTexto: reglamentoPorDefecto
+                reglamentoTexto: reglamentoEsencialPorDefecto
             },
             clienteActualDoc: localStorage.getItem('kargass_cliente_doc_memoria') || null,
             transActualPlaca: localStorage.getItem('kargass_trans_placa_memoria') || null,
@@ -702,7 +720,7 @@
                 localStorage.setItem('kargass_tarifas_oficiales', JSON.stringify(state.tarifas));
                 localStorage.setItem('kargass_config_global', JSON.stringify(state.config));
             } catch (e) {
-                console.error("Error al guardar en localStorage (posible exceso de espacio por foto):", e);
+                console.error("Error al guardar en localStorage:", e);
                 alert("⚠️ La foto es demasiado pesada para la memoria del navegador. Intenta con una imagen más liviana.");
             }
         }
@@ -731,7 +749,7 @@
             if (elPico) elPico.innerText = state.config.picoPlacaTexto || picoPlacaPorDefecto;
 
             const elReg = document.getElementById('modal-reglamento-texto');
-            if (elReg) elReg.innerText = state.config.reglamentoTexto || reglamentoPorDefecto;
+            if (elReg) elReg.innerText = state.config.reglamentoTexto || reglamentoEsencialPorDefecto;
         }
 
         function mostrarSelectorRol() {
@@ -928,6 +946,8 @@
                 foto: state.fotoBase64,
                 estado: "Recibiendo Cotizaciones",
                 ofertas: [],
+                conductorAsignadoPlaca: null,
+                calificacionEstrellas: null,
                 fechaCreacion: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             };
 
@@ -974,7 +994,9 @@
                     
                     <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1.5">
                         <p class="font-black text-orange-400">🏷️ Cotizaciones Recibidas (${c.ofertas ? c.ofertas.length : 0}):</p>
-                        ${(!c.ofertas || c.ofertas.length === 0) ? '<p class="text-slate-400 italic">Esperando cotizaciones de la flota...</p>' : c.ofertas.map((of, oIdx) => `
+                        ${(!c.ofertas || c.ofertas.length === 0) ? '<p class="text-slate-400 italic">Esperando cotizaciones de la flota...</p>' : c.ofertas.map((of, oIdx) => {
+                            const yaSeleccionado = (c.conductorAsignadoPlaca === of.placa);
+                            return `
                             <div class="flex justify-between items-center bg-slate-800 p-2 rounded-lg border border-slate-700">
                                 <div>
                                     <p class="font-bold text-white">${of.conductorNombre} (${of.placa})</p>
@@ -982,11 +1004,32 @@
                                 </div>
                                 <div class="text-right">
                                     <span class="font-black text-emerald-400 text-sm">$${Number(of.precio).toLocaleString('es-CO')}</span>
-                                    <button onclick="seleccionarOfertaCliente(${c.id}, ${oIdx})" class="block mt-1 bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1 rounded text-[10px] cursor-pointer">Seleccionar</button>
+                                    ${yaSeleccionado ? 
+                                        `<span class="block mt-1 bg-emerald-600 text-white font-black px-2.5 py-1 rounded text-[10px]">✅ Seleccionado</span>` :
+                                        `<button onclick="seleccionarOfertaCliente(${c.id}, ${oIdx})" class="block mt-1 bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1 rounded text-[10px] cursor-pointer">Seleccionar</button>`
+                                    }
                                 </div>
                             </div>
-                        `).join('')}
+                        `;}).join('')}
                     </div>
+
+                    ${c.conductorAsignadoPlaca ? `
+                        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2 mt-2 text-center">
+                            <p class="font-black text-orange-400">⭐ Calificar Servicio del Transportador</p>
+                            ${c.calificacionEstrellas ? `
+                                <p class="text-emerald-400 font-bold text-sm">¡Calificado con ${c.calificacionEstrellas} ⭐ Estrellas!</p>
+                            ` : `
+                                <div class="flex justify-center space-x-1 text-xl">
+                                    <button onclick="calificarServicio(${c.id}, 1)" class="cursor-pointer">⭐</button>
+                                    <button onclick="calificarServicio(${c.id}, 2)" class="cursor-pointer">⭐</button>
+                                    <button onclick="calificarServicio(${c.id}, 3)" class="cursor-pointer">⭐</button>
+                                    <button onclick="calificarServicio(${c.id}, 4)" class="cursor-pointer">⭐</button>
+                                    <button onclick="calificarServicio(${c.id}, 5)" class="cursor-pointer">⭐</button>
+                                </div>
+                                <p class="text-[10px] text-slate-400">Haz clic en la estrella deseada para calificar</p>
+                            `}
+                        </div>
+                    ` : ''}
                 </div>
             `).join('');
         }
@@ -997,10 +1040,33 @@
             if (carga && carga.ofertas[ofertaIdx]) {
                 const seleccionada = carga.ofertas[ofertaIdx];
                 carga.estado = `Asignado a ${seleccionada.conductorNombre} ($${Number(seleccionada.precio).toLocaleString('es-CO')})`;
-                carga.conductorAsignadoPlaca = seleccionada.placa; // Guardamos la placa ganadora
+                carga.conductorAsignadoPlaca = seleccionada.placa; 
                 guardarDatosLocal();
                 renderHistorialCliente();
                 alert(`✅ ¡Has seleccionado la cotización de ${seleccionada.conductorNombre}! Servicio asignado.`);
+            }
+        }
+
+        function calificarServicio(cargaId, estrellas) {
+            state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
+            state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
+            
+            let carga = state.cargas.find(c => Number(c.id) === Number(cargaId));
+            if (carga && carga.conductorAsignadoPlaca) {
+                carga.calificacionEstrellas = estrellas;
+                
+                let cond = state.conductores.find(co => co.placa === carga.conductorAsignadoPlaca);
+                if (cond) {
+                    if (cond.serviciosCalificados === undefined) cond.serviciosCalificados = 0;
+                    cond.serviciosCalificados += 1;
+                    
+                    if (cond.calificacion === undefined) cond.calificacion = 5.0;
+                    cond.calificacion = Number(((cond.calificacion + estrellas) / 2).toFixed(1));
+                }
+
+                guardarDatosLocal();
+                renderHistorialCliente();
+                alert(`✅ ¡Gracias! Has calificado este servicio con ${estrellas} estrellas ⭐.`);
             }
         }
 
@@ -1038,6 +1104,17 @@
             document.getElementById('trans-perfil-tel').innerText = cond.tel || "N/A";
             document.getElementById('trans-perfil-placa').innerText = cond.placa;
             document.getElementById('trans-perfil-vehiculo').innerText = (cond.vehiculo || "Motocarguero") + ` (${cond.marca || 'AKT'} - ${cond.cilindraje || '200cc'})`;
+            document.getElementById('trans-promedio-estrellas').innerText = cond.calificacion !== undefined ? cond.calificacion : "5.0";
+
+            // Verificar si tiene bonificación pendiente por mostrar
+            const bannerPremio = document.getElementById('trans-banner-premio');
+            const textoPremio = document.getElementById('trans-texto-premio');
+            if (cond.bonoNotificacion) {
+                bannerPremio.classList.remove('hidden');
+                textoPremio.innerText = cond.bonoNotificacion;
+            } else {
+                bannerPremio.classList.add('hidden');
+            }
 
             calcularCuentaRegresivaSuscripcion(cond.vencimiento);
             renderCargasDisponiblesTrans();
@@ -1052,8 +1129,8 @@
 
             if (!fechaVencimientoStr) {
                 elFechas.innerText = "Sin fecha registrada";
-                elRegresiva.innerText = "⚠️ Comunícate con la Central para activar vigencia";
-                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-slate-900 border-amber-500 text-amber-400";
+                elRegresiva.innerText = "⚠️ Comunícate con la Central";
+                boxAlerta.className = "mt-3 p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-slate-900 border-amber-500 text-amber-400";
                 return;
             }
 
@@ -1064,20 +1141,20 @@
             inicioVigencia.setMonth(inicioVigencia.getMonth() - 1);
 
             const formatoF = (f) => f.toLocaleDateString('es-CO', {day: '2-digit', month: 'short', year: 'numeric'});
-            elFechas.innerText = `${formatoF(inicioVigencia)} al ${formatoF(vencimiento)}`;
+            elFechas.innerText = `Vigencia: ${formatoF(inicioVigencia)} al ${formatoF(vencimiento)}`;
 
             const diferenciaTiempo = vencimiento - hoy;
             const diasRestantes = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24));
 
             if (diasRestantes < 0) {
-                elRegresiva.innerText = "❌ ¡Suscripción Vencida! Servicio desactivado";
-                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-red-950/80 border-red-500 text-red-400 animate-pulse";
+                elRegresiva.innerText = "❌ ¡Suscripción Vencida!";
+                boxAlerta.className = "mt-3 p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-red-950/80 border-red-500 text-red-400 animate-pulse";
             } else if (diasRestantes <= 5) {
-                elRegresiva.innerText = `🚨 ¡URGENTE! Te quedan ${diasRestantes} día(s) para vencerse`;
-                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-red-950/60 border-red-500 text-red-400";
+                elRegresiva.innerText = `⚠️ ¡Quedan ${diasRestantes} días!`;
+                boxAlerta.className = "mt-3 p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-red-950/50 border-red-500 text-red-400";
             } else {
-                elRegresiva.innerText = `✅ Suscripción Activa (${diasRestantes} días restantes)`;
-                boxAlerta.className = "mt-2 p-3 rounded-xl border text-xs space-y-1 bg-slate-900 border-emerald-500/50 text-emerald-400";
+                elRegresiva.innerText = `💎 Quedan ${diasRestantes} Días Pendientes`;
+                boxAlerta.className = "mt-3 p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-slate-900 border-emerald-500/50 text-emerald-400";
             }
         }
 
@@ -1146,7 +1223,6 @@
             }
 
             el.innerHTML = state.cargas.map(c => {
-                // Verificamos si este transportador específico fue el asignado por el cliente
                 const esAsignadoAceptado = (c.conductorAsignadoPlaca === state.transActualPlaca);
 
                 return `
@@ -1174,7 +1250,6 @@
                         </div>
                     </div>
                     
-                    <!-- EL BOTÓN DE WHATSAPP SOLO APARECE SI EL CLIENTE ACEPTÓ A ESTE CONDUCTOR -->
                     ${esAsignadoAceptado ? `
                         <div class="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/50 space-y-1 mt-2 text-center">
                             <p class="text-emerald-400 font-black">🎉 ¡Tu oferta fue aceptada por el cliente!</p>
@@ -1254,7 +1329,7 @@
             fechaFutura.setDate(fechaFutura.getDate() + 30);
             const vencimientoStr = fechaFutura.toISOString().split('T')[0];
 
-            state.conductores.push({ placa, nombre, doc, tel, municipio, vehiculo, marca, cilindraje, estado: "Pendiente", vencimiento: vencimientoStr });
+            state.conductores.push({ placa, nombre, doc, tel, municipio, vehiculo, marca, cilindraje, estado: "Pendiente", vencimiento: vencimientoStr, calificacion: 5.0, serviciosCalificados: 0, bonoNotificacion: null });
             guardarDatosLocal();
             alert("🚀 ¡Postulación enviada a la Central con éxito! Queda a la espera de aprobación.");
             
@@ -1366,17 +1441,26 @@
                     ` : ''}
                     <p class="text-white"><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
                     <p class="text-slate-300"><b>Ruta:</b> ${c.origen} ➔ ${c.destino}</p>
-                    <p class="text-slate-400 font-bold">Estado: ${c.estado}</p>
+                    <p class="text-orange-300 font-bold">Estado actual: ${c.estado}</p>
+                    ${c.calificacionEstrellas ? `<p class="text-amber-400 font-bold">⭐ Calificación del cliente: ${c.calificacionEstrellas} / 5</p>` : ''}
                     
                     <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 flex items-center space-x-2 pt-2">
                         <select id="select-asignar-${c.id}" class="w-full p-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-[11px] font-bold">
-                            <option value="">-- Seleccionar Conductor Activo --</option>
-                            ${listaConductoresActivos.map(cond => `<option value="${cond.nombre} - ${cond.placa}">${cond.nombre} (${cond.placa} - ${cond.municipio})</option>`).join('')}
+                            <option value="">-- Asignar Conductor Directo --</option>
+                            ${listaConductoresActivos.map(cond => `<option value="${cond.nombre} - ${cond.placa}">${cond.nombre} (${cond.placa})</option>`).join('')}
                         </select>
                         <button onclick="asignarConductorAdmin(${c.id})" class="bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-lg text-white font-bold whitespace-nowrap cursor-pointer">Asignar</button>
                     </div>
 
-                    <p class="text-emerald-400 font-bold">Cotizaciones recibidas: ${c.ofertas ? c.ofertas.length : 0}</p>
+                    <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700 space-y-1">
+                        <p class="font-bold text-slate-300">🏷️ Ofertas recibidas de la Flota (${c.ofertas ? c.ofertas.length : 0}):</p>
+                        ${(!c.ofertas || c.ofertas.length === 0) ? '<p class="text-slate-400 italic">Sin ofertas aún.</p>' : c.ofertas.map(of => `
+                            <div class="flex justify-between items-center text-[11px] bg-slate-800 p-1.5 rounded">
+                                <span>${of.conductorNombre} (${of.placa})</span>
+                                <span class="font-black text-emerald-400">$${Number(of.precio).toLocaleString('es-CO')}</span>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
             `).join('');
         }
@@ -1390,6 +1474,8 @@
             let carga = state.cargas.find(c => Number(c.id) === Number(cargaId));
             if (carga) {
                 carga.estado = `Asignado por Central a: ${val}`;
+                const partes = val.split(" - ");
+                if(partes[1]) carga.conductorAsignadoPlaca = partes[1].trim();
                 guardarDatosLocal();
                 renderAdminServicios();
                 alert(`✅ Conductor asignado al servicio con éxito.`);
@@ -1446,22 +1532,69 @@
                 el.innerHTML = '<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin transportadores registrados.</div>';
                 return;
             }
-            el.innerHTML = state.conductores.map((cond, idx) => `
+            el.innerHTML = state.conductores.map((cond, idx) => {
+                const serviciosCalificados = cond.serviciosCalificados || 0;
+                const calificacionProm = cond.calificacion !== undefined ? cond.calificacion : 5.0;
+                const esCandidatoBono = (serviciosCalificados >= 5 && calificacionProm >= 4.5);
+
+                return `
                 <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-1.5 shadow">
                     <div class="flex justify-between items-center">
                         <p class="font-black text-white">${cond.nombre} (<span class="text-orange-400">${cond.placa}</span>)</p>
                         <span class="px-2 py-0.5 rounded text-[10px] font-bold ${cond.estado === 'Activo' ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}">${cond.estado}</span>
                     </div>
                     <p class="text-[11px] text-slate-300"><b>Ciudad:</b> <span class="text-orange-400 font-bold">${cond.municipio || 'Acacías'}</span> • C.C: ${cond.doc} • Tel: ${cond.tel}</p>
-                    <p class="text-[11px] text-slate-300">Vence: <b class="text-orange-400">${cond.vencimiento || 'No asignado'}</b></p>
-                    <p class="text-[11px] text-slate-400">${cond.vehiculo} (${cond.marca} - ${cond.cilindraje})</p>
+                    <p class="text-[11px] text-slate-300">Vencimiento Suscripción: <b class="text-orange-400">${cond.vencimiento || 'No asignado'}</b></p>
+                    <p class="text-[11px] text-amber-400 font-bold">⭐ Estrellas: ${calificacionProm} | Servicios Calificados: ${serviciosCalificados}</p>
+                    
+                    ${esCandidatoBono ? `
+                        <div class="bg-amber-950/40 p-2 rounded border border-amber-500/50 flex justify-between items-center text-[11px]">
+                            <span class="text-amber-300 font-bold">✨ ¡Candidato a Bono por Estrellas!</span>
+                            <button onclick="otorgarBonoTransportador(${idx}, 3)" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-black cursor-pointer">+3 Días ⭐</button>
+                        </div>
+                    ` : ''}
+
+                    <div class="bg-slate-900 p-2 rounded-lg border border-slate-700 flex items-center space-x-2 pt-1">
+                        <input type="date" id="input-vence-${idx}" value="${cond.vencimiento || ''}" class="p-1 bg-slate-800 border border-slate-700 rounded text-white text-[11px]">
+                        <button onclick="actualizarFechaSuscripcionAdmin(${idx})" class="bg-amber-600 hover:bg-amber-700 px-2.5 py-1 rounded text-white font-bold cursor-pointer">Modificar Vencimiento</button>
+                    </div>
+
                     <div class="flex space-x-2 pt-1">
-                        ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Aprobar / Activar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Suspender</button>`}
+                        ${cond.estado !== 'Activo' ? `<button onclick="cambiarEstadoConductor(${idx}, 'Activo')" class="bg-green-600 hover:bg-green-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Aprobar</button>` : `<button onclick="cambiarEstadoConductor(${idx}, 'Suspendido')" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Suspender</button>`}
                         <button onclick="editarConductorAdmin(${idx})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Editar</button>
                         <button onclick="eliminarConductorAdmin(${idx})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
+        }
+
+        function otorgarBonoTransportador(idx, diasExtra) {
+            state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
+            let cond = state.conductores[idx];
+            if (cond && cond.vencimiento) {
+                let fechaV = new Date(cond.vencimiento + 'T00:00:00');
+                fechaV.setDate(fechaV.getDate() + diasExtra);
+                cond.vencimiento = fechaV.toISOString().split('T')[0];
+                cond.serviciosCalificados = 0; // Reiniciar contador
+                cond.bonoNotificacion = `¡Has recibido un bono de ${diasExtra} días adicionales por tu excelente desempeño y calificación de 5 estrellas! 🌟`;
+                
+                guardarDatosLocal();
+                renderAdminConductores();
+                alert(`✅ ¡Se le han sumado ${diasExtra} días de bono con éxito a ${cond.nombre}!`);
+            } else {
+                alert("⚠️ El conductor no tiene una fecha de vencimiento válida registrada.");
+            }
+        }
+
+        function actualizarFechaSuscripcionAdmin(idx) {
+            const nuevaFecha = document.getElementById(`input-vence-${idx}`).value;
+            if(!nuevaFecha) { alert("Selecciona una fecha válida"); return; }
+            state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
+            state.conductores[idx].vencimiento = nuevaFecha;
+            guardarDatosLocal();
+            renderAdminConductores();
+            alert("✅ ¡Fecha de suscripción modificada con éxito para el transportador!");
         }
 
         function guardarConductorAdmin() {
@@ -1473,6 +1606,7 @@
             const cilindraje = document.getElementById('adm-c-cilindraje').value.trim();
             const placa = document.getElementById('adm-c-placa').value.trim().toUpperCase();
             const tel = document.getElementById('adm-c-tel').value.trim();
+            const vencInput = document.getElementById('adm-c-vencimiento').value;
             const idx = parseInt(document.getElementById('admin-cond-idx').value);
 
             if (!nombre || !placa) {
@@ -1483,7 +1617,7 @@
             state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
             const fechaFutura = new Date();
             fechaFutura.setDate(fechaFutura.getDate() + 30);
-            const vencimientoStr = fechaFutura.toISOString().split('T')[0];
+            const vencimientoStr = vencInput || fechaFutura.toISOString().split('T')[0];
 
             const datosCond = { 
                 placa, 
@@ -1495,17 +1629,22 @@
                 marca: marca || "Akt", 
                 cilindraje: cilindraje || "200cc", 
                 estado: "Activo",
-                vencimiento: vencimientoStr
+                vencimiento: vencimientoStr,
+                calificacion: 5.0,
+                serviciosCalificados: 0,
+                bonoNotificacion: null
             };
 
             if (idx >= 0) {
-                datosCond.vencimiento = state.conductores[idx].vencimiento || vencimientoStr;
                 datosCond.estado = state.conductores[idx].estado || "Activo";
+                datosCond.calificacion = state.conductores[idx].calificacion !== undefined ? state.conductores[idx].calificacion : 5.0;
+                datosCond.serviciosCalificados = state.conductores[idx].serviciosCalificados || 0;
+                datosCond.bonoNotificacion = state.conductores[idx].bonoNotificacion || null;
                 state.conductores[idx] = datosCond;
                 alert("✅ Conductor actualizado con éxito");
             } else {
                 state.conductores.push(datosCond);
-                alert("✅ Conductor añadido al directorio con 1 mes activo");
+                alert("✅ Conductor añadido al directorio");
             }
 
             guardarDatosLocal();
@@ -1525,6 +1664,7 @@
             document.getElementById('adm-c-cilindraje').value = cond.cilindraje || "";
             document.getElementById('adm-c-placa').value = cond.placa || "";
             document.getElementById('adm-c-tel').value = cond.tel || "";
+            document.getElementById('adm-c-vencimiento').value = cond.vencimiento || "";
             document.getElementById('admin-cond-form-title').innerText = "✏️ Editar Transportador (" + cond.placa + ")";
         }
 
@@ -1536,6 +1676,7 @@
             document.getElementById('adm-c-cilindraje').value = "";
             document.getElementById('adm-c-placa').value = "";
             document.getElementById('adm-c-tel').value = "";
+            document.getElementById('adm-c-vencimiento').value = "";
             document.getElementById('admin-cond-form-title').innerText = "Registrar Nuevo Conductor";
         }
 
@@ -1646,7 +1787,7 @@
             if (elNeq) elNeq.value = state.config.nequi;
             if (elWapp) elWapp.value = state.config.whatsapp;
             if (elPico) elPico.value = state.config.picoPlacaTexto || picoPlacaPorDefecto;
-            if (elReg) elReg.value = state.config.reglamentoTexto || reglamentoPorDefecto;
+            if (elReg) elReg.value = state.config.reglamentoTexto || reglamentoEsencialPorDefecto;
         }
 
         function guardarAjustesGlobales() {
@@ -1657,7 +1798,7 @@
             state.config.nequi = document.getElementById('cfg-nequi').value.trim() || "3143842007";
             state.config.whatsapp = document.getElementById('cfg-whatsapp').value.trim() || "3507690951";
             state.config.picoPlacaTexto = document.getElementById('cfg-pico-placa').value.trim() || picoPlacaPorDefecto;
-            state.config.reglamentoTexto = document.getElementById('cfg-reglamento').value.trim() || reglamentoPorDefecto;
+            state.config.reglamentoTexto = document.getElementById('cfg-reglamento').value.trim() || reglamentoEsencialPorDefecto;
             
             guardarDatosLocal();
             actualizarTextosGlobales();
