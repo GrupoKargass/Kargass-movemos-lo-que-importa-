@@ -2147,6 +2147,7 @@
             state.config.reglamentoTexto = document.getElementById('cfg-reglamento').value.trim() || reglamentoEsencialPorDefecto;
             
             guardarDatosLocal();
+            textosGlobalesActualizados = true; // flag seguro
             actualizarTextosGlobales();
             alert("✅ ¡Ajustes globales guardados con éxito!");
         }
