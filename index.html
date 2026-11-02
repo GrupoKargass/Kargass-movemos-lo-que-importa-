@@ -17,6 +17,7 @@
 <div><h1 class="font-black text-lg tracking-wider text-white">KARGASS</h1><p class="text-[9px] text-orange-400 font-black tracking-wide">GRUPO KARGASS • META</p></div>
 </div>
 <div class="flex items-center space-x-2">
+<!-- Campana exclusiva para transportador (oculta en cliente) -->
 <div id="header-bell-box" class="relative hidden cursor-pointer" onclick="switchTabTrans('servicios')" title="Servicios Disponibles">
 <button class="bg-slate-700 hover:bg-slate-600 p-2 rounded-xl border border-slate-600 text-slate-200 text-lg flex items-center justify-center shadow-md">🔔</button>
 <span id="bell-badge-count" class="absolute -top-1.5 -right-1.5 bg-red-600 text-white font-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-slate-800 shadow animate-bounce">0</span>
@@ -82,8 +83,8 @@
 <h2 class="text-xs font-black text-orange-400 uppercase tracking-wider">4. VEHÍCULO Y DIRECCIONES</h2>
 <div><label class="text-[11px] font-bold text-slate-300">Vehículo Requerido</label><select id="cli-vehiculo" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black outline-none"><option value="Motocarguero Sencillo">🛺 Motocarguero Sencillo</option><option value="Motocarguero Doble Pacha">🚛 Motocarguero Doble Pacha</option><option value="Camioneta">🚙 Camioneta</option><option value="Camión">🚚 Camión</option></select></div>
 <div><label class="text-[11px] font-bold text-slate-300">Peso o Referencia (Ej: 250 kg, nevera...)</label><input type="text" id="cli-peso" placeholder="Ej: 250 kg, nevera..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
-<div><div class="flex justify-between items-center"><label class="text-[11px] font-bold text-slate-300">Dirección de Origen (Recogida)</label><button type="button" onclick="obtenerGPS()" class="text-[10px] text-orange-400 font-black hover:underline cursor-pointer">📍 Usar GPS</button></div><input type="text" id="cli-origen" placeholder="Barrio o dirección exacta" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
-<div><label class="text-[11px] font-bold text-slate-300">Dirección de Destino (Entrega)</label><input type="text" id="cli-destino" placeholder="Barrio o dirección exacta" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
+<div><div class="flex justify-between items-center"><label class="text-[11px] font-bold text-slate-300">Dirección de Origen (Recogida)</label><button type="button" onclick="obtenerGPS()" class="text-[10px] text-orange-400 font-black hover:underline cursor-pointer">📍 Usar GPS / Ubicación Actual</button></div><input type="text" id="cli-origen" placeholder="Ej: Calle 5 # 19-14 o Frente al parque de la vida" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
+<div><label class="text-[11px] font-bold text-slate-300">Dirección de Destino (Entrega)</label><input type="text" id="cli-destino" placeholder="Ej: Calle 5 # 23-48, barrio La Carolina" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
 <div><label class="text-[11px] font-bold text-slate-300">Detalles adicionales (Observaciones)</label><textarea id="cli-obs" rows="2" placeholder="Observaciones..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-medium outline-none"></textarea></div>
 <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
 <div class="flex items-center space-x-2"><span class="text-base">📸</span><div><p class="font-bold text-white text-[11px]">Foto de la Carga</p><p id="foto-estado" class="text-[10px] text-slate-400">Sin foto</p></div></div>
@@ -401,11 +402,16 @@ function registrarActividadUsuario(){localStorage.setItem('kargass_trans_ultimo_
 function verificarInactividadSesion(){if(state.transActualPlaca){const ultimoUso=parseInt(localStorage.getItem('kargass_trans_ultimo_uso')||'0');const ahora=Date.now();const horasInactivo=(ahora-ultimoUso)/(1000*60*60);if(horasInactivo>=4){cambiarPlacaTrans();alert("🔒 Sesión cerrada por seguridad tras más de 4 horas sin uso.");}}}
 
 function actualizarCampanitaServicios(){
-if(!state.transActualPlaca){document.getElementById('header-bell-box').classList.add('hidden');return;}
+const bellBox=document.getElementById('header-bell-box');
+if(!state.transActualPlaca){bellBox.classList.add('hidden');return;}
+// Solo mostrar la campanita si está en rol transportador activo
+if(state.rolGuardado!=='transportador'){bellBox.classList.add('hidden');return;}
+
 state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
 const cond=state.conductores.find(c=>c.placa===state.transActualPlaca);
-if(!cond)return;
-document.getElementById('header-bell-box').classList.remove('hidden');
+if(!cond){bellBox.classList.add('hidden');return;}
+
+bellBox.classList.remove('hidden');
 state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];
 const disponibles=state.cargas.filter(c=>{
 const esMiZona=c.tipoZona==='Local (Urbano)'?c.municipio===cond.municipio:(c.municipio===cond.municipio||c.municipioDestino===cond.municipio);
@@ -416,10 +422,10 @@ const badgeHead=document.getElementById('bell-badge-count');
 const badgeTab=document.getElementById('tab-badge-count');
 if(total>0){
 badgeHead.innerText=total;badgeHead.classList.remove('hidden');
-badgeTab.innerText=total;badgeTab.classList.remove('hidden');
+if(badgeTab){badgeTab.innerText=total;badgeTab.classList.remove('hidden');}
 if(total>state.conteoServiciosAnterior){emitirPitoDobleAlerta();}
 }else{
-badgeHead.classList.add('hidden');badgeTab.classList.add('hidden');
+badgeHead.classList.add('hidden');if(badgeTab)badgeTab.classList.add('hidden');
 }
 state.conteoServiciosAnterior=total;
 }
@@ -438,7 +444,34 @@ function cerrarReglamentoModal(){document.getElementById('modal-reglamento').cla
 function ampliarFoto(urlFoto){document.getElementById('imagen-ampliada').src=urlFoto;document.getElementById('modal-ver-foto').classList.remove('hidden');}
 function cerrarModalFoto(){document.getElementById('modal-ver-foto').classList.add('hidden');}
 
-function irModulo(mod){state.rolGuardado=mod;localStorage.setItem('kargass_rol_activo_memoria',mod);document.getElementById('modal-selector').classList.add('hidden');document.getElementById('view-cliente').classList.add('hidden');document.getElementById('view-transportador').classList.add('hidden');document.getElementById('view-afiliacion').classList.add('hidden');document.getElementById('view-central').classList.add('hidden');poblarSelectMunicipios();actualizarTextosGlobales();if(mod==='cliente'){document.getElementById('view-cliente').classList.remove('hidden');if(state.clienteActualDoc){document.getElementById('cli-doc-input').value=state.clienteActualDoc;verificarClienteLoginMemoria(state.clienteActualDoc);}else{document.getElementById('cliente-login').classList.remove('hidden');document.getElementById('cliente-dashboard').classList.add('hidden');}}else if(mod==='transportador'){verificarInactividadSesion();document.getElementById('view-transportador').classList.remove('hidden');if(state.transActualPlaca){document.getElementById('trans-placa-input').value=state.transActualPlaca;verificarTransportadorLoginMemoriaDirecto(state.transActualPlaca);}else{document.getElementById('trans-login').classList.remove('hidden');document.getElementById('trans-dashboard').classList.add('hidden');}}else if(mod==='afiliacion'){document.getElementById('view-afiliacion').classList.remove('hidden');}else if(mod==='central'){document.getElementById('view-central').classList.remove('hidden');if(state.isAdmin){document.getElementById('admin-login').classList.add('hidden');document.getElementById('admin-dashboard').classList.remove('hidden');}else{document.getElementById('admin-pass').value='';document.getElementById('admin-login').classList.remove('hidden');document.getElementById('admin-dashboard').classList.add('hidden');}}}
+function irModulo(mod){
+state.rolGuardado=mod;
+localStorage.setItem('kargass_rol_activo_memoria',mod);
+document.getElementById('modal-selector').classList.add('hidden');
+document.getElementById('view-cliente').classList.add('hidden');
+document.getElementById('view-transportador').classList.add('hidden');
+document.getElementById('view-afiliacion').classList.add('hidden');
+document.getElementById('view-central').classList.add('hidden');
+poblarSelectMunicipios();
+actualizarTextosGlobales();
+
+// Ocultar o mostrar campana según rol
+actualizarCampanitaServicios();
+
+if(mod==='cliente'){
+document.getElementById('view-cliente').classList.remove('hidden');
+if(state.clienteActualDoc){document.getElementById('cli-doc-input').value=state.clienteActualDoc;verificarClienteLoginMemoria(state.clienteActualDoc);}else{document.getElementById('cliente-login').classList.remove('hidden');document.getElementById('cliente-dashboard').classList.add('hidden');}
+}else if(mod==='transportador'){
+verificarInactividadSesion();
+document.getElementById('view-transportador').classList.remove('hidden');
+if(state.transActualPlaca){document.getElementById('trans-placa-input').value=state.transActualPlaca;verificarTransportadorLoginMemoriaDirecto(state.transActualPlaca);}else{document.getElementById('trans-login').classList.remove('hidden');document.getElementById('trans-dashboard').classList.add('hidden');}
+}else if(mod==='afiliacion'){
+document.getElementById('view-afiliacion').classList.remove('hidden');
+}else if(mod==='central'){
+document.getElementById('view-central').classList.remove('hidden');
+if(state.isAdmin){document.getElementById('admin-login').classList.add('hidden');document.getElementById('admin-dashboard').classList.remove('hidden');}else{document.getElementById('admin-pass').value='';document.getElementById('admin-login').classList.remove('hidden');document.getElementById('admin-dashboard').classList.add('hidden');}
+}
+}
 
 function verificarClienteLogin(){const doc=document.getElementById('cli-doc-input').value.trim();if(!doc){alert("Ingresa tu cédula");return;}verificarClienteLoginMemoria(doc);}
 function verificarClienteLoginMemoria(doc){state.clienteActualDoc=doc;localStorage.setItem('kargass_cliente_doc_memoria',doc);document.getElementById('cliente-login').classList.add('hidden');document.getElementById('cliente-dashboard').classList.remove('hidden');document.getElementById('cli-perfil-doc').innerText=doc;const guardado=JSON.parse(localStorage.getItem('kargass_memoria_cli_'+doc));if(guardado){document.getElementById('cli-nombre').value=guardado.nombre||"";document.getElementById('cli-tel').value=guardado.tel||"";}renderHistorialCliente();}
@@ -447,7 +480,7 @@ function cambiarCedulaCliente(){state.clienteActualDoc=null;localStorage.removeI
 function setTipoZona(tipo){state.tipoZona=tipo;const btnU=document.getElementById('btn-tipo-urbano');const btnI=document.getElementById('btn-tipo-inter');const boxDestino=document.getElementById('box-municipio-destino');if(tipo==='Local (Urbano)'){btnU.className="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";btnI.className="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";if(boxDestino)boxDestino.classList.add('hidden');}else{btnI.className="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";btnU.className="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";if(boxDestino)boxDestino.classList.remove('hidden');}}
 function setHorario(horario){state.horarioTipo=horario;const btnI=document.getElementById('btn-horario-inmediato');const btnP=document.getElementById('btn-horario-programado');const box=document.getElementById('box-hora-programada');if(horario==='Inmediato'){btnI.className="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";btnP.className="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";box.classList.add('hidden');}else{btnP.className="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";btnI.className="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";box.classList.remove('hidden');}}
 
-function obtenerGPS(){if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude.toFixed(4);const lon=pos.coords.longitude.toFixed(4);document.getElementById('cli-origen').value=`GPS: ${lat}, ${lon}`;alert("📍 Coordenadas capturadas con éxito");},()=>alert("No se pudo obtener GPS"));}else alert("GPS no soportado");}
+function obtenerGPS(){if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude.toFixed(4);const lon=pos.coords.longitude.toFixed(4);const inputOrigen=document.getElementById('cli-origen');inputOrigen.value=`GPS: ${lat}, ${lon}`;alert("📍 Coordenadas de GPS capturadas con éxito");},()=>alert("No se pudo obtener la ubicación GPS"));}else alert("GPS no soportado en este dispositivo");}
 
 function capturarFoto(e){const file=e.target.files[0];if(file){const reader=new FileReader();reader.onload=function(evt){const img=new Image();img.src=evt.target.result;img.onload=function(){const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');let width=img.width,height=img.height;if(width>height){if(width>800){height*=800/width;width=800;}}else{if(height>800){width*=800/height;height=800;}}canvas.width=width;canvas.height=height;ctx.drawImage(img,0,0,width,height);state.fotoBase64=canvas.toDataURL('image/jpeg',0.8);document.getElementById('foto-estado').innerText="¡Foto cargada completa!";document.getElementById('foto-estado').className="text-[10px] text-green-400 font-bold";};};reader.readAsDataURL(file);}}
 
@@ -460,7 +493,6 @@ function publicarSolicitudCliente(){
   const municipioOrigen=document.getElementById('cli-mun-local').value;
   const municipioDestinoVal=(state.tipoZona==='Intermunicipal')?document.getElementById('cli-mun-destino').value:municipioOrigen;
 
-  // Validación estricta anti-fantasmas y errores intermunicipales
   if(!nombre||!tel||!peso||!origen||!destino){
     alert("⚠️ Debes completar todos los campos obligatorios.");
     return;
@@ -534,8 +566,9 @@ function renderHistorialCliente(){
           <button onclick="eliminarSolicitudCliente(${c.id})" class="bg-red-600 hover:bg-red-700 text-white font-black px-2 py-0.5 rounded text-[10px] cursor-pointer shadow" title="Eliminar Solicitud">🗑️ Eliminar</button>
         </div>
       </div>
-      ${esFantasmaAntiguo?`<div class="bg-red-950/60 p-2 rounded-xl border border-red-500/50 text-red-300 text-[11px] font-bold">⚠️ Solicitud estancada / sin datos de zona. Elimínala y vuelve a crearla con el nuevo sistema.</div>`:''}
-      <p class="font-black text-white">📦 ${c.origen} ➔ ${c.destino}</p>
+      ${esFantasmaAntiguo?`<div class="bg-red-950/60 p-2 rounded-xl border border-red-500/50 text-red-300 text-[11px] font-bold">⚠️ Solicitud estancada / sin datos de zona. Elimínala y vuelve a crearla.</div>`:''}
+      <p class="font-black text-white">📦 Origen: ${c.origen}</p>
+      <p class="font-black text-white">📦 Destino: ${c.destino}</p>
       <p><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
       ${c.foto?`<div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')"><img src="${c.foto}" class="w-full h-40 object-contain bg-slate-950 rounded-xl border border-slate-700"><div class="absolute bottom-2 right-2 bg-slate-900/80 text-orange-400 font-bold text-[10px] px-2 py-1 rounded-lg border border-slate-700">🔍 Toca para ampliar foto</div></div>`:''}
       <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1.5">
@@ -588,7 +621,23 @@ function cerrarModalCambiarPass(){document.getElementById('modal-cambiar-pass').
 
 function ejecutarCambioPasswordTrans(){const actual=document.getElementById('trans-pass-actual').value.trim();const nueva=document.getElementById('trans-pass-nueva').value.trim();const confirma=document.getElementById('trans-pass-confirma').value.trim();if(!actual||!nueva||!confirma){alert("⚠️ Completa los campos");return;}if(nueva!==confirma){alert("⚠️ Las contraseñas no coinciden");return;}state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;let cond=state.conductores.find(c=>c.placa===state.transActualPlaca);if(cond){if(actual!==(cond.password||cond.doc)){alert("❌ Contraseña actual incorrecta");return;}cond.password=nueva;guardarDatosLocal();cerrarModalCambiarPass();alert("✅ ¡Contraseña actualizada!");}}
 
-function cargarDashboardTrans(cond){document.getElementById('trans-login').classList.add('hidden');document.getElementById('trans-dashboard').classList.remove('hidden');document.getElementById('trans-perfil-nombre').innerText=cond.nombre||"Conductor";document.getElementById('trans-perfil-doc').innerText=cond.doc||"N/A";document.getElementById('trans-perfil-tel').innerText=cond.tel||"N/A";document.getElementById('trans-perfil-placa').innerText=cond.placa;document.getElementById('trans-perfil-vehiculo').innerText=(cond.vehiculo||"Motocarguero")+` (${cond.marca||'AKT'} - ${cond.cilindraje||'200cc'})`;document.getElementById('trans-promedio-estrellas').innerText=cond.calificacion!==undefined?cond.calificacion:"5.0";document.getElementById('trans-municipio-tarifas-label').innerText=`Municipio Base: ${cond.municipio||'Acacías'}`;const bannerPremio=document.getElementById('trans-banner-premio');const textoPremio=document.getElementById('trans-texto-premio');if(cond.bonoNotificacion){bannerPremio.classList.remove('hidden');textoPremio.innerText=cond.bonoNotificacion;}else{bannerPremio.classList.add('hidden');}calcularCuentaRegresivaSuscripcion(cond.vencimiento);renderCargasDisponiblesTrans();renderTarifasTransportador(cond.municipio||'Acacías');actualizarTextosGlobales();actualizarCampanitaServicios();}
+function cargarDashboardTrans(cond){
+document.getElementById('trans-login').classList.add('hidden');
+document.getElementById('trans-dashboard').classList.remove('hidden');
+document.getElementById('trans-perfil-nombre').innerText=cond.nombre||"Conductor";
+document.getElementById('trans-perfil-doc').innerText=cond.doc||"N/A";
+document.getElementById('trans-perfil-tel').innerText=cond.tel||"N/A";
+document.getElementById('trans-perfil-placa').innerText=cond.placa;
+document.getElementById('trans-perfil-vehiculo').innerText=(cond.vehiculo||"Motocarguero")+` (${cond.marca||'AKT'} - ${cond.cilindraje||'200cc'})`;
+document.getElementById('trans-promedio-estrellas').innerText=cond.calificacion!==undefined?cond.calificacion:"5.0";
+document.getElementById('trans-municipio-tarifas-label').innerText=`Municipio Base: ${cond.municipio||'Acacías'}`;
+const bannerPremio=document.getElementById('trans-banner-premio');const textoPremio=document.getElementById('trans-texto-premio');if(cond.bonoNotificacion){bannerPremio.classList.remove('hidden');textoPremio.innerText=cond.bonoNotificacion;}else{bannerPremio.classList.add('hidden');}
+calcularCuentaRegresivaSuscripcion(cond.vencimiento);
+renderCargasDisponiblesTrans();
+renderTarifasTransportador(cond.municipio||'Acacías');
+actualizarTextosGlobales();
+actualizarCampanitaServicios();
+}
 
 function calcularCuentaRegresivaSuscripcion(fechaVencimientoStr){const elFechas=document.getElementById('trans-fechas-sus');const elRegresiva=document.getElementById('trans-cuenta-regresiva');const boxAlerta=document.getElementById('box-suscripcion-alerta');if(!fechaVencimientoStr){elFechas.innerText="Sin fecha registrada";elRegresiva.innerText="⚠️ Comunícate con la Central";return;}const hoy=new Date();hoy.setHours(0,0,0,0);const vencimiento=new Date(fechaVencimientoStr+'T00:00:00');const inicioVigencia=new Date(vencimiento);inicioVigencia.setMonth(inicioVigencia.getMonth()-1);const formatoF=(f)=>f.toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'});elFechas.innerText=`Vigencia: ${formatoF(inicioVigencia)} al ${formatoF(vencimiento)}`;const diasRestantes=Math.ceil((vencimiento-hoy)/(1000*60*60*24));if(diasRestantes<0){elRegresiva.innerText="❌ ¡Suscripción Vencida!";boxAlerta.className="mt-3 p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-red-950/80 border-red-500 text-red-400 animate-pulse";}else if(diasRestantes<=5){elRegresiva.innerText=`⚠️ ¡Quedan ${diasRestantes} días!`;boxAlerta.className="mt-3 p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-red-950/50 border-red-500 text-red-400";}else{elRegresiva.innerText=`💎 Quedan ${diasRestantes} Días Pendientes`;boxAlerta.className="mt-3 p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-slate-900 border-emerald-500/50 text-emerald-400";}}
 
@@ -625,26 +674,59 @@ function renderCargasDisponiblesTrans(){
     const yaAsignadoOConOfertaAceptada=(c.conductorAsignadoPlaca!=null||c.estado.startsWith("Asignado"));
     const labelRuta=c.tipoZona==='Intermunicipal'?`📍 Intermunicipal: ${c.municipio} ➔ ${c.municipioDestino}`:`📍 ${c.municipio} (Urbano)`;
     
-    // Generar enlace interactivo si el origen o destino tiene coordenadas GPS
-    let origenHtml = c.origen;
-    if(c.origen.includes("GPS:")){
-      const coords = c.origen.replace("GPS:", "").trim();
-      origenHtml = `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(coords)}" target="_blank" class="text-orange-400 font-black underline flex items-center gap-1">📍 Abrir GPS en Maps (${coords})</a>`;
+    // Verificar si este conductor ya envió oferta en este servicio
+    const yaEnvioOferta = c.ofertas && c.ofertas.some(o => o.placa === state.transActualPlaca);
+    const miOfertaActual = yaEnvioOferta ? c.ofertas.find(o => o.placa === state.transActualPlaca) : null;
+    
+    function formatearUbicacionConEnlace(textoUbicacion, municipioBase){
+      if(!textoUbicacion) return "Sin especificar";
+      if(textoUbicacion.includes("GPS:")){
+        const coords = textoUbicacion.replace("GPS:", "").trim();
+        const urlMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(coords)}`;
+        return `<a href="${urlMaps}" target="_blank" class="text-orange-400 font-black underline hover:text-orange-300">📍 ${textoUbicacion} (Abrir GPS en Maps)</a>`;
+      }
+      const tLower = textoUbicacion.toLowerCase();
+      const esDireccionExacta = tLower.includes('calle') || tLower.includes('carrera') || tLower.includes('cra') || tLower.includes('cl') || tLower.includes('#') || /\d+[\s#\-]+\d+/.test(textoUbicacion);
+
+      if(esDireccionExacta){
+        const queryBusqueda = `${textoUbicacion}, ${municipioBase}, Meta, Colombia`;
+        const urlMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(queryBusqueda)}`;
+        return `<a href="${urlMaps}" target="_blank" class="text-orange-400 font-black underline hover:text-orange-300" title="Toca para abrir en Google Maps">🗺️ ${textoUbicacion} (Abrir en Maps)</a>`;
+      }else{
+        return `<span class="text-white font-medium">${textoUbicacion} <span class="text-[10px] text-slate-400 font-normal">(Referencia)</span></span>`;
+      }
     }
+
+    const origenHtml = formatearUbicacionConEnlace(c.origen, c.municipio);
+    const destinoHtml = formatearUbicacionConEnlace(c.destino, c.municipioDestino || c.municipio);
 
     return`<div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-md">
       <div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1">
         <span>${labelRuta}</span><span>🛺 ${c.vehiculo}</span>
       </div>
-      <div class="space-y-1">
-        <p class="font-black text-white text-sm">Origen: ${origenHtml}</p>
-        <p class="font-black text-white text-sm">Destino: ${c.destino}</p>
+      <div class="space-y-1.5 bg-slate-900 p-2.5 rounded-xl border border-slate-700">
+        <div><span class="text-[10px] text-slate-400 uppercase font-bold">Origen (Recogida):</span><div class="text-sm mt-0.5">${origenHtml}</div></div>
+        <div><span class="text-[10px] text-slate-400 uppercase font-bold">Destino (Entrega):</span><div class="text-sm mt-0.5">${destinoHtml}</div></div>
       </div>
       <p class="text-slate-300"><b>Carga:</b> ${c.peso} | <b>Horario:</b> ${c.horario}</p>
       <p class="text-orange-300 font-bold">Estado actual: ${c.estado}</p>
       ${c.observaciones?`<p class="text-slate-400 italic">"${c.observaciones}"</p>`:''}
       ${c.foto?`<div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')"><img src="${c.foto}" class="w-full h-44 object-contain bg-slate-950 rounded-xl border border-slate-700"><div class="absolute bottom-2 right-2 bg-slate-900/90 text-orange-400 font-bold text-[10px] px-2 py-1 rounded-lg border border-slate-700">🔍 Toca para ver foto completa</div></div>`:''}
-      ${yaAsignadoOConOfertaAceptada?'':`<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2"><label class="font-bold text-slate-300">Enviar Cotización de Flete (COP):</label><div class="flex space-x-2"><input type="text" id="input-oferta-${c.id}" placeholder="Ej: 35000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs"><button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Cotización</button></div></div>`}
+      
+      ${yaAsignadoOConOfertaAceptada?'':(yaEnvioOferta?
+        `<div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/50 text-center space-y-1">
+           <p class="text-emerald-400 font-black">✅ Ya enviaste tu cotización por <b class="text-white">$${Number(miOfertaActual.precio).toLocaleString('es-CO')}</b></p>
+           <p class="text-[10px] text-slate-400">Esperando respuesta del cliente...</p>
+         </div>`:
+        `<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2">
+           <label class="font-bold text-slate-300">Enviar Cotización de Flete (COP):</label>
+           <div class="flex space-x-2">
+             <input type="text" id="input-oferta-${c.id}" placeholder="Ej: 35000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs">
+             <button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Cotización</button>
+           </div>
+         </div>`
+      )}
+
       ${esAsignadoAceptado?`<div class="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/50 space-y-1 mt-2 text-center"><p class="text-emerald-400 font-black">🎉 ¡Tu oferta fue aceptada por el cliente!</p><a href="https://wa.me/57${c.clienteTel}?text=`+encodeURIComponent("Hola "+c.clienteNombre+", fui el transportador seleccionado en Kargass.")+`" target="_blank" class="block bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white shadow cursor-pointer">💬 Iniciar WhatsApp Directo con el Cliente</a></div>`:''}
     </div>`;
   }).join('');
@@ -666,7 +748,36 @@ return`<div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-x
 }).join('');
 }
 
-function enviarOfertaTransportador(cargaId){registrarActividadUsuario();const rawVal=document.getElementById(`input-oferta-${cargaId}`).value.trim();if(!rawVal){alert("⚠️ Ingresa un valor válido.");return;}const inputVal=rawVal.replace(/[^0-9]/g,'');if(!inputVal||isNaN(inputVal)){alert("⚠️ Ingresa un valor numérico válido (ej: 30000).");return;}state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));let cond=state.conductores.find(co=>co.placa===state.transActualPlaca);if(carga&&cond){if(!carga.ofertas)carga.ofertas=[];let existente=carga.ofertas.find(o=>o.placa===cond.placa);if(existente){existente.precio=inputVal;}else{carga.ofertas.push({placa:cond.placa,conductorNombre:cond.nombre,tel:cond.tel,precio:inputVal});}guardarDatosLocal();alert(`🚀 ¡Cotización enviada con éxito!`);document.getElementById(`input-oferta-${cargaId}`).value='';renderCargasDisponiblesTrans();}}
+function enviarOfertaTransportador(cargaId){
+  registrarActividadUsuario();
+  const inputEl = document.getElementById(`input-oferta-${cargaId}`);
+  if(!inputEl) return;
+  const rawVal=inputEl.value.trim();
+  if(!rawVal){alert("⚠️ Ingresa un valor válido.");return;}
+  const inputVal=rawVal.replace(/[^0-9]/g,'');
+  if(!inputVal||isNaN(inputVal)){alert("⚠️ Ingresa un valor numérico válido (ej: 30000).");return;}
+  
+  state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];
+  state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
+  let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));
+  let cond=state.conductores.find(co=>co.placa===state.transActualPlaca);
+  
+  if(carga&&cond){
+    if(!carga.ofertas) carga.ofertas=[];
+    // Validar si ya había cotizado para bloquear doble envío
+    let existente=carga.ofertas.find(o=>o.placa===cond.placa);
+    if(existente){
+      alert("⚠️ Ya habías enviado una cotización para este servicio.");
+      renderCargasDisponiblesTrans();
+      return;
+    }
+    
+    carga.ofertas.push({placa:cond.placa,conductorNombre:cond.nombre,tel:cond.tel,precio:inputVal});
+    guardarDatosLocal();
+    alert(`🚀 ¡Cotización enviada con éxito! El botón ha quedado bloqueado para evitar duplicados.`);
+    renderCargasDisponiblesTrans();
+  }
+}
 
 function copiarNequi(){registrarActividadUsuario();navigator.clipboard.writeText(state.config.nequi);alert("✅ Número Nequi copiado: "+state.config.nequi);}
 
