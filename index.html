@@ -99,10 +99,10 @@
 </div>
 <div id="view-transportador" class="space-y-4 hidden">
 <div id="trans-login" class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-xl text-center space-y-3">
-<div class="text-4xl">🏍️</div><h3 class="font-black text-lg text-white">Portal de Transportadores</h3><p class="text-xs text-slate-300">Ingresa tu placa y contraseña</p>
+<div class="text-4xl">🏍️</div><h3 class="font-black text-lg text-white">Portal de Transportadores</h3><p class="text-xs text-slate-300">Ingresa tu placa y contraseña personal</p>
 <div class="space-y-2 pt-1 text-left">
-<div><label class="text-[11px] font-bold text-slate-300">Número de Placa</label><input type="text" id="trans-placa-input" placeholder="Ej: ABC123" class="w-full tracking-widest text-base p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-black uppercase outline-none mt-0.5"></div>
-<div><label class="text-[11px] font-bold text-slate-300">Contraseña (Celular o Clave Personal)</label><input type="password" id="trans-pass-input" placeholder="Tu celular o contraseña" class="w-full tracking-widest text-base p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-black outline-none mt-0.5"></div>
+<div><label class="text-[11px] font-bold text-slate-300">Número de Placa</label><input type="text" id="trans-placa-input" placeholder="Ej: ABC123" autocomplete="off" class="w-full tracking-widest text-base p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-black uppercase outline-none mt-0.5"></div>
+<div><label class="text-[11px] font-bold text-slate-300">Contraseña Personal</label><input type="password" id="trans-pass-input" placeholder="Contraseña personal" autocomplete="off" class="w-full tracking-widest text-base p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-black outline-none mt-0.5"></div>
 </div>
 <button onclick="verificarTransportadorLogin()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white shadow-lg cursor-pointer mt-1">Ingresar al Panel</button>
 <button onclick="recuperarClaveTransportador()" class="text-xs text-slate-400 hover:text-orange-400 font-bold block mx-auto cursor-pointer pt-1">🔑 ¿Olvidaste tu contraseña? Solicitar a Central</button>
@@ -242,7 +242,6 @@
 <div id="admin-lista-cargas" class="space-y-2.5"></div>
 </div>
 <div id="a-content-conductores" class="space-y-3 hidden">
-<!-- CONTENEDOR DEL FORMULARIO CON ANCLA PARA SCROLL SUAVE -->
 <div id="box-form-conductor-admin" class="bg-slate-800 p-4 rounded-2xl border-2 border-slate-700 space-y-3 text-xs shadow-xl transition-all duration-300">
 <h3 class="font-black text-sm text-orange-400" id="admin-cond-form-title">Registrar Nuevo Conductor</h3>
 <input type="hidden" id="admin-cond-idx" value="-1">
@@ -369,10 +368,20 @@ const picoPlacaPorDefecto=`📅 Periodo: Vigente 2026.\n⏰ Horarios: De 6:30 a.
 
 let state={cargas:JSON.parse(localStorage.getItem('kargass_cargas'))||[],conductores:JSON.parse(localStorage.getItem('kargass_conductores'))||[{placa:"ABC123",password:"3100000000",nombre:"Conductor de Prueba ABC",doc:"3100000000",tel:"3100000000",vehiculo:"Motocarguero sencillo",marca:"AKT",cilindraje:"200cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null},{placa:"571AGU",password:"3143842007",nombre:"Daniel David Martínez Santamaría",doc:"3143842007",tel:"3143842007",vehiculo:"Motocarguero sencillo",marca:"Camello",cilindraje:"250cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null}],tarifasPorMunicipio:JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||{"Acacías":tarifasBaseAcacias},config:JSON.parse(localStorage.getItem('kargass_config_global'))||{adminPass:"1234",adminMaster:"KARGASS-RESCUE-2026",valorSuscripcion:45000,nequi:"3143842007",whatsapp:"3507690951",picoPlacaTexto:picoPlacaPorDefecto,reglamentoTexto:reglamentoEsencialPorDefecto},rolGuardado:localStorage.getItem('kargass_rol_activo_memoria')||null,clienteActualDoc:localStorage.getItem('kargass_cliente_doc_memoria')||null,transActualPlaca:localStorage.getItem('kargass_trans_placa_memoria')||null,isAdmin:false,tipoZona:"Local (Urbano)",horarioTipo:"Inmediato",fotoBase64:null,conteoServiciosAnterior:0};
 
-// SINTETIZADOR AUDIO NATIVO PARA EL TIMBRE / PITO DE SERVICIOS
-function emitirPitoNotificacion(){try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const osc=ctx.createOscillator();const gain=ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(880,ctx.currentTime);osc.frequency.exponentialRampToValueAtTime(1760,ctx.currentTime+0.2);gain.gain.setValueAtTime(0.3,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.4);osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+0.4);}catch(e){console.log("Audio not supported or waiting gesture",e);}}
+// SINTETIZADOR AUDIO: DOBLE PITICO DE ALERTA CUANDO HAY SERVICIOS
+function emitirPitoDobleAlerta(){try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const now=ctx.currentTime;
+const osc1=ctx.createOscillator();const gain1=ctx.createGain();
+osc1.type='sine';osc1.frequency.setValueAtTime(900,now);osc1.frequency.exponentialRampToValueAtTime(1800,now+0.15);
+gain1.gain.setValueAtTime(0.3,now);gain1.gain.exponentialRampToValueAtTime(0.01,now+0.2);
+osc1.connect(gain1);gain1.connect(ctx.destination);osc1.start(now);osc1.stop(now+0.2);
 
-function guardarDatosLocal(){try{localStorage.setItem('kargass_cargas',JSON.stringify(state.cargas));localStorage.setItem('kargass_conductores',JSON.stringify(state.conductores));localStorage.setItem('kargass_tarifas_municipios',JSON.stringify(state.tarifasPorMunicipio));localStorage.setItem('kargass_config_global',JSON.stringify(state.config));localStorage.setItem('kargass_trans_ultimo_uso',Date.now().toString());actualizarCampanitaServicios();}catch(e){console.error(e);alert("⚠️ La foto es demasiado pesada para la memoria del navegador.");}}
+const osc2=ctx.createOscillator();const gain2=ctx.createGain();
+osc2.type='sine';osc2.frequency.setValueAtTime(1200,now+0.25);osc2.frequency.exponentialRampToValueAtTime(2200,now+0.4);
+gain2.gain.setValueAtTime(0.3,now+0.25);gain2.gain.exponentialRampToValueAtTime(0.01,now+0.5);
+osc2.connect(gain2);gain2.connect(ctx.destination);osc2.start(now+0.25);osc2.stop(now+0.5);
+}catch(e){console.log("Audio waiting gesture",e);}}
+
+function guardarDatosLocal(){try{localStorage.setItem('kargass_cargas',JSON.stringify(state.cargas));localStorage.setItem('kargass_conductores',JSON.stringify(state.conductores));localStorage.setItem('kargass_tarifas_municipios',JSON.stringify(state.tarifasPorMunicipio));localStorage.setItem('kargass_config_global',JSON.stringify(state.config));localStorage.setItem('kargass_trans_ultimo_uso',Date.now().toString());actualizarCampanitaServicios();}catch(e){console.error(e);alert("⚠️ Memoria llena.");}}
 
 function registrarActividadUsuario(){localStorage.setItem('kargass_trans_ultimo_uso',Date.now().toString());}
 
@@ -395,7 +404,7 @@ const badgeTab=document.getElementById('tab-badge-count');
 if(total>0){
 badgeHead.innerText=total;badgeHead.classList.remove('hidden');
 badgeTab.innerText=total;badgeTab.classList.remove('hidden');
-if(total>state.conteoServiciosAnterior){emitirPitoNotificacion();}
+if(total>state.conteoServiciosAnterior){emitirPitoDobleAlerta();}
 }else{
 badgeHead.classList.add('hidden');badgeTab.classList.add('hidden');
 }
@@ -404,7 +413,7 @@ state.conteoServiciosAnterior=total;
 
 function descargarRespaldoJSON(){const datosBackup={cargas:state.cargas,conductores:state.conductores,tarifasPorMunicipio:state.tarifasPorMunicipio,config:state.config,fechaRespaldo:new Date().toISOString()};const dataStr="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(datosBackup,null,2));const downloadAnchor=document.createElement('a');downloadAnchor.setAttribute("href",dataStr);downloadAnchor.setAttribute("download",`kargass_backup_${new Date().toISOString().split('T')[0]}.json`);document.body.appendChild(downloadAnchor);downloadAnchor.click();downloadAnchor.remove();alert("✅ ¡Copia de seguridad descargada con éxito!");}
 
-function restaurarRespaldoJSON(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const contenido=JSON.parse(e.target.result);if(contenido.cargas&&contenido.conductores&&contenido.config){state.cargas=contenido.cargas;state.conductores=contenido.conductores;if(contenido.tarifasPorMunicipio)state.tarifasPorMunicipio=contenido.tarifasPorMunicipio;state.config=contenido.config;guardarDatosLocal();alert("✅ ¡Datos restaurados con éxito!");location.reload();}else{alert("❌ Formato de respaldo incorrecto.");}}catch(err){alert("❌ Error al leer el archivo JSON.");}};reader.readAsText(file);}
+function restaurarRespaldoJSON(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const contenido=JSON.parse(e.target.result);if(contenido.cargas&&contenido.conductores&&contenido.config){state.cargas=contenido.cargas;state.conductores=contenido.conductores;if(contenido.tarifasPorMunicipio)state.tarifasPorMunicipio=contenido.tarifasPorMunicipio;state.config=contenido.config;guardarDatosLocal();alert("✅ ¡Datos restaurados con éxito!");location.reload();}else{alert("❌ Formato incorrecto.");}}catch(err){alert("❌ Error al leer JSON.");}};reader.readAsText(file);}
 
 function poblarSelectMunicipios(){document.querySelectorAll('.select-municipios').forEach(sel=>{const actual=sel.value||"Acacías";sel.innerHTML=listaMunicipiosMeta.map(m=>`<option value="${m}">${m}</option>`).join('');sel.value=actual;});}
 
@@ -445,14 +454,22 @@ function recuperarClaveAdminMaestra(){const master=prompt("🔒 Ingresa la Clave
 
 function verificarTransportadorLoginMemoriaDirecto(placa){state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;let cond=state.conductores.find(c=>c.placa===placa);if(cond&&cond.estado==='Activo'){registrarActividadUsuario();cargarDashboardTrans(cond);}else{cambiarPlacaTrans();}}
 
-function cambiarPlacaTrans(){state.transActualPlaca=null;localStorage.removeItem('kargass_trans_placa_memoria');document.getElementById('trans-dashboard').classList.add('hidden');document.getElementById('trans-login').classList.remove('hidden');document.getElementById('trans-placa-input').value='';document.getElementById('trans-pass-input').value='';actualizarCampanitaServicios();}
+function cambiarPlacaTrans(){
+state.transActualPlaca=null;
+localStorage.removeItem('kargass_trans_placa_memoria');
+document.getElementById('trans-dashboard').classList.add('hidden');
+document.getElementById('trans-login').classList.remove('hidden');
+document.getElementById('trans-placa-input').value='';
+document.getElementById('trans-pass-input').value='';
+actualizarCampanitaServicios();
+}
 
 function abrirModalCambiarPass(){document.getElementById('trans-pass-actual').value='';document.getElementById('trans-pass-nueva').value='';document.getElementById('trans-pass-confirma').value='';document.getElementById('modal-cambiar-pass').classList.remove('hidden');}
 function cerrarModalCambiarPass(){document.getElementById('modal-cambiar-pass').classList.add('hidden');}
 
 function ejecutarCambioPasswordTrans(){const actual=document.getElementById('trans-pass-actual').value.trim();const nueva=document.getElementById('trans-pass-nueva').value.trim();const confirma=document.getElementById('trans-pass-confirma').value.trim();if(!actual||!nueva||!confirma){alert("⚠️ Completa los campos");return;}if(nueva!==confirma){alert("⚠️ Las contraseñas no coinciden");return;}state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;let cond=state.conductores.find(c=>c.placa===state.transActualPlaca);if(cond){if(actual!==(cond.password||cond.doc)){alert("❌ Contraseña actual incorrecta");return;}cond.password=nueva;guardarDatosLocal();cerrarModalCambiarPass();alert("✅ ¡Contraseña actualizada!");}}
 
-function cargarDashboardTrans(cond){document.getElementById('trans-login').classList.add('hidden');document.getElementById('trans-dashboard').classList.remove('hidden');document.getElementById('trans-perfil-nombre').innerText=cond.nombre||"Conductor";document.getElementById('trans-perfil-doc').innerText=cond.doc||"N/A";document.getElementById('trans-perfil-tel').innerText=cond.tel||"N/A";document.getElementById('trans-perfil-placa').innerText=cond.placa;document.getElementById('trans-perfil-vehiculo').innerText=(cond.vehiculo||"Motocarguero")+` (${cond.marca||'AKT'} - ${cond.cilindraje||'200cc'})`;document.getElementById('trans-promedio-estrellas').innerText=cond.calificacion!==undefined?cond.calificacion:"5.0";document.getElementById('trans-municipio-tarifas-label').innerText=`Municipio Base: ${cond.municipio||'Acacías'}`;const bannerPremio=document.getElementById('trans-banner-premio');const textoPremio=document.getElementById('trans-texto-premio');if(cond.bonoNotificacion){bannerPremio.classList.remove('hidden');textoPremio.innerText=cond.bonoNotificacion;}else{bannerPremio.classList.add('hidden');}calcularCuentaRegresivaSuscripcion(cond.vencimiento);renderCargasDisponiblesTrans();renderTarifasTransportador(cond.municipio||'Acacías');actualizarTextosGlobales();actualizarCampanitaServicios();emitirPitoNotificacion();}
+function cargarDashboardTrans(cond){document.getElementById('trans-login').classList.add('hidden');document.getElementById('trans-dashboard').classList.remove('hidden');document.getElementById('trans-perfil-nombre').innerText=cond.nombre||"Conductor";document.getElementById('trans-perfil-doc').innerText=cond.doc||"N/A";document.getElementById('trans-perfil-tel').innerText=cond.tel||"N/A";document.getElementById('trans-perfil-placa').innerText=cond.placa;document.getElementById('trans-perfil-vehiculo').innerText=(cond.vehiculo||"Motocarguero")+` (${cond.marca||'AKT'} - ${cond.cilindraje||'200cc'})`;document.getElementById('trans-promedio-estrellas').innerText=cond.calificacion!==undefined?cond.calificacion:"5.0";document.getElementById('trans-municipio-tarifas-label').innerText=`Municipio Base: ${cond.municipio||'Acacías'}`;const bannerPremio=document.getElementById('trans-banner-premio');const textoPremio=document.getElementById('trans-texto-premio');if(cond.bonoNotificacion){bannerPremio.classList.remove('hidden');textoPremio.innerText=cond.bonoNotificacion;}else{bannerPremio.classList.add('hidden');}calcularCuentaRegresivaSuscripcion(cond.vencimiento);renderCargasDisponiblesTrans();renderTarifasTransportador(cond.municipio||'Acacías');actualizarTextosGlobales();actualizarCampanitaServicios();}
 
 function calcularCuentaRegresivaSuscripcion(fechaVencimientoStr){const elFechas=document.getElementById('trans-fechas-sus');const elRegresiva=document.getElementById('trans-cuenta-regresiva');const boxAlerta=document.getElementById('box-suscripcion-alerta');if(!fechaVencimientoStr){elFechas.innerText="Sin fecha registrada";elRegresiva.innerText="⚠️ Comunícate con la Central";return;}const hoy=new Date();hoy.setHours(0,0,0,0);const vencimiento=new Date(fechaVencimientoStr+'T00:00:00');const inicioVigencia=new Date(vencimiento);inicioVigencia.setMonth(inicioVigencia.getMonth()-1);const formatoF=(f)=>f.toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'});elFechas.innerText=`Vigencia: ${formatoF(inicioVigencia)} al ${formatoF(vencimiento)}`;const diasRestantes=Math.ceil((vencimiento-hoy)/(1000*60*60*24));if(diasRestantes<0){elRegresiva.innerText="❌ ¡Suscripción Vencida!";boxAlerta.className="mt-3 p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-red-950/80 border-red-500 text-red-400 animate-pulse";}else if(diasRestantes<=5){elRegresiva.innerText=`⚠️ ¡Quedan ${diasRestantes} días!`;boxAlerta.className="mt-3 p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-red-950/50 border-red-500 text-red-400";}else{elRegresiva.innerText=`💎 Quedan ${diasRestantes} Días Pendientes`;boxAlerta.className="mt-3 p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-slate-900 border-emerald-500/50 text-emerald-400";}}
 
@@ -520,7 +537,6 @@ function actualizarFechaSuscripcionAdmin(idx){const nv=document.getElementById(`
 
 function guardarConductorAdmin(){const nombre=document.getElementById('adm-c-nombre').value.trim();const doc=document.getElementById('adm-c-doc').value.trim();const municipio=document.getElementById('adm-c-municipio').value;const vehiculo=document.getElementById('adm-c-vehiculo').value;const marca=document.getElementById('adm-c-marca').value.trim();const cilindraje=document.getElementById('adm-c-cilindraje').value.trim();const placa=document.getElementById('adm-c-placa').value.trim().toUpperCase().replace(/\s+/g,'');const tel=document.getElementById('adm-c-tel').value.trim();const vencInput=document.getElementById('adm-c-vencimiento').value;const idx=parseInt(document.getElementById('admin-cond-idx').value);if(!nombre||!placa){alert("Completa nombre y placa");return;}state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;const fechaFutura=new Date();fechaFutura.setDate(fechaFutura.getDate()+30);const vencimientoStr=vencInput||fechaFutura.toISOString().split('T')[0];const datosCond={placa,password:doc||"3143842007",nombre,doc:doc||"N/A",tel:tel||"N/A",municipio,vehiculo,marca:marca||"Akt",cilindraje:cilindraje||"200cc",estado:"Activo",vencimiento:vencimientoStr,calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null};if(idx>=0){datosCond.password=state.conductores[idx].password||doc||"3143842007";datosCond.estado=state.conductores[idx].estado||"Activo";datosCond.calificacion=state.conductores[idx].calificacion!==undefined?state.conductores[idx].calificacion:5.0;state.conductores[idx]=datosCond;}else{state.conductores.push(datosCond);}guardarDatosLocal();limpiarFormConductorAdmin();renderAdminConductores();alert("✅ Conductor guardado con éxito.");}
 
-// MEJORA AUTO-SCROLL AL EDITAR CONDUCTORES
 function editarConductorAdmin(idx){
 state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
 const cond=state.conductores[idx];
