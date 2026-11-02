@@ -67,7 +67,7 @@
 <button type="button" id="btn-tipo-urbano" onclick="setTipoZona('Local (Urbano)')" class="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer"><span>🏠 Local (Urbano)</span></button>
 <button type="button" id="btn-tipo-inter" onclick="setTipoZona('Intermunicipal')" class="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer"><span>🛣️ Intermunicipal</span></button>
 </div>
-<div><label class="text-[11px] font-bold text-slate-300">Municipio de Origen (Salida)</label><select id="cli-mun-local" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select></div>
+<div><label class="text-[11px] font-bold text-slate-300">Municipio Base de Operación (Salida)</label><select id="cli-mun-local" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select></div>
 <div id="box-municipio-destino" class="hidden pt-1"><label class="text-[11px] font-bold text-orange-400">Municipio de Destino (Llegada)</label><select id="cli-mun-destino" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select></div>
 </div>
 <div class="space-y-2 border-b border-slate-700 pb-3">
@@ -268,7 +268,6 @@
 </div>
 <div class="flex flex-col space-y-2 pt-2">
 <div class="flex justify-between items-center"><h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Directorio General de Transportadores</h3></div>
-<!-- BARRA DE BÚSQUEDA RÁPIDA DE PLACA O NOMBRE -->
 <div><input type="text" id="input-buscar-flota" placeholder="🔍 Buscar por Placa o Nombre..." oninput="renderAdminConductores()" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold text-xs outline-none focus:border-orange-500"></div>
 </div>
 <div id="admin-lista-conductores" class="space-y-2"></div>
@@ -362,7 +361,7 @@
 <div id="modal-ver-foto" class="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4 hidden" onclick="cerrarModalFoto()">
 <div class="relative max-w-lg w-full max-h-[90vh] flex flex-col items-center" onclick="event.stopPropagation()">
 <button onclick="cerrarModalFoto()" class="absolute -top-10 right-0 bg-orange-500 hover:bg-orange-600 text-white font-black px-3 py-1 rounded-full text-xs shadow-lg cursor-pointer">✕ Cerrar</button>
-<img id="imagen-ampliada" src="" class="w-full max-h-[80vh] object-contain rounded-2xl border-2 border-slate-700 bg-black shadow-2xl">
+<img id="imagen-ampliada" src="" class="w-full max-h-[80vh] object-contain bg-slate-950 rounded-2xl border border-slate-700 bg-black shadow-2xl">
 <p class="text-xs text-slate-300 mt-2 text-center font-bold">Toca fuera de la imagen o en el botón para cerrar</p>
 </div>
 </div>
@@ -552,7 +551,6 @@ return;
 }
 
 el.innerHTML=listaFiltrada.map((cond)=>{
-// Buscamos el índice real en el arreglo global state.conductores para que los botones funcionen bien
 const idx=state.conductores.findIndex(c=>c.placa===cond.placa);
 const servicios=cond.serviciosCalificados||0;
 const cal=cond.calificacion!==undefined?cond.calificacion:5.0;
@@ -650,7 +648,25 @@ function cargarAjustesGlobales(){state.config=JSON.parse(localStorage.getItem('k
 
 function guardarAjustesGlobales(){const np=document.getElementById('cfg-admin-pass').value.trim();if(np)state.config.adminPass=np;const nm=document.getElementById('cfg-admin-master').value.trim();if(nm)state.config.adminMaster=nm;state.config.valorSuscripcion=parseInt(document.getElementById('cfg-valor-sus').value)||45000;state.config.nequi=document.getElementById('cfg-nequi').value.trim()||"3143842007";state.config.whatsapp=document.getElementById('cfg-whatsapp').value.trim()||"3507690951";state.config.picoPlacaTexto=document.getElementById('cfg-pico-placa').value.trim()||picoPlacaPorDefecto;state.config.reglamentoTexto=document.getElementById('cfg-reglamento').value.trim()||reglamentoEsencialPorDefecto;guardarDatosLocal();actualizarTextosGlobales();alert("✅ ¡Ajustes guardados con éxito!");}
 
-window.onload=function(){verificarInactividadSesion();poblarSelectMunicipios();actualizarTextosGlobales();actualizarCampanitaServicios();if(state.rolGuardado==='cliente')irModulo('cliente');else if(state.rolGuardado==='transportador')irModulo('transportador');else if(state.rolGuardado==='central')irModuleNameIfNeeded();else if(state.rolGuardado==='central')irModulo('central');else if(state.rolGuardado==='afiliacion')irModulo('afiliacion');else mostrarSelectorRolManual();};
+window.onload=function(){
+verificarInactividadSesion();
+poblarSelectMunicipios();
+actualizarTextosGlobales();
+actualizarCampanitaServicios();
+
+// CORRECCIÓN: Si hay un rol guardado pero no hay sesión activa real o da conflicto, abrimos el selector por defecto para evitar pantallas en blanco
+if(state.rolGuardado==='cliente' && state.clienteActualDoc){
+irModulo('cliente');
+}else if(state.rolGuardado==='transportador' && state.transActualPlaca){
+irModulo('transportador');
+}else if(state.rolGuardado==='central'){
+irModulo('central');
+}else if(state.rolGuardado==='afiliacion'){
+irModulo('afiliacion');
+}else{
+mostrarSelectorRolManual();
+}
+};
 </script>
 </body>
 </html>
