@@ -112,8 +112,12 @@
                             <button type="button" id="btn-tipo-inter" onclick="setTipoZona('Intermunicipal')" class="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer"><span>🛣️ Intermunicipal</span></button>
                         </div>
                         <div>
-                            <label class="text-[11px] font-bold text-slate-300">Municipio Base / Origen</label>
+                            <label class="text-[11px] font-bold text-slate-300">Municipio de Origen (Salida)</label>
                             <select id="cli-mun-local" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select>
+                        </div>
+                        <div id="box-municipio-destino" class="hidden pt-1">
+                            <label class="text-[11px] font-bold text-orange-400">Municipio de Destino (Llegada)</label>
+                            <select id="cli-mun-destino" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select>
                         </div>
                     </div>
 
@@ -189,7 +193,7 @@
             </div>
         </div>
 
-        <!-- 2. MÓDULO TRANSPORTADOR PROFESIONAL (BLINDADO CON PLACA + CONTRASEÑA) -->
+        <!-- 2. MÓDULO TRANSPORTADOR PROFESIONAL -->
         <div id="view-transportador" class="space-y-4 hidden">
             <div id="trans-login" class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-xl text-center space-y-3">
                 <div class="text-4xl">🏍️</div>
@@ -211,14 +215,11 @@
             </div>
 
             <div id="trans-dashboard" class="hidden space-y-3">
-                
-                <!-- BANNER DE FELICITACIÓN / BONO ACTIVO PARA EL TRANSPORTADOR -->
                 <div id="trans-banner-premio" class="hidden bg-gradient-to-r from-amber-600/30 to-orange-600/30 border-2 border-amber-500 p-4 rounded-2xl shadow-xl space-y-1 text-center">
                     <p class="text-sm font-black text-amber-400">🎉 ¡Felicitaciones! Bono Estrellas Recibido</p>
                     <p id="trans-texto-premio" class="text-xs text-slate-200 font-medium">La Central te ha premiado con días adicionales por tu excelente servicio.</p>
                 </div>
 
-                <!-- BANNER PROFESIONAL DE MOTIVACIÓN COLECTIVA -->
                 <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 shadow-md text-xs space-y-1 text-center">
                     <p class="font-black text-orange-400">📊 Reconocimiento a la Excelencia Kargass</p>
                     <p class="text-[11px] text-slate-300 font-medium">Durante este periodo, varios transportadores alcanzaron el estándar de 5 estrellas ⭐ y acceso a bonificaciones. ¡Tú también puedes sumar días extra manteniendo un servicio de primera calidad!</p>
@@ -338,7 +339,7 @@
             </div>
         </div>
 
-        <!-- 3. MÓDULO AFILIACIÓN PROFESIONAL -->
+        <!-- 3. MÓDULO AFILIACIÓN -->
         <div id="view-afiliacion" class="space-y-4 hidden">
             <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 shadow-xl space-y-3 text-xs">
                 <div class="text-center space-y-1">
@@ -547,7 +548,7 @@
                     </div>
                 </div>
 
-                <!-- GESTIÓN DE TARIFAS POR MUNICIPIO Y MÓDULO -->
+                <!-- GESTIÓN DE TARIFAS -->
                 <div id="a-content-tarifas" class="space-y-3 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
                         <h3 class="font-black text-sm text-orange-400">📍 Seleccionar Municipio para Tarifas</h3>
@@ -588,7 +589,7 @@
                     </div>
                 </div>
 
-                <!-- AJUSTES GLOBALES -->
+                <!-- AJUSTES GLOBALES Y RESPALDO -->
                 <div id="a-content-ajustes" class="space-y-3 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
                         <h3 class="font-black text-sm text-orange-400">⚙️ Ajustes y Configuración Global</h3>
@@ -626,6 +627,28 @@
                     </div>
 
                     <button onclick="guardarAjustesGlobales()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white shadow cursor-pointer uppercase tracking-wider">💾 Guardar Todos los Ajustes</button>
+
+                    <!-- SECCIÓN DE COPIAS DE SEGURIDAD (BACKUP) -->
+                    <div class="bg-slate-800 p-4 rounded-2xl border-2 border-orange-500/50 space-y-3 text-xs mt-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-2xl">🛡️</span>
+                            <div>
+                                <h3 class="font-black text-sm text-orange-400">Copias de Seguridad (Respaldo de Datos)</h3>
+                                <p class="text-[10px] text-slate-300">Protege tu base de datos de transportadores y servicios ante limpieza de caché o cambios de celular.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 pt-1">
+                            <button onclick="descargarRespaldoJSON()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 px-2 rounded-xl text-center cursor-pointer shadow flex items-center justify-center space-x-1">
+                                <span>📥</span><span>Descargar Respaldo</span>
+                            </button>
+                            <button onclick="document.getElementById('input-archivo-backup').click()" class="bg-blue-600 hover:bg-blue-700 text-white font-black py-3 px-2 rounded-xl text-center cursor-pointer shadow flex items-center justify-center space-x-1">
+                                <span>📂</span><span>Restaurar Datos</span>
+                            </button>
+                            <input type="file" id="input-archivo-backup" accept=".json" class="hidden" onchange="restaurarRespaldoJSON(event)">
+                        </div>
+                        <p class="text-[10px] text-slate-400 italic text-center">💡 Tip: Descarga una copia de seguridad cada semana para mantener tus datos seguros.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -799,6 +822,52 @@
             }
         }
 
+        function descargarRespaldoJSON() {
+            const datosBackup = {
+                cargas: state.cargas,
+                conductores: state.conductores,
+                tarifasPorMunicipio: state.tarifasPorMunicipio,
+                config: state.config,
+                fechaRespaldo: new Date().toISOString()
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(datosBackup, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `kargass_backup_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            alert("✅ ¡Copia de seguridad descargada con éxito!");
+        }
+
+        function restaurarRespaldoJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const contenido = JSON.parse(e.target.result);
+                    if (contenido.cargas && contenido.conductores && contenido.config) {
+                        state.cargas = contenido.cargas;
+                        state.conductores = contenido.conductores;
+                        if (contenido.tarifasPorMunicipio) state.tarifasPorMunicipio = contenido.tarifasPorMunicipio;
+                        state.config = contenido.config;
+                        
+                        guardarDatosLocal();
+                        alert("✅ ¡Datos restaurados con éxito! La plataforma se actualizará.");
+                        location.reload();
+                    } else {
+                        alert("❌ El archivo seleccionado no tiene el formato correcto de respaldo Kargass.");
+                    }
+                } catch (err) {
+                    alert("❌ Error al leer el archivo JSON.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
         function poblarSelectMunicipios() {
             document.querySelectorAll('.select-municipios').forEach(sel => {
                 const actual = sel.value || "Acacías";
@@ -925,12 +994,16 @@
             state.tipoZona = tipo;
             const btnU = document.getElementById('btn-tipo-urbano');
             const btnI = document.getElementById('btn-tipo-inter');
+            const boxDestino = document.getElementById('box-municipio-destino');
+
             if (tipo === 'Local (Urbano)') {
                 btnU.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
                 btnI.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+                if(boxDestino) boxDestino.classList.add('hidden');
             } else {
                 btnI.className = "btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
                 btnU.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";
+                if(boxDestino) boxDestino.classList.remove('hidden');
             }
         }
 
@@ -1013,13 +1086,17 @@
             const horaCargue = state.horarioTipo === 'Inmediato' ? '⚡ Cargue Inmediato' : '⏰ Programado: ' + (document.getElementById('cli-hora-input').value || 'Acordado');
             const fechaHoyObj = new Date();
 
+            const municipioOrigen = document.getElementById('cli-mun-local').value;
+            const municipioDestinoVal = (state.tipoZona === 'Intermunicipal') ? document.getElementById('cli-mun-destino').value : municipioOrigen;
+
             const nuevaCarga = {
                 id: Date.now(),
                 clienteDoc: state.clienteActualDoc,
                 clienteNombre: nombre,
                 clienteTel: tel,
                 tipoZona: state.tipoZona,
-                municipio: document.getElementById('cli-mun-local').value,
+                municipio: municipioOrigen,
+                municipioDestino: municipioDestinoVal,
                 horario: horaCargue,
                 vehiculo: document.getElementById('cli-vehiculo').value,
                 peso: peso,
@@ -1062,11 +1139,12 @@
             }
             el.innerHTML = mis.map(c => {
                 const yaAsignadoOConOfertaAceptada = (c.conductorAsignadoPlaca != null || c.estado.startsWith("Asignado"));
+                const labelRutaInfo = c.tipoZona === 'Intermunicipal' ? `[${c.municipio} ➔ ${c.municipioDestino}]` : `[${c.municipio}]`;
 
                 return `
                 <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-lg">
                     <div class="flex justify-between items-start border-b border-slate-700 pb-1.5">
-                        <span class="bg-orange-500/20 text-orange-400 font-black px-2 py-0.5 rounded-lg text-[10px]">${c.tipoZona}</span>
+                        <span class="bg-orange-500/20 text-orange-400 font-black px-2 py-0.5 rounded-lg text-[10px]">${c.tipoZona} ${labelRutaInfo}</span>
                         <span class="text-orange-400 font-black text-[11px]">${c.estado}</span>
                     </div>
                     <p class="font-black text-white">📦 ${c.origen} ➔ ${c.destino}</p>
@@ -1167,7 +1245,7 @@
             }
         }
 
-        // TRANSPORTADOR JS (BLINDADO CON CONTRASEÑA)
+        // TRANSPORTADOR JS
         function verificarTransportadorLogin() {
             const placa = document.getElementById('trans-placa-input').value.trim().toUpperCase();
             const pass = document.getElementById('trans-pass-input').value.trim();
@@ -1185,7 +1263,6 @@
                 return;
             }
 
-            // Validar contraseña o cédula por defecto
             const claveReal = cond.password || cond.doc;
             if (pass !== claveReal) {
                 alert("❌ Contraseña incorrecta. Recuerda que por defecto es tu número de cédula.");
@@ -1378,22 +1455,35 @@
 
         function renderCargasDisponiblesTrans() {
             state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
+            state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
+            const conductorActual = state.conductores.find(c => c.placa === state.transActualPlaca);
+            const municipioConductor = conductorActual ? conductorActual.municipio : "Acacías";
+
             const el = document.getElementById('lista-cargas-disponibles');
             if (!el) return;
             
-            if (state.cargas.length === 0) {
-                el.innerHTML = '<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay acarreos disponibles en este momento.</div>';
+            const cargasVisibles = state.cargas.filter(c => {
+                if (c.tipoZona === 'Local (Urbano)') {
+                    return c.municipio === municipioConductor;
+                } else {
+                    return c.municipio === municipioConductor || c.municipioDestino === municipioConductor;
+                }
+            });
+
+            if (cargasVisibles.length === 0) {
+                el.innerHTML = '<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay acarreos disponibles para tu municipio en este momento.</div>';
                 return;
             }
 
-            el.innerHTML = state.cargas.map(c => {
+            el.innerHTML = cargasVisibles.map(c => {
                 const esAsignadoAceptado = (c.conductorAsignadoPlaca === state.transActualPlaca);
                 const yaAsignadoOConOfertaAceptada = (c.conductorAsignadoPlaca != null || c.estado.startsWith("Asignado"));
+                const labelRuta = c.tipoZona === 'Intermunicipal' ? `📍 Intermunicipal: ${c.municipio} ➔ ${c.municipioDestino}` : `📍 ${c.municipio} (Urbano)`;
 
                 return `
                 <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-md">
                     <div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1">
-                        <span>📍 ${c.municipio} (${c.tipoZona})</span>
+                        <span>${labelRuta}</span>
                         <span>🛺 ${c.vehiculo}</span>
                     </div>
                     <p class="font-black text-white text-sm">${c.origen} ➔ ${c.destino}</p>
@@ -1498,7 +1588,7 @@
 
             state.conductores.push({ 
                 placa, 
-                password: doc, // Contraseña inicial igual a la cédula
+                password: doc, 
                 nombre, 
                 doc, 
                 tel, 
@@ -1624,11 +1714,12 @@
 
             el.innerHTML = state.cargas.map(c => {
                 const yaAsignado = (c.conductorAsignadoPlaca != null || c.estado.startsWith("Asignado"));
+                const labelRutaAdmin = c.tipoZona === 'Intermunicipal' ? `[${c.municipio} ➔ ${c.municipioDestino}]` : `[${c.municipio}]`;
 
                 return `
                 <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-2 shadow-md">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-1">
-                        <span class="font-bold text-orange-400">[${c.municipio}] ${c.clienteNombre} (${c.clienteTel})</span>
+                        <span class="font-bold text-orange-400">${labelRutaAdmin} ${c.clienteNombre} (${c.clienteTel})</span>
                         <div class="space-x-1">
                             <a href="https://wa.me/57${c.clienteTel}?text=Hola%20${c.clienteNombre},%20te%20contacto%20de%20la%20Central%20Kargass." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded text-white font-bold inline-block">WhatsApp</a>
                             <button onclick="abrirEditarServicio(${c.id})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Editar</button>
@@ -1840,7 +1931,6 @@
             alert("✅ ¡Archivo CSV de Excel generado y descargado con éxito!");
         }
 
-        // GESTIÓN DE TARIFAS POR MUNICIPIO Y MÓDULO EN ADMIN
         function inicializarSelectMunicipioTarifasAdmin() {
             const sel = document.getElementById('admin-tarifa-municipio-sel');
             if(!sel) return;
@@ -2155,7 +2245,6 @@
             poblarSelectMunicipios();
             actualizarTextosGlobales();
 
-            // MANTENER LA VISTA EXACTA AL REFRESCAR LA PÁGINA
             if (state.rolGuardado === 'cliente') {
                 irModulo('cliente');
             } else if (state.rolGuardado === 'transportador') {
