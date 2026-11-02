@@ -457,18 +457,23 @@ function publicarSolicitudCliente(){
   const peso=document.getElementById('cli-peso').value.trim();
   const origen=document.getElementById('cli-origen').value.trim();
   const destino=document.getElementById('cli-destino').value.trim();
-  
+  const municipioOrigen=document.getElementById('cli-mun-local').value;
+  const municipioDestinoVal=(state.tipoZona==='Intermunicipal')?document.getElementById('cli-mun-destino').value:municipioOrigen;
+
+  // Validación estricta anti-fantasmas y errores intermunicipales
   if(!nombre||!tel||!peso||!origen||!destino){
-    alert("⚠️ Completa todos los campos requeridos.");
+    alert("⚠️ Debes completar todos los campos obligatorios.");
     return;
   }
   
+  if(state.tipoZona==='Intermunicipal' && municipioOrigen===municipioDestinoVal){
+    alert("⚠️ Error: En un servicio Intermunicipal el municipio de origen y de destino no pueden ser iguales. Selecciona un destino diferente.");
+    return;
+  }
+
   localStorage.setItem('kargass_memoria_cli_'+state.clienteActualDoc,JSON.stringify({nombre,tel}));
   const horaCargue=state.horarioTipo==='Inmediato'?'⚡ Cargue Inmediato':'⏰ Programado: '+(document.getElementById('cli-hora-input').value||'Acordado');
   const fechaHoyObj=new Date();
-  
-  const municipioOrigen=document.getElementById('cli-mun-local').value;
-  const municipioDestinoVal=(state.tipoZona==='Intermunicipal')?document.getElementById('cli-mun-destino').value:municipioOrigen;
 
   const nuevaCarga={
     id:Date.now(),
@@ -619,7 +624,29 @@ function renderCargasDisponiblesTrans(){
     const esAsignadoAceptado=(c.conductorAsignadoPlaca===state.transActualPlaca);
     const yaAsignadoOConOfertaAceptada=(c.conductorAsignadoPlaca!=null||c.estado.startsWith("Asignado"));
     const labelRuta=c.tipoZona==='Intermunicipal'?`📍 Intermunicipal: ${c.municipio} ➔ ${c.municipioDestino}`:`📍 ${c.municipio} (Urbano)`;
-    return`<div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-md"><div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1"><span>${labelRuta}</span><span>🛺 ${c.vehiculo}</span></div><p class="font-black text-white text-sm">${c.origen} ➔ ${c.destino}</p><p class="text-slate-300"><b>Carga:</b> ${c.peso} | <b>Horario:</b> ${c.horario}</p><p class="text-orange-300 font-bold">Estado actual: ${c.estado}</p>${c.observaciones?`<p class="text-slate-400 italic">"${c.observaciones}"</p>`:''}${c.foto?`<div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')"><img src="${c.foto}" class="w-full h-44 object-contain bg-slate-950 rounded-xl border border-slate-700"><div class="absolute bottom-2 right-2 bg-slate-900/90 text-orange-400 font-bold text-[10px] px-2 py-1 rounded-lg border border-slate-700">🔍 Toca para ver foto completa</div></div>`:''}${yaAsignadoOConOfertaAceptada?'':`<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2"><label class="font-bold text-slate-300">Enviar Cotización de Flete (COP):</label><div class="flex space-x-2"><input type="text" id="input-oferta-${c.id}" placeholder="Ej: 35000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs"><button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Cotización</button></div></div>`}${esAsignadoAceptado?`<div class="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/50 space-y-1 mt-2 text-center"><p class="text-emerald-400 font-black">🎉 ¡Tu oferta fue aceptada por el cliente!</p><a href="https://wa.me/57${c.clienteTel}?text=`+encodeURIComponent("Hola "+c.clienteNombre+", fui el transportador seleccionado in Kargass.")+`" target="_blank" class="block bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white shadow cursor-pointer">💬 Iniciar WhatsApp Directo con el Cliente</a></div>`:''}</div>`;
+    
+    // Generar enlace interactivo si el origen o destino tiene coordenadas GPS
+    let origenHtml = c.origen;
+    if(c.origen.includes("GPS:")){
+      const coords = c.origen.replace("GPS:", "").trim();
+      origenHtml = `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(coords)}" target="_blank" class="text-orange-400 font-black underline flex items-center gap-1">📍 Abrir GPS en Maps (${coords})</a>`;
+    }
+
+    return`<div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-md">
+      <div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1">
+        <span>${labelRuta}</span><span>🛺 ${c.vehiculo}</span>
+      </div>
+      <div class="space-y-1">
+        <p class="font-black text-white text-sm">Origen: ${origenHtml}</p>
+        <p class="font-black text-white text-sm">Destino: ${c.destino}</p>
+      </div>
+      <p class="text-slate-300"><b>Carga:</b> ${c.peso} | <b>Horario:</b> ${c.horario}</p>
+      <p class="text-orange-300 font-bold">Estado actual: ${c.estado}</p>
+      ${c.observaciones?`<p class="text-slate-400 italic">"${c.observaciones}"</p>`:''}
+      ${c.foto?`<div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')"><img src="${c.foto}" class="w-full h-44 object-contain bg-slate-950 rounded-xl border border-slate-700"><div class="absolute bottom-2 right-2 bg-slate-900/90 text-orange-400 font-bold text-[10px] px-2 py-1 rounded-lg border border-slate-700">🔍 Toca para ver foto completa</div></div>`:''}
+      ${yaAsignadoOConOfertaAceptada?'':`<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2"><label class="font-bold text-slate-300">Enviar Cotización de Flete (COP):</label><div class="flex space-x-2"><input type="text" id="input-oferta-${c.id}" placeholder="Ej: 35000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs"><button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Cotización</button></div></div>`}
+      ${esAsignadoAceptado?`<div class="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/50 space-y-1 mt-2 text-center"><p class="text-emerald-400 font-black">🎉 ¡Tu oferta fue aceptada por el cliente!</p><a href="https://wa.me/57${c.clienteTel}?text=`+encodeURIComponent("Hola "+c.clienteNombre+", fui el transportador seleccionado en Kargass.")+`" target="_blank" class="block bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white shadow cursor-pointer">💬 Iniciar WhatsApp Directo con el Cliente</a></div>`:''}
+    </div>`;
   }).join('');
 }
 
