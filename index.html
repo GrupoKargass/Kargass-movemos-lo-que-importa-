@@ -284,16 +284,17 @@
 </div>
 <div id="a-content-tarifas" class="space-y-3 hidden">
 <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs"><h3 class="font-black text-sm text-orange-400">📍 Seleccionar Municipio para Tarifas</h3><select id="admin-tarifa-municipio-sel" onchange="renderAdminTarifas()" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-black select-municipios outline-none text-xs"></select></div>
-<div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
+<div id="box-form-tarifa-admin" class="bg-slate-800 p-4 rounded-2xl border-2 border-slate-700 space-y-3 text-xs shadow-xl transition-all duration-300">
 <h3 class="font-black text-sm text-orange-400" id="admin-tarifa-form-title">⚙️ Añadir Tarifa Oficial</h3>
 <input type="hidden" id="admin-tarifa-edit-idx" value="-1">
+<input type="hidden" id="admin-tarifa-orig-cat" value="">
 <div class="space-y-2">
 <div><label class="text-[11px] font-bold text-slate-300">Módulo / Categoría</label><select id="admin-tarifa-cat" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold"><option value="urbano">🏠 Urbanos</option><option value="veredas">🛣️ Veredas</option><option value="municipios">🚙 Municipios</option></select></div>
 <div><label class="text-[11px] font-bold text-slate-300">Nombre de la Ruta / Destino</label><input type="text" id="admin-tarifa-nombre" placeholder="Ej: Vereda La Palmita" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold"></div>
 <div><label class="text-[11px] font-bold text-slate-300">Valor Flete (COP)</label><input type="text" id="admin-tarifa-val" placeholder="Ej: $45.000" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold"></div>
 <div class="flex space-x-2 pt-1">
 <button onclick="guardarNuevaTarifaAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow cursor-pointer">💾 Guardar Tarifa</button>
-<button onclick="limpiarFormTarifaAdmin()" class="bg-slate-700 hover:bg-slate-600 px-3 py-2.5 rounded-xl text-slate-200 font-bold cursor-pointer">Limpiar</button>
+<button type="button" onclick="limpiarFormTarifaAdmin()" class="bg-slate-700 hover:bg-slate-600 px-3 py-2.5 rounded-xl text-slate-200 font-bold cursor-pointer">Limpiar</button>
 </div>
 </div>
 </div>
@@ -484,7 +485,7 @@ function switchSubTabTarifas(sub){registrarActividadUsuario();['urbano','veredas
 
 function renderTarifasTransportador(municipioConductor){state.tarifasPorMunicipio=JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||state.tarifasPorMunicipio;const tarifasMun=state.tarifasPorMunicipio[municipioConductor]||tarifasBaseAcacias;['urbano','veredas','municipios'].forEach(cat=>{const contenedor=document.getElementById(`contenedor-tarifas-${cat}`);if(!contenedor)return;const items=tarifasMun[cat]||[];contenedor.innerHTML=items.length===0?`<p class="text-slate-400 text-center py-2">Sin tarifas.</p>`:items.map(t=>`<div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700"><span>${t.ruta}</span><span class="font-black text-orange-400">${t.valor}</span></div>`).join('');});}
 
-function renderCargasDisponiblesTrans(){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;const conductorActual=state.conductores.find(c=>c.placa===state.transActualPlaca);const municipioConductor=conductorActual?conductorActual.municipio:"Acacías";const el=document.getElementById('lista-cargas-disponibles');if(!el)return;const cargasVisibles=state.cargas.filter(c=>{if(c.tipoZona==='Local (Urbano)'){return c.municipio===municipioConductor;}else{return c.municipio===municipioConductor||c.municipioDestino===municipioConductor;}});if(cargasVisibles.length===0){el.innerHTML='<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay acarreos disponibles para tu municipio en este momento.</div>';return;}el.innerHTML=cargasVisibles.map(c=>{const esAsignadoAceptado=(c.conductorAsignadoPlaca===state.transActualPlaca);const yaAsignadoOConOfertaAceptada=(c.conductorAsignadoPlaca!=null||c.estado.startsWith("Asignado"));const labelRuta=c.tipoZona==='Intermunicipal'?`📍 Intermunicipal: ${c.municipio} ➔ ${c.municipioDestino}`:`📍 ${c.municipio} (Urbano)`;return`<div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-md"><div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1"><span>${labelRuta}</span><span>🛺 ${c.vehiculo}</span></div><p class="font-black text-white text-sm">${c.origen} ➔ ${c.destino}</p><p class="text-slate-300"><b>Carga:</b> ${c.peso} | <b>Horario:</b> ${c.horario}</p><p class="text-orange-300 font-bold">Estado actual: ${c.estado}</p>${c.observaciones?`<p class="text-slate-400 italic">"${c.observaciones}"</p>`:''}${c.foto?`<div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')"><img src="${c.foto}" class="w-full h-44 object-contain bg-slate-950 rounded-xl border border-slate-700"><div class="absolute bottom-2 right-2 bg-slate-900/90 text-orange-400 font-bold text-[10px] px-2 py-1 rounded-lg border border-slate-700">🔍 Toca para ver foto completa</div></div>`:''}${yaAsignadoOConOfertaAceptada?'':`<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2"><label class="font-bold text-slate-300">Enviar Cotización de Flete (COP):</label><div class="flex space-x-2"><input type="text" id="input-oferta-${c.id}" placeholder="Ej: 35000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs"><button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Cotización</button></div></div>`}${esAsignadoAceptado?`<div class="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/50 space-y-1 mt-2 text-center"><p class="text-emerald-400 font-black">🎉 ¡Tu oferta fue aceptada por el cliente!</p><a href="https://wa.me/57${c.clienteTel}?text=`+encodeURIComponent("Hola "+c.clienteNombre+", fui el transportador seleccionado en Kargass.")+`" target="_blank" class="block bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white shadow cursor-pointer">💬 Iniciar WhatsApp Directo con el Cliente</a></div>`:''}</div>`;}).join('');}
+function renderCargasDisponiblesTrans(){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;const conductorActual=state.conductores.find(c=>c.placa===state.transActualPlaca);const municipioConductor=conductorActual?conductorActual.municipio:"Acacías";const el=document.getElementById('lista-cargas-disponibles');if(!el)return;const cargasVisibles=state.cargas.filter(c=>{if(c.tipoZona==='Local (Urbano)'){return c.municipio===municipioConductor;}else{return c.municipio===municipioConductor||c.municipioDestino===municipioConductor;}});if(cargasVisibles.length===0){el.innerHTML='<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay acarreos disponibles para tu municipio en este momento.</div>';return;}el.innerHTML=cargasVisibles.map(c=>{const esAsignadoAceptado=(c.conductorAsignadoPlaca===state.transActualPlaca);const yaAsignadoOConOfertaAceptada=(c.conductorAsignadoPlaca!=null||c.estado.startsWith("Asignado"));const labelRuta=c.tipoZona==='Intermunicipal'?`📍 Intermunicipal: ${c.municipio} ➔ ${c.municipioDestino}`:`📍 ${c.municipio} (Urbano)`;return`<div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow-md"><div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1"><span>${labelRuta}</span><span>🛺 ${c.vehiculo}</span></div><p class="font-black text-white text-sm">${c.origen} ➔ ${c.destino}</p><p class="text-slate-300"><b>Carga:</b> ${c.peso} | <b>Horario:</b> ${c.horario}</p><p class="text-orange-300 font-bold">Estado actual: ${c.estado}</p>${c.observaciones?`<p class="text-slate-400 italic">"${c.observaciones}"</p>`:''}${c.foto?`<div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')"><img src="${c.foto}" class="w-full h-44 object-contain bg-slate-950 rounded-xl border border-slate-700"><div class="absolute bottom-2 right-2 bg-slate-900/90 text-orange-400 font-bold text-[10px] px-2 py-1 rounded-lg border border-slate-700">🔍 Toca para ver foto completa</div></div>`:''}${yaAsignadoOConOfertaAceptada?'':`<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2"><label class="font-bold text-slate-300">Enviar Cotización de Flete (COP):</label><div class="flex space-x-2"><input type="text" id="input-oferta-${c.id}" placeholder="Ej: 35000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs"><button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Cotización</button></div></div>`}${esAsignadoAceptado?`<div class="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/50 space-y-1 mt-2 text-center"><p class="text-emerald-400 font-black">🎉 ¡Tu oferta fue aceptada por el cliente!</p><a href="https://wa.me/57${c.clienteTel}?text=`+encodeURIComponent("Hola "+c.clienteNombre+", fui el transportador seleccionado in Kargass.")+`" target="_blank" class="block bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white shadow cursor-pointer">💬 Iniciar WhatsApp Directo con el Cliente</a></div>`:''}</div>`;}).join('');}
 
 function renderHistorialTransportador(){
 state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];
@@ -542,13 +543,63 @@ function inicializarSelectMunicipioTarifasAdmin(){const sel=document.getElementB
 
 function renderAdminTarifas(){state.tarifasPorMunicipio=JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||state.tarifasPorMunicipio;const munSel=document.getElementById('admin-tarifa-municipio-sel').value||"Acacías";if(!state.tarifasPorMunicipio[munSel])state.tarifasPorMunicipio[munSel]={urbano:[],veredas:[],municipios:[]};const tarifasMun=state.tarifasPorMunicipio[munSel];const el=document.getElementById('admin-lista-tarifas');if(!el)return;let html='';['urbano','veredas','municipios'].forEach(cat=>{const items=tarifasMun[cat]||[];const tCat=cat==='urbano'?'🏠 Urbanas':(cat==='veredas'?'🛣️ Veredales':'🚙 Municipios');html+=`<div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2"><p class="font-black text-orange-400 uppercase text-xs">${tCat}</p>`;html+=items.length===0?`<p class="text-slate-400 text-[11px] italic">Sin tarifas.</p>`:items.map((t,idx)=>`<div class="flex justify-between items-center bg-slate-800 p-2 rounded border border-slate-700 text-[11px]"><span>${t.ruta} - <b class="text-orange-400">${t.valor}</b></span><div class="space-x-1"><button onclick="editarTarifaAdmin('${munSel}','${cat}',${idx})" class="bg-blue-600 px-2 py-0.5 rounded text-white font-bold cursor-pointer">Editar</button><button onclick="eliminarTarifaAdmin('${munSel}','${cat}',${idx})" class="bg-red-600 px-2 py-0.5 rounded text-white font-bold cursor-pointer">Eliminar</button></div></div>`).join('');html+=`</div>`;});el.innerHTML=html;}
 
-function guardarNuevaTarifaAdmin(){const munSel=document.getElementById('admin-tarifa-municipio-sel').value;const cat=document.getElementById('admin-tarifa-cat').value;const ruta=document.getElementById('admin-tarifa-nombre').value.trim();const val=document.getElementById('admin-tarifa-val').value.trim();const editIdx=parseInt(document.getElementById('admin-tarifa-edit-idx').value);if(!ruta||!val){alert("Completa ruta y valor");return;}state.tarifasPorMunicipio=JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||state.tarifasPorMunicipio;if(!state.tarifasPorMunicipio[munSel])state.tarifasPorMunicipio[munSel]={urbano:[],veredas:[],municipios:[]};if(editIdx>=0){state.tarifasPorMunicipio[munSel][cat][editIdx]={id:Date.now(),ruta,valor:val};}else{state.tarifasPorMunicipio[munSel][cat].push({id:Date.now(),ruta,valor:val});}guardarDatosLocal();limpiarFormTarifaAdmin();renderAdminTarifas();alert("✅ Guardado");}
+function guardarNuevaTarifaAdmin(){
+const munSel=document.getElementById('admin-tarifa-municipio-sel').value;
+const cat=document.getElementById('admin-tarifa-cat').value;
+const ruta=document.getElementById('admin-tarifa-nombre').value.trim();
+const val=document.getElementById('admin-tarifa-val').value.trim();
+const editIdx=parseInt(document.getElementById('admin-tarifa-edit-idx').value);
+const origCat=document.getElementById('admin-tarifa-orig-cat').value;
+if(!ruta||!val){alert("Completa ruta y valor");return;}
+state.tarifasPorMunicipio=JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||state.tarifasPorMunicipio;
+if(!state.tarifasPorMunicipio[munSel])state.tarifasPorMunicipio[munSel]={urbano:[],veredas:[],municipios:[]};
 
-function editarTarifaAdmin(mun,cat,idx){document.getElementById('admin-tarifa-municipio-sel').value=mun;document.getElementById('admin-tarifa-cat').value=cat;state.tarifasPorMunicipio=JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||state.tarifasPorMunicipio;const t=state.tarifasPorMunicipio[mun][cat][idx];document.getElementById('admin-tarifa-nombre').value=t.ruta;document.getElementById('admin-tarifa-val').value=t.valor;document.getElementById('admin-tarifa-edit-idx').value=idx;document.getElementById('admin-tarifa-form-title').innerText=`✏️ Editar Tarifa`;}
+if(editIdx>=0){
+// Si se editó y posiblemente cambió de categoría, removemos la vieja y agregamos la nueva limpia
+if(origCat && state.tarifasPorMunicipio[munSel][origCat]){
+state.tarifasPorMunicipio[munSel][origCat].splice(editIdx,1);
+}
+state.tarifasPorMunicipio[munSel][cat].push({id:Date.now(),ruta,valor:val});
+}else{
+state.tarifasPorMunicipio[munSel][cat].push({id:Date.now(),ruta,valor:val});
+}
+guardarDatosLocal();
+limpiarFormTarifaAdmin();
+renderAdminTarifas();
+alert("✅ Tarifa guardada y movida con éxito");
+}
+
+function editarTarifaAdmin(mun,cat,idx){
+document.getElementById('admin-tarifa-municipio-sel').value=mun;
+document.getElementById('admin-tarifa-cat').value=cat;
+state.tarifasPorMunicipio=JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||state.tarifasPorMunicipio;
+const t=state.tarifasPorMunicipio[mun][cat][idx];
+document.getElementById('admin-tarifa-nombre').value=t.ruta;
+document.getElementById('admin-tarifa-val').value=t.valor;
+document.getElementById('admin-tarifa-edit-idx').value=idx;
+document.getElementById('admin-tarifa-orig-cat').value=cat;
+
+const boxForm=document.getElementById('box-form-tarifa-admin');
+const formTitle=document.getElementById('admin-tarifa-form-title');
+formTitle.innerText=`✏️ Editando Tarifa`;
+boxForm.classList.remove('border-slate-700');
+boxForm.classList.add('border-orange-500');
+boxForm.scrollIntoView({behavior:'smooth',block:'center'});
+document.getElementById('admin-tarifa-nombre').focus();
+}
 
 function eliminarTarifaAdmin(mun,cat,idx){if(confirm("¿Eliminar?")){state.tarifasPorMunicipio=JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||state.tarifasPorMunicipio;state.tarifasPorMunicipio[mun][cat].splice(idx,1);guardarDatosLocal();renderAdminTarifas();}}
 
-function limpiarFormTarifaAdmin(){document.getElementById('admin-tarifa-nombre').value='';document.getElementById('admin-tarifa-val').value='';document.getElementById('admin-tarifa-edit-idx').value='-1';document.getElementById('admin-tarifa-form-title').innerText="⚙️ Añadir Tarifa Oficial";}
+function limpiarFormTarifaAdmin(){
+document.getElementById('admin-tarifa-nombre').value='';
+document.getElementById('admin-tarifa-val').value='';
+document.getElementById('admin-tarifa-edit-idx').value='-1';
+document.getElementById('admin-tarifa-orig-cat').value='';
+document.getElementById('admin-tarifa-form-title').innerText="⚙️ Añadir Tarifa Oficial";
+const boxForm=document.getElementById('box-form-tarifa-admin');
+boxForm.classList.remove('border-orange-500');
+boxForm.classList.add('border-slate-700');
+}
 
 function renderAdminConductores(){
 state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
