@@ -17,7 +17,6 @@
 <div><h1 class="font-black text-lg tracking-wider text-white">KARGASS</h1><p class="text-[9px] text-orange-400 font-black tracking-wide">GRUPO KARGASS • META</p></div>
 </div>
 <div class="flex items-center space-x-2">
-<!-- CAMPANITA CON CONTADOR -->
 <div id="header-bell-box" class="relative hidden cursor-pointer" onclick="switchTabTrans('servicios')" title="Servicios Disponibles">
 <button class="bg-slate-700 hover:bg-slate-600 p-2 rounded-xl border border-slate-600 text-slate-200 text-lg flex items-center justify-center shadow-md">🔔</button>
 <span id="bell-badge-count" class="absolute -top-1.5 -right-1.5 bg-red-600 text-white font-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-slate-800 shadow animate-bounce">0</span>
@@ -196,9 +195,10 @@
 <h4 class="font-black text-orange-400">📝 Formulario de Postulación</h4>
 <div><label class="text-[11px] font-bold text-slate-300">Nombre Completo</label><input type="text" id="af-nombre" placeholder="Tu nombre" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
 <div class="grid grid-cols-2 gap-2">
-<div><label class="text-[11px] font-bold text-slate-300">Celular (Contraseña Inicial)</label><input type="number" id="af-doc" placeholder="Celular" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
-<div><label class="text-[11px] font-bold text-slate-300">Teléfono Celular</label><input type="tel" id="af-tel" placeholder="314..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
+<div><label class="text-[11px] font-bold text-slate-300">Número de Cédula</label><input type="number" id="af-doc" placeholder="Cédula" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
+<div><label class="text-[11px] font-bold text-slate-300">Contraseña Personal</label><input type="password" id="af-pass-nuevo" placeholder="Clave personal" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
 </div>
+<div><label class="text-[11px] font-bold text-slate-300">Teléfono Celular</label><input type="tel" id="af-tel" placeholder="314..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
 <div><label class="text-[11px] font-bold text-slate-300">Municipio Base de Operación</label><select id="af-municipio" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select></div>
 <div class="grid grid-cols-2 gap-2">
 <div><label class="text-[11px] font-bold text-slate-300">Tipo de Vehículo</label><select id="af-vehiculo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-black outline-none"><option value="Motocarguero sencillo">Motocarguero sencillo</option><option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option><option value="Camioneta">Camioneta</option><option value="Camión">Camión</option></select></div>
@@ -247,7 +247,10 @@
 <input type="hidden" id="admin-cond-idx" value="-1">
 <div class="space-y-2.5">
 <div><label class="text-[11px] font-bold text-slate-300">Nombre del Conductor</label><input type="text" id="adm-c-nombre" placeholder="Ej: Carlos Gómez" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none"></div>
-<div><label class="text-[11px] font-bold text-slate-300">Número de Celular / Contraseña</label><input type="number" id="adm-c-doc" placeholder="Ej: 3143842007" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none"></div>
+<div class="grid grid-cols-2 gap-2">
+<div><label class="text-[11px] font-bold text-slate-300">Número de Cédula</label><input type="number" id="adm-c-doc" placeholder="Cédula" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none"></div>
+<div><label class="text-[11px] font-bold text-slate-300">Contraseña Personal</label><input type="password" id="adm-c-pass" placeholder="Clave personal" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none"></div>
+</div>
 <div><label class="text-[11px] font-bold text-slate-300">Municipio Base de Operación</label><select id="adm-c-municipio" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select></div>
 <div><label class="text-[11px] font-bold text-slate-300">Tipo de Vehículo</label><select id="adm-c-vehiculo" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none"><option value="Motocarguero sencillo">Motocarguero sencillo</option><option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option><option value="Camioneta">Camioneta</option><option value="Camión">Camión</option></select></div>
 <div class="grid grid-cols-2 gap-2">
@@ -263,7 +266,11 @@
 </div>
 </div>
 </div>
-<div class="flex justify-between items-center pt-2"><h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Directorio General de Transportadores</h3></div>
+<div class="flex flex-col space-y-2 pt-2">
+<div class="flex justify-between items-center"><h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Directorio General de Transportadores</h3></div>
+<!-- BARRA DE BÚSQUEDA RÁPIDA DE PLACA O NOMBRE -->
+<div><input type="text" id="input-buscar-flota" placeholder="🔍 Buscar por Placa o Nombre..." oninput="renderAdminConductores()" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold text-xs outline-none focus:border-orange-500"></div>
+</div>
 <div id="admin-lista-conductores" class="space-y-2"></div>
 </div>
 <div id="a-content-historial" class="space-y-3 hidden">
@@ -366,9 +373,8 @@ const tarifasBaseAcacias={urbano:[{id:1,ruta:"Urbano",valor:"$25.000"},{id:2,rut
 const reglamentoEsencialPorDefecto=`REGLAMENTO OPERATIVO Y DE CONVIVENCIA – GRUPO KARGASS\n"Unidos hacemos más camino. En Grupo Kargass nuestra mayor herramienta es la confianza del cliente."\n\n1. Nuestra Carta de Presentación:\n• Trato amable, cordial y respetuoso con el cliente.\n• Vestimenta adecuada, limpia y profesional.\n• Cuidado del vehículo en higiene y mecánica.\n\n2. Compromiso con el Tiempo y la Puntualidad:\n• Puntualidad estricta en la hora de recogida acordada.\n• Evitar cancelaciones de último momento.\n\n3. Cuidado y Respeto Absoluto por la Carga:\n• Manipulación impecable de mercancías y trasteos.\n• Cobro transparente según tarifa cotizada en la app.\n\n4. Programa de Estrellas y Bonificaciones ⭐:\n• Promedio mínimo deseado: 4.5 a 5.0 estrellas.\n• Al sumar 15 servicios calificados con excelencia, la Central otorga días adicionales de suscripción mensual de regalo.`;
 const picoPlacaPorDefecto=`📅 Periodo: Vigente 2026.\n⏰ Horarios: De 6:30 a.m. a 9:30 a.m. y de 5:00 p.m. a 8:00 p.m.\n🗓️ Regla: Lunes a viernes (excepto festivos).`;
 
-let state={cargas:JSON.parse(localStorage.getItem('kargass_cargas'))||[],conductores:JSON.parse(localStorage.getItem('kargass_conductores'))||[{placa:"ABC123",password:"3100000000",nombre:"Conductor de Prueba ABC",doc:"3100000000",tel:"3100000000",vehiculo:"Motocarguero sencillo",marca:"AKT",cilindraje:"200cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null},{placa:"571AGU",password:"3143842007",nombre:"Daniel David Martínez Santamaría",doc:"3143842007",tel:"3143842007",vehiculo:"Motocarguero sencillo",marca:"Camello",cilindraje:"250cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null}],tarifasPorMunicipio:JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||{"Acacías":tarifasBaseAcacias},config:JSON.parse(localStorage.getItem('kargass_config_global'))||{adminPass:"1234",adminMaster:"KARGASS-RESCUE-2026",valorSuscripcion:45000,nequi:"3143842007",whatsapp:"3507690951",picoPlacaTexto:picoPlacaPorDefecto,reglamentoTexto:reglamentoEsencialPorDefecto},rolGuardado:localStorage.getItem('kargass_rol_activo_memoria')||null,clienteActualDoc:localStorage.getItem('kargass_cliente_doc_memoria')||null,transActualPlaca:localStorage.getItem('kargass_trans_placa_memoria')||null,isAdmin:false,tipoZona:"Local (Urbano)",horarioTipo:"Inmediato",fotoBase64:null,conteoServiciosAnterior:0};
+let state={cargas:JSON.parse(localStorage.getItem('kargass_cargas'))||[],conductores:JSON.parse(localStorage.getItem('kargass_conductores'))||[{placa:"ABC123",password:"3100000000",nombre:"Conductor de Prueba ABC",doc:"3100000000",tel:"3100000000",vehiculo:"Motocarguero sencillo",marca:"AKT",cilindraje:"200cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null},{placa:"571AGU",password:"3143842007",nombre:"Daniel David Martínez Santamaría",doc:"1122124473",tel:"3143842007",vehiculo:"Motocarguero sencillo",marca:"Camello",cilindraje:"250cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null}],tarifasPorMunicipio:JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||{"Acacías":tarifasBaseAcacias},config:JSON.parse(localStorage.getItem('kargass_config_global'))||{adminPass:"1234",adminMaster:"KARGASS-RESCUE-2026",valorSuscripcion:45000,nequi:"3143842007",whatsapp:"3507690951",picoPlacaTexto:picoPlacaPorDefecto,reglamentoTexto:reglamentoEsencialPorDefecto},rolGuardado:localStorage.getItem('kargass_rol_activo_memoria')||null,clienteActualDoc:localStorage.getItem('kargass_cliente_doc_memoria')||null,transActualPlaca:localStorage.getItem('kargass_trans_placa_memoria')||null,isAdmin:false,tipoZona:"Local (Urbano)",horarioTipo:"Inmediato",fotoBase64:null,conteoServiciosAnterior:0};
 
-// SINTETIZADOR AUDIO: DOBLE PITICO DE ALERTA CUANDO HAY SERVICIOS
 function emitirPitoDobleAlerta(){try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const now=ctx.currentTime;
 const osc1=ctx.createOscillator();const gain1=ctx.createGain();
 osc1.type='sine';osc1.frequency.setValueAtTime(900,now);osc1.frequency.exponentialRampToValueAtTime(1800,now+0.15);
@@ -485,7 +491,7 @@ function enviarOfertaTransportador(cargaId){registrarActividadUsuario();const ra
 
 function copiarNequi(){registrarActividadUsuario();navigator.clipboard.writeText(state.config.nequi);alert("✅ Número Nequi copiado: "+state.config.nequi);}
 
-function enviarPostulacion(){const nombre=document.getElementById('af-nombre').value.trim();const doc=document.getElementById('af-doc').value.trim();const tel=document.getElementById('af-tel').value.trim();const municipio=document.getElementById('af-municipio').value;const vehiculo=document.getElementById('af-vehiculo').value;const placa=document.getElementById('af-placa').value.trim().toUpperCase().replace(/\s+/g,'');const marca=document.getElementById('af-marca').value.trim();const cilindraje=document.getElementById('af-cilindraje').value.trim();const acepto=document.getElementById('af-check-reglamento').checked;if(!nombre||!doc||!tel||!placa||!marca||!cilindraje){alert("⚠️ Completa todos los campos.");return;}if(!acepto){alert("⚠️ Debes aceptar el reglamento.");return;}const fechaFutura=new Date();fechaFutura.setDate(fechaFutura.getDate()+30);state.conductores.push({placa,password:doc,nombre,doc,tel,municipio,vehiculo,marca,cilindraje,estado:"Pendiente",vencimiento:fechaFutura.toISOString().split('T')[0],calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null});guardarDatosLocal();alert("🚀 ¡Postulación enviada a la Central con éxito!");irModulo('central');}
+function enviarPostulacion(){const nombre=document.getElementById('af-nombre').value.trim();const doc=document.getElementById('af-doc').value.trim();const passNuevo=document.getElementById('af-pass-nuevo').value.trim();const tel=document.getElementById('af-tel').value.trim();const municipio=document.getElementById('af-municipio').value;const vehiculo=document.getElementById('af-vehiculo').value;const placa=document.getElementById('af-placa').value.trim().toUpperCase().replace(/\s+/g,'');const marca=document.getElementById('af-marca').value.trim();const cilindraje=document.getElementById('af-cilindraje').value.trim();const acepto=document.getElementById('af-check-reglamento').checked;if(!nombre||!doc||!passNuevo||!tel||!placa||!marca||!cilindraje){alert("⚠️ Completa todos los campos obligatorios.");return;}if(!acepto){alert("⚠️ Debes aceptar el reglamento.");return;}const fechaFutura=new Date();fechaFutura.setDate(fechaFutura.getDate()+30);state.conductores.push({placa,password:passNuevo,nombre,doc,tel,municipio,vehiculo,marca,cilindraje,estado:"Pendiente",vencimiento:fechaFutura.toISOString().split('T')[0],calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null});guardarDatosLocal();alert("🚀 ¡Postulación enviada a la Central con éxito!");irModulo('central');}
 
 function toggleVerPasswordAdminLogin(){const passInput=document.getElementById('admin-pass');passInput.type=passInput.type==="password"?"text":"password";}
 
@@ -529,13 +535,73 @@ function eliminarTarifaAdmin(mun,cat,idx){if(confirm("¿Eliminar?")){state.tarif
 
 function limpiarFormTarifaAdmin(){document.getElementById('admin-tarifa-nombre').value='';document.getElementById('admin-tarifa-val').value='';document.getElementById('admin-tarifa-edit-idx').value='-1';document.getElementById('admin-tarifa-form-title').innerText="⚙️ Añadir Tarifa Oficial";}
 
-function renderAdminConductores(){state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;const el=document.getElementById('admin-lista-conductores');if(!el)return;if(!state.conductores||state.conductores.length===0){el.innerHTML='<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin transportadores.</div>';return;}el.innerHTML=state.conductores.map((cond,idx)=>{const servicios=cond.serviciosCalificados||0;const cal=cond.calificacion!==undefined?cond.calificacion:5.0;const bono=(servicios>=5&&cal>=4.5);return`<div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-1.5 shadow"><div class="flex justify-between items-center"><p class="font-black text-white">${cond.nombre} (<span class="text-orange-400">${cond.placa}</span>)</p><span class="px-2 py-0.5 rounded text-[10px] font-bold ${cond.estado==='Activo'?'bg-green-500/20 text-green-400':'bg-amber-500/20 text-amber-400'}">${cond.estado}</span></div><p class="text-[11px] text-slate-300"><b>Ciudad:</b> <span class="text-orange-400 font-bold">${cond.municipio||'Acacías'}</span> • Tel: ${cond.tel}</p><p class="text-[11px] text-slate-300">Vence: <b class="text-orange-400">${cond.vencimiento||'N/A'}</b></p><p class="text-[11px] text-amber-400 font-bold">⭐ Estrellas: ${cal} | Calificados: ${servicios}</p>${bono?`<div class="bg-amber-950/40 p-2 rounded border border-amber-500/50 flex justify-between items-center text-[11px]"><span class="text-amber-300 font-bold">✨ ¡Candidato a Bono!</span><button onclick="otorgarBonoTransportador(${idx},3)" class="bg-amber-600 px-2 py-1 rounded text-white font-black cursor-pointer">+3 Días ⭐</button></div>`:''}<div class="bg-slate-900 p-2 rounded-lg border border-slate-700 flex items-center space-x-2 pt-1"><input type="date" id="input-vence-${idx}" value="${cond.vencimiento||''}" class="p-1 bg-slate-800 border border-slate-700 rounded text-white text-[11px]"><button onclick="actualizarFechaSuscripcionAdmin(${idx})" class="bg-amber-600 px-2.5 py-1 rounded text-white font-bold cursor-pointer">Modificar Vencimiento</button></div><div class="flex space-x-2 pt-1">${cond.estado!=='Activo'?`<button onclick="cambiarEstadoConductor(${idx},'Activo')" class="bg-green-600 px-2 py-1 rounded text-white font-bold cursor-pointer">Aprobar</button>`:`<button onclick="cambiarEstadoConductor(${idx},'Suspendido')" class="bg-amber-600 px-2 py-1 rounded text-white font-bold cursor-pointer">Suspender</button>`}<button onclick="editarConductorAdmin(${idx})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold cursor-pointer">✏️ Editar</button><button onclick="eliminarConductorAdmin(${idx})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button></div></div>`;}).join('');}
+function renderAdminConductores(){
+state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
+const el=document.getElementById('admin-lista-conductores');
+const queryBusqueda=document.getElementById('input-buscar-flota')?document.getElementById('input-buscar-flota').value.trim().toUpperCase():"";
+if(!el)return;
+
+let listaFiltrada=state.conductores;
+if(queryBusqueda){
+listaFiltrada=state.conductores.filter(c=>c.placa.toUpperCase().includes(queryBusqueda)||c.nombre.toUpperCase().includes(queryBusqueda));
+}
+
+if(!listaFiltrada||listaFiltrada.length===0){
+el.innerHTML='<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No se encontraron transportadores con esa búsqueda.</div>';
+return;
+}
+
+el.innerHTML=listaFiltrada.map((cond)=>{
+// Buscamos el índice real en el arreglo global state.conductores para que los botones funcionen bien
+const idx=state.conductores.findIndex(c=>c.placa===cond.placa);
+const servicios=cond.serviciosCalificados||0;
+const cal=cond.calificacion!==undefined?cond.calificacion:5.0;
+const bono=(servicios>=5&&cal>=4.5);
+return`<div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-1.5 shadow"><div class="flex justify-between items-center"><p class="font-black text-white">${cond.nombre} (<span class="text-orange-400">${cond.placa}</span>)</p><span class="px-2 py-0.5 rounded text-[10px] font-bold ${cond.estado==='Activo'?'bg-green-500/20 text-green-400':'bg-amber-500/20 text-amber-400'}">${cond.estado}</span></div><p class="text-[11px] text-slate-300"><b>Cédula:</b> ${cond.doc||'N/A'} | <b>Ciudad:</b> <span class="text-orange-400 font-bold">${cond.municipio||'Acacías'}</span> • Tel: ${cond.tel}</p><p class="text-[11px] text-slate-300">Vence: <b class="text-orange-400">${cond.vencimiento||'N/A'}</b></p><p class="text-[11px] text-amber-400 font-bold">⭐ Estrellas: ${cal} | Calificados: ${servicios}</p>${bono?`<div class="bg-amber-950/40 p-2 rounded border border-amber-500/50 flex justify-between items-center text-[11px]"><span class="text-amber-300 font-bold">✨ ¡Candidato a Bono!</span><button onclick="otorgarBonoTransportador(${idx},3)" class="bg-amber-600 px-2 py-1 rounded text-white font-black cursor-pointer">+3 Días ⭐</button></div>`:''}<div class="bg-slate-900 p-2 rounded-lg border border-slate-700 flex items-center space-x-2 pt-1"><input type="date" id="input-vence-${idx}" value="${cond.vencimiento||''}" class="p-1 bg-slate-800 border border-slate-700 rounded text-white text-[11px]"><button onclick="actualizarFechaSuscripcionAdmin(${idx})" class="bg-amber-600 px-2.5 py-1 rounded text-white font-bold cursor-pointer">Modificar Vencimiento</button></div>
+<div class="flex flex-wrap gap-1.5 pt-1">
+<button onclick="restablecerClaveAdmin(${idx})" class="bg-purple-600 hover:bg-purple-700 px-2.5 py-1.5 rounded text-white font-bold cursor-pointer">🔑 Restablecer Clave</button>
+${cond.estado!=='Activo'?`<button onclick="cambiarEstadoConductor(${idx},'Activo')" class="bg-green-600 px-2.5 py-1.5 rounded text-white font-bold cursor-pointer">Aprobar</button>`:`<button onclick="cambiarEstadoConductor(${idx},'Suspendido')" class="bg-amber-600 px-2.5 py-1.5 rounded text-white font-bold cursor-pointer">Suspender</button>`}
+<button onclick="editarConductorAdmin(${idx})" class="bg-blue-600 hover:bg-blue-700 px-2.5 py-1.5 rounded text-white font-bold cursor-pointer">✏️ Editar</button>
+<button onclick="eliminarConductorAdmin(${idx})" class="bg-red-600 hover:bg-red-700 px-2.5 py-1.5 rounded text-white font-bold cursor-pointer">Eliminar</button>
+</div></div>`;}).join('');
+}
+
+function restablecerClaveAdmin(idx){
+state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
+const cond=state.conductores[idx];
+const nuevaClave=prompt(`🔑 Ingresa la nueva contraseña personal para el transportador ${cond.nombre} (Placa: ${cond.placa}):`);
+if(nuevaClave&&nuevaClave.trim()){
+cond.password=nuevaClave.trim();
+guardarDatosLocal();
+renderAdminConductores();
+alert(`✅ ¡Contraseña restablecida con éxito para el vehículo ${cond.placa}! Ya puede ingresar con su nueva clave.`);
+}
+}
 
 function otorgarBonoTransportador(idx,diasExtra){state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;let cond=state.conductores[idx];if(cond&&cond.vencimiento){let fechaV=new Date(cond.vencimiento+'T00:00:00');fechaV.setDate(fechaV.getDate()+diasExtra);cond.vencimiento=fechaV.toISOString().split('T')[0];cond.serviciosCalificados=0;cond.bonoNotificacion=`¡Has recibido un bono de ${diasExtra} días por excelencia! 🌟`;guardarDatosLocal();renderAdminConductores();alert("✅ Bono otorgado con éxito!");}}
 
 function actualizarFechaSuscripcionAdmin(idx){const nv=document.getElementById(`input-vence-${idx}`).value;if(!nv)return;state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;state.conductores[idx].vencimiento=nv;guardarDatosLocal();renderAdminConductores();alert("✅ Fecha actualizada.");}
 
-function guardarConductorAdmin(){const nombre=document.getElementById('adm-c-nombre').value.trim();const doc=document.getElementById('adm-c-doc').value.trim();const municipio=document.getElementById('adm-c-municipio').value;const vehiculo=document.getElementById('adm-c-vehiculo').value;const marca=document.getElementById('adm-c-marca').value.trim();const cilindraje=document.getElementById('adm-c-cilindraje').value.trim();const placa=document.getElementById('adm-c-placa').value.trim().toUpperCase().replace(/\s+/g,'');const tel=document.getElementById('adm-c-tel').value.trim();const vencInput=document.getElementById('adm-c-vencimiento').value;const idx=parseInt(document.getElementById('admin-cond-idx').value);if(!nombre||!placa){alert("Completa nombre y placa");return;}state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;const fechaFutura=new Date();fechaFutura.setDate(fechaFutura.getDate()+30);const vencimientoStr=vencInput||fechaFutura.toISOString().split('T')[0];const datosCond={placa,password:doc||"3143842007",nombre,doc:doc||"N/A",tel:tel||"N/A",municipio,vehiculo,marca:marca||"Akt",cilindraje:cilindraje||"200cc",estado:"Activo",vencimiento:vencimientoStr,calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null};if(idx>=0){datosCond.password=state.conductores[idx].password||doc||"3143842007";datosCond.estado=state.conductores[idx].estado||"Activo";datosCond.calificacion=state.conductores[idx].calificacion!==undefined?state.conductores[idx].calificacion:5.0;state.conductores[idx]=datosCond;}else{state.conductores.push(datosCond);}guardarDatosLocal();limpiarFormConductorAdmin();renderAdminConductores();alert("✅ Conductor guardado con éxito.");}
+function guardarConductorAdmin(){
+const nombre=document.getElementById('adm-c-nombre').value.trim();
+const doc=document.getElementById('adm-c-doc').value.trim();
+const pass=document.getElementById('adm-c-pass').value.trim();
+const municipio=document.getElementById('adm-c-municipio').value;
+const vehiculo=document.getElementById('adm-c-vehiculo').value;
+const marca=document.getElementById('adm-c-marca').value.trim();
+const cilindraje=document.getElementById('adm-c-cilindraje').value.trim();
+const placa=document.getElementById('adm-c-placa').value.trim().toUpperCase().replace(/\s+/g,'');
+const tel=document.getElementById('adm-c-tel').value.trim();
+const vencInput=document.getElementById('adm-c-vencimiento').value;
+const idx=parseInt(document.getElementById('admin-cond-idx').value);
+if(!nombre||!placa||!doc||!pass){alert("⚠️ Completa nombre, cédula, contraseña y placa obligatoriamente.");return;}
+state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
+const fechaFutura=new Date();fechaFutura.setDate(fechaFutura.getDate()+30);
+const vencimientoStr=vencInput||fechaFutura.toISOString().split('T')[0];
+const datosCond={placa,password:pass,nombre,doc,tel,municipio,vehiculo,marca:marca||"Akt",cilindraje:cilindraje||"200cc",estado:"Activo",vencimiento:vencimientoStr,calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null};
+if(idx>=0){datosCond.estado=state.conductores[idx].estado||"Activo";datosCond.calificacion=state.conductores[idx].calificacion!==undefined?state.conductores[idx].calificacion:5.0;state.conductores[idx]=datosCond;}else{state.conductores.push(datosCond);}
+guardarDatosLocal();limpiarFormConductorAdmin();renderAdminConductores();alert("✅ Conductor guardado con éxito.");
+}
 
 function editarConductorAdmin(idx){
 state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
@@ -543,6 +609,7 @@ const cond=state.conductores[idx];
 document.getElementById('admin-cond-idx').value=idx;
 document.getElementById('adm-c-nombre').value=cond.nombre||"";
 document.getElementById('adm-c-doc').value=cond.doc||"";
+document.getElementById('adm-c-pass').value=cond.password||"";
 document.getElementById('adm-c-municipio').value=cond.municipio||"Acacías";
 document.getElementById('adm-c-vehiculo').value=cond.vehiculo||"Motocarguero sencillo";
 document.getElementById('adm-c-marca').value=cond.marca||"";
@@ -563,6 +630,7 @@ function limpiarFormConductorAdmin(){
 document.getElementById('admin-cond-idx').value="-1";
 document.getElementById('adm-c-nombre').value="";
 document.getElementById('adm-c-doc').value="";
+document.getElementById('adm-c-pass').value="";
 document.getElementById('adm-c-marca').value="";
 document.getElementById('adm-c-cilindraje').value="";
 document.getElementById('adm-c-placa').value="";
@@ -582,7 +650,7 @@ function cargarAjustesGlobales(){state.config=JSON.parse(localStorage.getItem('k
 
 function guardarAjustesGlobales(){const np=document.getElementById('cfg-admin-pass').value.trim();if(np)state.config.adminPass=np;const nm=document.getElementById('cfg-admin-master').value.trim();if(nm)state.config.adminMaster=nm;state.config.valorSuscripcion=parseInt(document.getElementById('cfg-valor-sus').value)||45000;state.config.nequi=document.getElementById('cfg-nequi').value.trim()||"3143842007";state.config.whatsapp=document.getElementById('cfg-whatsapp').value.trim()||"3507690951";state.config.picoPlacaTexto=document.getElementById('cfg-pico-placa').value.trim()||picoPlacaPorDefecto;state.config.reglamentoTexto=document.getElementById('cfg-reglamento').value.trim()||reglamentoEsencialPorDefecto;guardarDatosLocal();actualizarTextosGlobales();alert("✅ ¡Ajustes guardados con éxito!");}
 
-window.onload=function(){verificarInactividadSesion();poblarSelectMunicipios();actualizarTextosGlobales();actualizarCampanitaServicios();if(state.rolGuardado==='cliente')irModulo('cliente');else if(state.rolGuardado==='transportador')irModulo('transportador');else if(state.rolGuardado==='central')irModulo('central');else if(state.rolGuardado==='afiliacion')irModulo('afiliacion');else mostrarSelectorRolManual();};
+window.onload=function(){verificarInactividadSesion();poblarSelectMunicipios();actualizarTextosGlobales();actualizarCampanitaServicios();if(state.rolGuardado==='cliente')irModulo('cliente');else if(state.rolGuardado==='transportador')irModulo('transportador');else if(state.rolGuardado==='central')irModuleNameIfNeeded();else if(state.rolGuardado==='central')irModulo('central');else if(state.rolGuardado==='afiliacion')irModulo('afiliacion');else mostrarSelectorRolManual();};
 </script>
 </body>
 </html>
