@@ -247,8 +247,8 @@
                 <div id="t-content-tarifas" class="space-y-3 hidden">
                     <div class="bg-slate-800 p-3 rounded-2xl border border-slate-700 space-y-3 text-xs">
                         <div class="text-center">
-                            <h3 class="font-black text-sm text-orange-400">Tarifas de Motocarguero 2026 (Acacías)</h3>
-                            <p class="text-[10px] text-slate-400">Tarifas oficiales exclusivas para operadores en Acacías</p>
+                            <h3 class="font-black text-sm text-orange-400">Tarifas Oficiales Vigentes</h3>
+                            <p id="trans-municipio-tarifas-label" class="text-[10px] text-slate-300 font-bold">Municipio Base: Acacías</p>
                         </div>
                         
                         <div class="grid grid-cols-3 gap-1 bg-slate-900 p-1 rounded-xl border border-slate-700 text-[10px] font-bold text-center">
@@ -287,7 +287,6 @@
                 </div>
 
                 <div id="t-content-sub" class="space-y-3 hidden">
-                    <!-- CUADRO DE SUSCRIPCIÓN DESTACADO AQUÍ -->
                     <div id="box-suscripcion-alerta" class="p-4 rounded-2xl border text-center space-y-1 shadow-lg bg-slate-900 border-slate-700">
                         <p class="text-[11px] uppercase font-bold text-slate-400 tracking-wider">Estado de Suscripción Mensual</p>
                         <div id="trans-cuenta-regresiva" class="font-black text-lg text-orange-400 py-1">
@@ -418,7 +417,6 @@
                 <h3 class="font-black text-lg text-white">Central / Administrador</h3>
                 <p class="text-xs text-slate-300">Ingresa la clave de administración</p>
                 
-                <!-- CAMPO CONTRASEÑA CON OJITO (👁️) -->
                 <div class="relative mt-1">
                     <input type="password" id="admin-pass" placeholder="Clave secreta" class="w-full text-center tracking-widest text-lg p-3 pr-12 bg-slate-900 border border-slate-700 rounded-xl text-white font-black outline-none">
                     <button type="button" onclick="toggleVerPasswordAdminLogin()" class="absolute right-3 top-3.5 text-slate-400 hover:text-white cursor-pointer text-lg">👁️</button>
@@ -433,7 +431,6 @@
                     <button onclick="cerrarSesionAdmin()" class="bg-slate-700 hover:bg-slate-600 px-2.5 py-1.5 rounded-lg text-slate-200 font-black cursor-pointer">Cerrar Sesión</button>
                 </div>
 
-                <!-- 5 PESTAÑAS DE ADMIN -->
                 <div class="grid grid-cols-5 gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700 text-[10px] font-black text-center">
                     <button onclick="switchTabAdmin('servicios')" id="tab-a-servicios" class="bg-orange-500 text-white py-2 px-1 rounded-lg cursor-pointer truncate">Call Center</button>
                     <button onclick="switchTabAdmin('conductores')" id="tab-a-conductores" class="text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate">Flota</button>
@@ -512,7 +509,7 @@
                     <div id="admin-lista-conductores" class="space-y-2"></div>
                 </div>
 
-                <!-- HISTORIAL DE FLOTA (TABLA TIPO EXCEL + DESCARGA .CSV) -->
+                <!-- HISTORIAL DE FLOTA -->
                 <div id="a-content-historial" class="space-y-3 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs shadow-xl">
                         <div class="flex justify-between items-center">
@@ -536,20 +533,24 @@
                     </div>
                 </div>
 
-                <!-- GESTIÓN DINÁMICA DE TARIFAS -->
-                <div id="a-content-tarifas" class="space-y-2.5 hidden">
+                <!-- GESTIÓN DE TARIFAS POR MUNICIPIO Y MÓDULO -->
+                <div id="a-content-tarifas" class="space-y-3 hidden">
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
-                        <h3 class="font-black text-sm text-orange-400" id="admin-tarifa-form-title">⚙️ Editor de Tarifas Oficiales</h3>
-                        <input type="hidden" id="admin-tarifa-edit-cat" value="">
+                        <h3 class="font-black text-sm text-orange-400">📍 Seleccionar Municipio para Tarifas</h3>
+                        <select id="admin-tarifa-municipio-sel" onchange="renderAdminTarifas()" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-black select-municipios outline-none text-xs"></select>
+                    </div>
+
+                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
+                        <h3 class="font-black text-sm text-orange-400" id="admin-tarifa-form-title">⚙️ Añadir Tarifa Oficial</h3>
                         <input type="hidden" id="admin-tarifa-edit-idx" value="-1">
 
                         <div class="space-y-2">
                             <div>
-                                <label class="text-[11px] font-bold text-slate-300">Categoría de Ruta</label>
+                                <label class="text-[11px] font-bold text-slate-300">Módulo / Categoría</label>
                                 <select id="admin-tarifa-cat" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
-                                    <option value="urbano">Urbanos</option>
-                                    <option value="veredas">Veredas</option>
-                                    <option value="municipios">Municipios</option>
+                                    <option value="urbano">🏠 Urbanos</option>
+                                    <option value="veredas">🛣️ Veredas</option>
+                                    <option value="municipios">🚙 Municipios</option>
                                 </select>
                             </div>
                             <div>
@@ -560,7 +561,7 @@
                                 <label class="text-[11px] font-bold text-slate-300">Valor Flete (COP)</label>
                                 <input type="text" id="admin-tarifa-val" placeholder="Ej: $45.000" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold">
                             </div>
-                            <div class="flex space-x-2">
+                            <div class="flex space-x-2 pt-1">
                                 <button onclick="guardarNuevaTarifaAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white shadow cursor-pointer">💾 Guardar Tarifa</button>
                                 <button onclick="limpiarFormTarifaAdmin()" class="bg-slate-700 hover:bg-slate-600 px-3 py-2.5 rounded-xl text-slate-200 font-bold cursor-pointer">Limpiar</button>
                             </div>
@@ -568,8 +569,8 @@
                     </div>
 
                     <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
-                        <h3 class="font-black text-sm text-orange-400">📋 Listado de Tarifas Actuales</h3>
-                        <div id="admin-lista-tarifas" class="space-y-2"></div>
+                        <h3 class="font-black text-sm text-orange-400">📋 Tarifas Registradas para el Municipio</h3>
+                        <div id="admin-lista-tarifas" class="space-y-3"></div>
                     </div>
                 </div>
 
@@ -728,7 +729,9 @@
                 { placa: "ABC123", nombre: "Conductor de Prueba ABC", doc: "99999999", tel: "3100000000", vehiculo: "Motocarguero sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01", calificacion: 5.0, serviciosCalificados: 0, bonoNotificacion: null },
                 { placa: "571 AGU", nombre: "Dani David Martínez", doc: "1122124473", tel: "3143842007", vehiculo: "Motocarguero sencillo", marca: "Camello", cilindraje: "250cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01", calificacion: 5.0, serviciosCalificados: 0, bonoNotificacion: null }
             ],
-            tarifas: JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || tarifasBaseAcacias,
+            tarifasPorMunicipio: JSON.parse(localStorage.getItem('kargass_tarifas_municipios')) || {
+                "Acacías": tarifasBaseAcacias
+            },
             config: JSON.parse(localStorage.getItem('kargass_config_global')) || {
                 adminPass: "1234",
                 valorSuscripcion: 45000,
@@ -749,7 +752,7 @@
             try {
                 localStorage.setItem('kargass_cargas', JSON.stringify(state.cargas));
                 localStorage.setItem('kargass_conductores', JSON.stringify(state.conductores));
-                localStorage.setItem('kargass_tarifas_oficiales', JSON.stringify(state.tarifas));
+                localStorage.setItem('kargass_tarifas_municipios', JSON.stringify(state.tarifasPorMunicipio));
                 localStorage.setItem('kargass_config_global', JSON.stringify(state.config));
             } catch (e) {
                 console.error("Error al guardar en localStorage:", e);
@@ -1049,7 +1052,6 @@
                         `;}).join('')}
                     </div>
 
-                    <!-- INHABILITAR BLOQUE DE COTIZACIÓN SI YA FUE ASIGNADO -->
                     ${yaAsignadoOConOfertaAceptada ? '' : `
                         <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2">
                             <label class="font-bold text-slate-300 text-[11px]">Enviar Cotización de Flete (COP):</label>
@@ -1153,8 +1155,8 @@
             document.getElementById('trans-perfil-placa').innerText = cond.placa;
             document.getElementById('trans-perfil-vehiculo').innerText = (cond.vehiculo || "Motocarguero") + ` (${cond.marca || 'AKT'} - ${cond.cilindraje || '200cc'})`;
             document.getElementById('trans-promedio-estrellas').innerText = cond.calificacion !== undefined ? cond.calificacion : "5.0";
+            document.getElementById('trans-municipio-tarifas-label').innerText = `Municipio Base: ${cond.municipio || 'Acacías'}`;
 
-            // Verificar si tiene bonificación pendiente por mostrar
             const bannerPremio = document.getElementById('trans-banner-premio');
             const textoPremio = document.getElementById('trans-texto-premio');
             if (cond.bonoNotificacion) {
@@ -1166,7 +1168,7 @@
 
             calcularCuentaRegresivaSuscripcion(cond.vencimiento);
             renderCargasDisponiblesTrans();
-            renderTarifasTransportador();
+            renderTarifasTransportador(cond.municipio || 'Acacías');
             actualizarTextosGlobales();
         }
 
@@ -1241,14 +1243,16 @@
             if (sb) sb.className = "bg-orange-500 text-white py-1.5 rounded-lg cursor-pointer";
         }
 
-        function renderTarifasTransportador() {
-            state.tarifas = JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || state.tarifas;
+        function renderTarifasTransportador(municipioConductor) {
+            state.tarifasPorMunicipio = JSON.parse(localStorage.getItem('kargass_tarifas_municipios')) || state.tarifasPorMunicipio;
+            const tarifasMun = state.tarifasPorMunicipio[municipioConductor] || tarifasBaseAcacias;
+
             ['urbano', 'veredas', 'municipios'].forEach(cat => {
                 const contenedor = document.getElementById(`contenedor-tarifas-${cat}`);
                 if (!contenedor) return;
-                const items = state.tarifas[cat] || [];
+                const items = tarifasMun[cat] || [];
                 if (items.length === 0) {
-                    contenedor.innerHTML = `<p class="text-slate-400 text-center py-2">Sin tarifas registradas.</p>`;
+                    contenedor.innerHTML = `<p class="text-slate-400 text-center py-2">Sin tarifas registradas para ${municipioConductor}.</p>`;
                 } else {
                     contenedor.innerHTML = items.map(t => `
                         <div class="flex justify-between bg-slate-900 p-2 rounded-lg border border-slate-700">
@@ -1291,7 +1295,6 @@
                         </div>
                     ` : ''}
                     
-                    <!-- INHABILITAR BLOQUE DE COTIZACIÓN SI YA FUE ASIGNADO -->
                     ${yaAsignadoOConOfertaAceptada ? '' : `
                         <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2">
                             <label class="font-bold text-slate-300">Enviar Cotización de Flete (COP):</label>
@@ -1414,6 +1417,7 @@
                 renderAdminServicios();
                 renderAdminConductores();
                 renderSelectHistorialPlacas();
+                inicializarSelectMunicipioTarifasAdmin();
                 renderAdminTarifas();
                 cargarAjustesGlobales();
             } else alert("Clave incorrecta");
@@ -1472,7 +1476,10 @@
             if (tab === 'conductores') renderAdminConductores();
             if (tab === 'servicios') renderAdminServicios();
             if (tab === 'historial') renderSelectHistorialPlacas();
-            if (tab === 'tarifas') renderAdminTarifas();
+            if (tab === 'tarifas') {
+                inicializarSelectMunicipioTarifasAdmin();
+                renderAdminTarifas();
+            }
         }
 
         function renderAdminServicios() {
@@ -1510,7 +1517,6 @@
                     <p class="text-white"><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p>
                     <p class="text-slate-300"><b>Ruta:</b> ${c.origen} ➔ ${c.destino}</p>
                     
-                    <!-- ESTADO RELEVANTE GRANDE EN VERDE SI YA FUE ASIGNADO -->
                     ${yaAsignado ? `
                         <div class="bg-emerald-950/60 p-3 rounded-xl border border-emerald-500 text-center space-y-1">
                             <p class="text-emerald-400 font-black text-sm">✅ ${c.estado.toUpperCase()}</p>
@@ -1632,7 +1638,6 @@
             }
 
             state.cargas = JSON.parse(localStorage.getItem('kargass_cargas')) || [];
-            // Filtrar servicios asignados a esta placa
             const serviciosConductor = state.cargas.filter(c => c.conductorAsignadoPlaca === placa || (c.estado && c.estado.includes(placa)));
 
             if(serviciosConductor.length === 0) {
@@ -1654,7 +1659,6 @@
                         </thead>
                         <tbody class="divide-y divide-slate-700 text-slate-200">
                             ${serviciosConductor.map(s => {
-                                // Buscar el valor acordado en la oferta o texto de estado
                                 let precioFlete = "Acordado";
                                 if(s.ofertas) {
                                     let matchOf = s.ofertas.find(o => o.placa === placa);
@@ -1709,6 +1713,108 @@
             alert("✅ ¡Archivo CSV de Excel generado y descargado con éxito!");
         }
 
+        // GESTIÓN DE TARIFAS POR MUNICIPIO Y MÓDULO EN ADMIN
+        function inicializarSelectMunicipioTarifasAdmin() {
+            const sel = document.getElementById('admin-tarifa-municipio-sel');
+            if(!sel) return;
+            const actual = sel.value || "Acacías";
+            sel.innerHTML = listaMunicipiosMeta.map(m => `<option value="${m}">${m}</option>`).join('');
+            sel.value = actual;
+        }
+
+        function renderAdminTarifas() {
+            state.tarifasPorMunicipio = JSON.parse(localStorage.getItem('kargass_tarifas_municipios')) || state.tarifasPorMunicipio;
+            const munSel = document.getElementById('admin-tarifa-municipio-sel').value || "Acacías";
+            
+            if(!state.tarifasPorMunicipio[munSel]) {
+                state.tarifasPorMunicipio[munSel] = { urbano: [], veredas: [], municipios: [] };
+            }
+
+            const tarifasMun = state.tarifasPorMunicipio[munSel];
+            const el = document.getElementById('admin-lista-tarifas');
+            if(!el) return;
+
+            let html = '';
+            ['urbano', 'veredas', 'municipios'].forEach(cat => {
+                const items = tarifasMun[cat] || [];
+                const tituloCat = cat === 'urbano' ? '🏠 Rutas Urbanas' : (cat === 'veredas' ? '🛣️ Rutas Veredales' : '🚙 Rutas Intermunicipales');
+                
+                html += `
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2">
+                        <p class="font-black text-orange-400 uppercase tracking-wide text-xs">${tituloCat}</p>
+                `;
+                if(items.length === 0) {
+                    html += `<p class="text-slate-400 text-[11px] italic">Sin tarifas registradas en esta categoría para ${munSel}.</p>`;
+                } else {
+                    html += items.map((t, tIdx) => `
+                        <div class="flex justify-between items-center bg-slate-800 p-2 rounded border border-slate-700 text-[11px]">
+                            <span>${t.ruta} - <b class="text-orange-400">${t.valor}</b></span>
+                            <div class="space-x-1">
+                                <button onclick="editarTarifaAdmin('${munSel}', '${cat}', ${tIdx})" class="bg-blue-600 hover:bg-blue-700 px-2 py-0.5 rounded text-white font-bold cursor-pointer">Editar</button>
+                                <button onclick="eliminarTarifaAdmin('${munSel}', '${cat}', ${tIdx})" class="bg-red-600 hover:bg-red-700 px-2 py-0.5 rounded text-white font-bold cursor-pointer">Eliminar</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                html += `</div>`;
+            });
+            el.innerHTML = html;
+        }
+
+        function guardarNuevaTarifaAdmin() {
+            const munSel = document.getElementById('admin-tarifa-municipio-sel').value;
+            const cat = document.getElementById('admin-tarifa-cat').value;
+            const ruta = document.getElementById('admin-tarifa-nombre').value.trim();
+            const val = document.getElementById('admin-tarifa-val').value.trim();
+            const editIdx = parseInt(document.getElementById('admin-tarifa-edit-idx').value);
+
+            if (!ruta || !val) { alert("Completa ruta y valor"); return; }
+            
+            state.tarifasPorMunicipio = JSON.parse(localStorage.getItem('kargass_tarifas_municipios')) || state.tarifasPorMunicipio;
+            if(!state.tarifasPorMunicipio[munSel]) {
+                state.tarifasPorMunicipio[munSel] = { urbano: [], veredas: [], municipios: [] };
+            }
+
+            if (editIdx >= 0) {
+                state.tarifasPorMunicipio[munSel][cat][editIdx] = { id: Date.now(), ruta, valor: val };
+                alert("✅ Tarifa actualizada con éxito");
+            } else {
+                state.tarifasPorMunicipio[munSel][cat].push({ id: Date.now(), ruta, valor: val });
+                alert("✅ Tarifa registrada con éxito en " + munSel);
+            }
+
+            guardarDatosLocal();
+            limpiarFormTarifaAdmin();
+            renderAdminTarifas();
+        }
+
+        function editarTarifaAdmin(mun, cat, idx) {
+            document.getElementById('admin-tarifa-municipio-sel').value = mun;
+            document.getElementById('admin-tarifa-cat').value = cat;
+            state.tarifasPorMunicipio = JSON.parse(localStorage.getItem('kargass_tarifas_municipios')) || state.tarifasPorMunicipio;
+            const tarifa = state.tarifasPorMunicipio[mun][cat][idx];
+            document.getElementById('admin-tarifa-nombre').value = tarifa.ruta;
+            document.getElementById('admin-tarifa-val').value = tarifa.valor;
+            document.getElementById('admin-tarifa-edit-idx').value = idx;
+            document.getElementById('admin-tarifa-form-title').innerText = `✏️ Editar Tarifa (${mun} - ${cat})`;
+        }
+
+        function eliminarTarifaAdmin(mun, cat, idx) {
+            if (confirm("¿Eliminar esta tarifa de " + mun + "?")) {
+                state.tarifasPorMunicipio = JSON.parse(localStorage.getItem('kargass_tarifas_municipios')) || state.tarifasPorMunicipio;
+                state.tarifasPorMunicipio[mun][cat].splice(idx, 1);
+                guardarDatosLocal();
+                renderAdminTarifas();
+            }
+        }
+
+        function limpiarFormTarifaAdmin() {
+            document.getElementById('admin-tarifa-nombre').value = '';
+            document.getElementById('admin-tarifa-val').value = '';
+            document.getElementById('admin-tarifa-edit-idx').value = '-1';
+            document.getElementById('admin-tarifa-form-title').innerText = "⚙️ Añadir Tarifa Oficial";
+        }
+
         function renderAdminConductores() {
             state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
             const el = document.getElementById('admin-lista-conductores');
@@ -1761,7 +1867,7 @@
                 let fechaV = new Date(cond.vencimiento + 'T00:00:00');
                 fechaV.setDate(fechaV.getDate() + diasExtra);
                 cond.vencimiento = fechaV.toISOString().split('T')[0];
-                cond.serviciosCalificados = 0; // Reiniciar contador
+                cond.serviciosCalificados = 0;
                 cond.bonoNotificacion = `¡Has recibido un bono de ${diasExtra} días adicionales por tu excelente desempeño y calificación de 5 estrellas! 🌟`;
                 
                 guardarDatosLocal();
@@ -1879,82 +1985,6 @@
                 state.conductores.splice(idx, 1);
                 guardarDatosLocal();
                 renderAdminConductores();
-            }
-        }
-
-        function guardarNuevaTarifaAdmin() {
-            const cat = document.getElementById('admin-tarifa-cat').value;
-            const ruta = document.getElementById('admin-tarifa-nombre').value.trim();
-            const val = document.getElementById('admin-tarifa-val').value.trim();
-            const editIdx = parseInt(document.getElementById('admin-tarifa-edit-idx').value);
-
-            if (!ruta || !val) { alert("Completa ruta y valor"); return; }
-            
-            state.tarifas = JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || state.tarifas;
-            if (editIdx >= 0) {
-                state.tarifas[cat][editIdx] = { id: Date.now(), ruta, valor: val };
-                alert("✅ Tarifa actualizada con éxito");
-            } else {
-                state.tarifas[cat].push({ id: Date.now(), ruta, valor: val });
-                alert("✅ Tarifa registrada con éxito");
-            }
-
-            guardarDatosLocal();
-            limpiarFormTarifaAdmin();
-            renderAdminTarifas();
-            renderTarifasTransportador();
-        }
-
-        function editarTarifaAdmin(cat, idx) {
-            state.tarifas = JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || state.tarifas;
-            const tarifa = state.tarifas[cat][idx];
-            document.getElementById('admin-tarifa-cat').value = cat;
-            document.getElementById('admin-tarifa-nombre').value = tarifa.ruta;
-            document.getElementById('admin-tarifa-val').value = tarifa.valor;
-            document.getElementById('admin-tarifa-edit-cat').value = cat;
-            document.getElementById('admin-tarifa-edit-idx').value = idx;
-            document.getElementById('admin-tarifa-form-title').innerText = "✏️ Editar Tarifa Oficial";
-        }
-
-        function limpiarFormTarifaAdmin() {
-            document.getElementById('admin-tarifa-nombre').value = '';
-            document.getElementById('admin-tarifa-val').value = '';
-            document.getElementById('admin-tarifa-edit-idx').value = '-1';
-            document.getElementById('admin-tarifa-form-title').innerText = "⚙️ Editor de Tarifas Oficiales";
-        }
-
-        function renderAdminTarifas() {
-            state.tarifas = JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || state.tarifas;
-            const el = document.getElementById('admin-lista-tarifas');
-            if(!el) return;
-            let html = '';
-            ['urbano', 'veredas', 'municipios'].forEach(cat => {
-                const items = state.tarifas[cat] || [];
-                html += `<p class="font-bold text-orange-400 capitalize mt-2">📂 Categoría: ${cat}</p>`;
-                if (items.length === 0) {
-                    html += `<p class="text-slate-400 text-[11px]">Sin tarifas.</p>`;
-                } else {
-                    html += items.map((t, tIdx) => `
-                        <div class="flex justify-between items-center bg-slate-900 p-2 rounded border border-slate-700 text-[11px]">
-                            <span>${t.ruta} - <b class="text-orange-400">${t.valor}</b></span>
-                            <div class="space-x-1">
-                                <button onclick="editarTarifaAdmin('${cat}', ${tIdx})" class="bg-blue-600 hover:bg-blue-700 px-2 py-0.5 rounded text-white font-bold cursor-pointer">Editar</button>
-                                <button onclick="eliminarTarifaAdmin('${cat}', ${tIdx})" class="bg-red-600 hover:bg-red-700 px-2 py-0.5 rounded text-white font-bold cursor-pointer">Eliminar</button>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-            });
-            el.innerHTML = html;
-        }
-
-        function eliminarTarifaAdmin(cat, idx) {
-            if (confirm("¿Eliminar esta tarifa?")) {
-                state.tarifas = JSON.parse(localStorage.getItem('kargass_tarifas_oficiales')) || state.tarifas;
-                state.tarifas[cat].splice(idx, 1);
-                guardarDatosLocal();
-                renderAdminTarifas();
-                renderTarifasTransportador();
             }
         }
 
