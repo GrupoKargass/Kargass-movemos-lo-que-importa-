@@ -189,14 +189,25 @@
             </div>
         </div>
 
-        <!-- 2. MÓDULO TRANSPORTADOR PROFESIONAL -->
+        <!-- 2. MÓDULO TRANSPORTADOR PROFESIONAL (BLINDADO CON PLACA + CONTRASEÑA) -->
         <div id="view-transportador" class="space-y-4 hidden">
             <div id="trans-login" class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-xl text-center space-y-3">
                 <div class="text-4xl">🏍️</div>
                 <h3 class="font-black text-lg text-white">Portal de Transportadores</h3>
-                <p class="text-xs text-slate-300">Ingresa la placa de tu vehículo registrado</p>
-                <input type="text" id="trans-placa-input" placeholder="Ej: ABC123" class="w-full text-center tracking-widest text-lg p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-black uppercase outline-none">
-                <button onclick="verificarTransportadorLogin()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white shadow-lg cursor-pointer">Ingresar al Panel</button>
+                <p class="text-xs text-slate-300">Ingresa tu placa y contraseña (por defecto tu número de cédula)</p>
+                
+                <div class="space-y-2 pt-1 text-left">
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-300">Número de Placa</label>
+                        <input type="text" id="trans-placa-input" placeholder="Ej: ABC123" class="w-full tracking-widest text-base p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-black uppercase outline-none mt-0.5">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-300">Contraseña (Cédula o Clave Personal)</label>
+                        <input type="password" id="trans-pass-input" placeholder="Tu cédula o contraseña" class="w-full tracking-widest text-base p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-black outline-none mt-0.5">
+                    </div>
+                </div>
+
+                <button onclick="verificarTransportadorLogin()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white shadow-lg cursor-pointer mt-1">Ingresar al Panel</button>
             </div>
 
             <div id="trans-dashboard" class="hidden space-y-3">
@@ -219,7 +230,10 @@
                             <p class="font-black text-white text-sm" id="trans-perfil-nombre">Conductor</p>
                             <p class="text-[11px] text-slate-300">C.C: <span id="trans-perfil-doc">--</span> | Tel: <span id="trans-perfil-tel">--</span></p>
                         </div>
-                        <button onclick="cambiarPlacaTrans()" class="bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded-lg text-slate-200 font-bold text-xs cursor-pointer">Cambiar Placa</button>
+                        <div class="space-x-1">
+                            <button onclick="abrirModalCambiarPass()" class="bg-amber-600 hover:bg-amber-700 px-2 py-1 rounded-lg text-white font-bold text-xs cursor-pointer">🔑 Cambiar Clave</button>
+                            <button onclick="cambiarPlacaTrans()" class="bg-slate-700 hover:bg-slate-600 px-2 py-1 rounded-lg text-slate-200 font-bold text-xs cursor-pointer">Salir</button>
+                        </div>
                     </div>
                     
                     <div class="pt-2 border-t border-slate-700 grid grid-cols-2 gap-2 text-xs">
@@ -362,7 +376,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="text-[11px] font-bold text-slate-300">Cédula</label>
+                            <label class="text-[11px] font-bold text-slate-300">Cédula (Contraseña Inicial)</label>
                             <input type="number" id="af-doc" placeholder="Cédula" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none">
                         </div>
                         <div>
@@ -460,7 +474,7 @@
                                 <input type="text" id="adm-c-nombre" placeholder="Ej: Carlos Gómez" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
                             </div>
                             <div>
-                                <label class="text-[11px] font-bold text-slate-300">Número de Cédula (Uso Interno Admin)</label>
+                                <label class="text-[11px] font-bold text-slate-300">Número de Cédula (Contraseña Inicial)</label>
                                 <input type="number" id="adm-c-doc" placeholder="Ej: 1122334455" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
                             </div>
                             <div>
@@ -618,6 +632,30 @@
 
     </main>
 
+    <!-- MODAL CAMBIAR CONTRASEÑA TRANSPORTADOR -->
+    <div id="modal-cambiar-pass" class="fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 p-5 rounded-3xl max-w-sm w-full space-y-3 shadow-2xl text-xs">
+            <h3 class="font-black text-sm text-orange-400 text-center">🔑 Cambiar Contraseña de Acceso</h3>
+            <p class="text-slate-300 text-[11px] text-center">Ingresa tu contraseña actual (o cédula) y define tu nueva clave personal.</p>
+            <div>
+                <label class="font-bold text-slate-300">Contraseña Actual</label>
+                <input type="password" id="trans-pass-actual" placeholder="Clave actual" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
+            </div>
+            <div>
+                <label class="font-bold text-slate-300">Nueva Contraseña</label>
+                <input type="password" id="trans-pass-nueva" placeholder="Nueva clave" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
+            </div>
+            <div>
+                <label class="font-bold text-slate-300">Confirmar Nueva Contraseña</label>
+                <input type="password" id="trans-pass-confirma" placeholder="Repite nueva clave" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none">
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-2">
+                <button onclick="ejecutarCambioPasswordTrans()" class="bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white cursor-pointer">Actualizar Clave</button>
+                <button onclick="cerrarModalCambiarPass()" class="bg-slate-700 hover:bg-slate-600 font-bold py-2.5 rounded-xl text-slate-200 cursor-pointer">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL EDITAR SERVICIO -->
     <div id="modal-editar-servicio" class="fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-800 border border-slate-700 p-5 rounded-3xl max-w-sm w-full space-y-3 shadow-2xl text-xs">
@@ -726,8 +764,8 @@
         let state = {
             cargas: JSON.parse(localStorage.getItem('kargass_cargas')) || [],
             conductores: JSON.parse(localStorage.getItem('kargass_conductores')) || [
-                { placa: "ABC123", nombre: "Conductor de Prueba ABC", doc: "99999999", tel: "3100000000", vehiculo: "Motocarguero sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01", calificacion: 5.0, serviciosCalificados: 0, bonoNotificacion: null },
-                { placa: "571 AGU", nombre: "Dani David Martínez", doc: "1122124473", tel: "3143842007", vehiculo: "Motocarguero sencillo", marca: "Camello", cilindraje: "250cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01", calificacion: 5.0, serviciosCalificados: 0, bonoNotificacion: null }
+                { placa: "ABC123", password: "99999999", nombre: "Conductor de Prueba ABC", doc: "99999999", tel: "3100000000", vehiculo: "Motocarguero sencillo", marca: "AKT", cilindraje: "200cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01", calificacion: 5.0, serviciosCalificados: 0, bonoNotificacion: null },
+                { placa: "571 AGU", password: "1122124473", nombre: "Dani David Martínez", doc: "1122124473", tel: "3143842007", vehiculo: "Motocarguero sencillo", marca: "Camello", cilindraje: "250cc", municipio: "Acacías", estado: "Activo", vencimiento: "2026-12-01", calificacion: 5.0, serviciosCalificados: 0, bonoNotificacion: null }
             ],
             tarifasPorMunicipio: JSON.parse(localStorage.getItem('kargass_tarifas_municipios')) || {
                 "Acacías": tarifasBaseAcacias
@@ -834,7 +872,7 @@
                 document.getElementById('view-transportador').classList.remove('hidden');
                 if (state.transActualPlaca) {
                     document.getElementById('trans-placa-input').value = state.transActualPlaca;
-                    verificarTransportadorLoginMemoria(state.transActualPlaca);
+                    verificarTransportadorLoginMemoriaDirecto(state.transActualPlaca);
                 } else {
                     document.getElementById('trans-login').classList.remove('hidden');
                     document.getElementById('trans-dashboard').classList.add('hidden');
@@ -1129,18 +1167,28 @@
             }
         }
 
-        // TRANSPORTADOR JS
+        // TRANSPORTADOR JS (BLINDADO CON CONTRASEÑA)
         function verificarTransportadorLogin() {
             const placa = document.getElementById('trans-placa-input').value.trim().toUpperCase();
-            if (!placa) { alert("Ingresa tu placa"); return; }
-            verificarTransportadorLoginMemoria(placa);
-        }
+            const pass = document.getElementById('trans-pass-input').value.trim();
 
-        function verificarTransportadorLoginMemoria(placa) {
+            if (!placa || !pass) { 
+                alert("⚠️ Ingresa la placa y tu contraseña (cédula)"); 
+                return; 
+            }
+
             state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
             let cond = state.conductores.find(c => c.placa === placa);
+
             if (!cond) {
                 alert("⚠️ Placa no encontrada o pendiente de aprobación en la Central.");
+                return;
+            }
+
+            // Validar contraseña o cédula por defecto
+            const claveReal = cond.password || cond.doc;
+            if (pass !== claveReal) {
+                alert("❌ Contraseña incorrecta. Recuerda que por defecto es tu número de cédula.");
                 return;
             }
 
@@ -1154,12 +1202,66 @@
             cargarDashboardTrans(cond);
         }
 
+        function verificarTransportadorLoginMemoriaDirecto(placa) {
+            state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
+            let cond = state.conductores.find(c => c.placa === placa);
+            if (cond && cond.estado === 'Activo') {
+                cargarDashboardTrans(cond);
+            } else {
+                cambiarPlacaTrans();
+            }
+        }
+
         function cambiarPlacaTrans() {
             state.transActualPlaca = null;
             localStorage.removeItem('kargass_trans_placa_memoria');
             document.getElementById('trans-dashboard').classList.add('hidden');
             document.getElementById('trans-login').classList.remove('hidden');
             document.getElementById('trans-placa-input').value = '';
+            document.getElementById('trans-pass-input').value = '';
+        }
+
+        function abrirModalCambiarPass() {
+            document.getElementById('trans-pass-actual').value = '';
+            document.getElementById('trans-pass-nueva').value = '';
+            document.getElementById('trans-pass-confirma').value = '';
+            document.getElementById('modal-cambiar-pass').classList.remove('hidden');
+        }
+
+        function cerrarModalCambiarPass() {
+            document.getElementById('modal-cambiar-pass').classList.add('hidden');
+        }
+
+        function ejecutarCambioPasswordTrans() {
+            const actual = document.getElementById('trans-pass-actual').value.trim();
+            const nueva = document.getElementById('trans-pass-nueva').value.trim();
+            const confirma = document.getElementById('trans-pass-confirma').value.trim();
+
+            if (!actual || !nueva || !confirma) {
+                alert("⚠️ Completa todos los campos");
+                return;
+            }
+
+            if (nueva !== confirma) {
+                alert("⚠️ Las nuevas contraseñas no coinciden");
+                return;
+            }
+
+            state.conductores = JSON.parse(localStorage.getItem('kargass_conductores')) || state.conductores;
+            let cond = state.conductores.find(c => c.placa === state.transActualPlaca);
+
+            if (cond) {
+                const claveActualValida = cond.password || cond.doc;
+                if (actual !== claveActualValida) {
+                    alert("❌ La contraseña actual es incorrecta");
+                    return;
+                }
+
+                cond.password = nueva;
+                guardarDatosLocal();
+                cerrarModalCambiarPass();
+                alert("✅ ¡Contraseña actualizada con éxito!");
+            }
         }
 
         function cargarDashboardTrans(cond) {
@@ -1394,7 +1496,22 @@
             fechaFutura.setDate(fechaFutura.getDate() + 30);
             const vencimientoStr = fechaFutura.toISOString().split('T')[0];
 
-            state.conductores.push({ placa, nombre, doc, tel, municipio, vehiculo, marca, cilindraje, estado: "Pendiente", vencimiento: vencimientoStr, calificacion: 5.0, serviciosCalificados: 0, bonoNotificacion: null });
+            state.conductores.push({ 
+                placa, 
+                password: doc, // Contraseña inicial igual a la cédula
+                nombre, 
+                doc, 
+                tel, 
+                municipio, 
+                vehiculo, 
+                marca, 
+                cilindraje, 
+                estado: "Pendiente", 
+                vencimiento: vencimientoStr, 
+                calificacion: 5.0, 
+                serviciosCalificados: 0, 
+                bonoNotificacion: null 
+            });
             guardarDatosLocal();
             alert("🚀 ¡Postulación enviada a la Central con éxito! Queda a la espera de aprobación.");
             
@@ -1920,8 +2037,11 @@
             fechaFutura.setDate(fechaFutura.getDate() + 30);
             const vencimientoStr = vencInput || fechaFutura.toISOString().split('T')[0];
 
+            const passwordInicial = doc || "1234";
+
             const datosCond = { 
                 placa, 
+                password: passwordInicial,
                 nombre, 
                 doc: doc || "N/A", 
                 tel: tel || "N/A", 
@@ -1937,6 +2057,7 @@
             };
 
             if (idx >= 0) {
+                datosCond.password = state.conductores[idx].password || doc || "1234";
                 datosCond.estado = state.conductores[idx].estado || "Activo";
                 datosCond.calificacion = state.conductores[idx].calificacion !== undefined ? state.conductores[idx].calificacion : 5.0;
                 datosCond.serviciosCalificados = state.conductores[idx].serviciosCalificados || 0;
@@ -2021,7 +2142,7 @@
             
             state.config.valorSuscripcion = parseInt(document.getElementById('cfg-valor-sus').value) || 45000;
             state.config.nequi = document.getElementById('cfg-nequi').value.trim() || "3143842007";
-            state.config.whatsapp = document.getElementById('cfg-whatsapp').value.trim() || "3507690951";
+            state.config.whatsapp = document.getElementById('cfg-whatsapp'].value.trim() || "3507690951";
             state.config.picoPlacaTexto = document.getElementById('cfg-pico-placa').value.trim() || picoPlacaPorDefecto;
             state.config.reglamentoTexto = document.getElementById('cfg-reglamento').value.trim() || reglamentoEsencialPorDefecto;
             
