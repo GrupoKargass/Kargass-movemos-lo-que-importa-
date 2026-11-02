@@ -2142,12 +2142,11 @@
             
             state.config.valorSuscripcion = parseInt(document.getElementById('cfg-valor-sus').value) || 45000;
             state.config.nequi = document.getElementById('cfg-nequi').value.trim() || "3143842007";
-            state.config.whatsapp = document.getElementById('cfg-whatsapp'].value.trim() || "3507690951";
+            state.config.whatsapp = document.getElementById('cfg-whatsapp').value.trim() || "3507690951";
             state.config.picoPlacaTexto = document.getElementById('cfg-pico-placa').value.trim() || picoPlacaPorDefecto;
             state.config.reglamentoTexto = document.getElementById('cfg-reglamento').value.trim() || reglamentoEsencialPorDefecto;
             
             guardarDatosLocal();
-            textosGlobalesActualizados = true; // flag seguro
             actualizarTextosGlobales();
             alert("✅ ¡Ajustes globales guardados con éxito!");
         }
