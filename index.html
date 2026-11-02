@@ -283,7 +283,14 @@
 <div id="contenedor-tabla-historial" class="space-y-3"><div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-center text-xs text-slate-400">Selecciona un conductor arriba para ver su historial en tabla.</div></div>
 </div>
 <div id="a-content-tarifas" class="space-y-3 hidden">
-<div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs"><h3 class="font-black text-sm text-orange-400">📍 Seleccionar Municipio para Tarifas</h3><select id="admin-tarifa-municipio-sel" onchange="renderAdminTarifas()" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-black select-municipios outline-none text-xs"></select></div>
+<div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
+<div class="flex justify-between items-center">
+<div><h3 class="font-black text-sm text-orange-400">📍 Seleccionar Municipio para Tarifas</h3></div>
+<button onclick="document.getElementById('input-csv-tarifas').click()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-2.5 py-1.5 rounded-xl text-[10px] cursor-pointer shadow flex items-center space-x-1"><span>📂</span><span>Importar CSV</span></button>
+<input type="file" id="input-csv-tarifas" accept=".csv" class="hidden" onchange="importarTarifasCSV(event)">
+</div>
+<select id="admin-tarifa-municipio-sel" onchange="renderAdminTarifas()" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-black select-municipios outline-none text-xs"></select>
+</div>
 <div id="box-form-tarifa-admin" class="bg-slate-800 p-4 rounded-2xl border-2 border-slate-700 space-y-3 text-xs shadow-xl transition-all duration-300">
 <h3 class="font-black text-sm text-orange-400" id="admin-tarifa-form-title">⚙️ Añadir Tarifa Oficial</h3>
 <input type="hidden" id="admin-tarifa-edit-idx" value="-1">
@@ -555,7 +562,6 @@ state.tarifasPorMunicipio=JSON.parse(localStorage.getItem('kargass_tarifas_munic
 if(!state.tarifasPorMunicipio[munSel])state.tarifasPorMunicipio[munSel]={urbano:[],veredas:[],municipios:[]};
 
 if(editIdx>=0){
-// Si se editó y posiblemente cambió de categoría, removemos la vieja y agregamos la nueva limpia
 if(origCat && state.tarifasPorMunicipio[munSel][origCat]){
 state.tarifasPorMunicipio[munSel][origCat].splice(editIdx,1);
 }
@@ -567,6 +573,42 @@ guardarDatosLocal();
 limpiarFormTarifaAdmin();
 renderAdminTarifas();
 alert("✅ Tarifa guardada y movida con éxito");
+}
+
+function importarTarifasCSV(event){
+const file=event.target.files[0];
+if(!file)return;
+const munSel=document.getElementById('admin-tarifa-municipio-sel').value;
+const reader=new FileReader();
+reader.onload=function(e){
+try{
+const lines=e.target.result.split(/\r\n|\n/);
+state.tarifasPorMunicipio=JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||state.tarifasPorMunicipio;
+if(!state.tarifasPorMunicipio[munSel])state.tarifasPorMunicipio[munSel]={urbano:[],veredas:[],municipios:[]};
+
+let count=0;
+lines.forEach(line=>{
+if(!line.trim())return;
+const cols=line.split(',').map(c=>c.trim().replace(/^["']|["']$/g,''));
+if(cols.length>=3){
+const ruta=cols[0];
+const cat=cols[1].toLowerCase();
+const valor=cols[2];
+if((cat==='urbano'||cat==='veredas'||cat==='municipios')&&ruta&&valor){
+state.tarifasPorMunicipio[munSel][cat].push({id:Date.now()+Math.random(),ruta,valor});
+count++;
+}
+}
+});
+guardarDatosLocal();
+renderAdminTarifas();
+alert(`✅ ¡Se importaron ${count} tarifas exitosamente para ${munSel}!`);
+event.target.value='';
+}catch(err){
+alert("❌ Error al procesar el archivo CSV. Asegúrate de que tenga el formato correcto.");
+}
+};
+reader.readAsText(file);
 }
 
 function editarTarifaAdmin(mun,cat,idx){
