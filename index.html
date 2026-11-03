@@ -296,7 +296,7 @@
 <div class="flex justify-between items-center"><h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">Directorio General de Transportadores</h3></div>
 <div><input type="text" id="input-buscar-flota" placeholder="🔍 Buscar por Placa o Nombre..." oninput="renderAdminConductores()" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold text-xs outline-none focus:border-orange-500"></div>
 </div>
-<div id="admin-lista-conductores" class="space-y-2"></div>
+<div id="admin-lista-conductores" class="space-y-3"></div>
 </div>
 <div id="a-content-historial" class="space-y-3 hidden">
 <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs shadow-xl">
@@ -1091,13 +1091,45 @@ const idx=state.conductores.findIndex(c=>c.placa===cond.placa);
 const servicios=cond.serviciosCalificados||0;
 const cal=cond.calificacion!==undefined?cond.calificacion:5.0;
 const bono=(servicios>=5&&cal>=4.5);
-return`<div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-1.5 shadow"><div class="flex justify-between items-center"><p class="font-black text-white">${cond.nombre} (<span class="text-orange-400">${cond.placa}</span>)</p><span class="px-2 py-0.5 rounded text-[10px] font-bold ${cond.estado==='Activo'?'bg-green-500/20 text-green-400':'bg-amber-500/20 text-amber-400'}">${cond.estado}</span></div><p class="text-[11px] text-slate-300"><b>Cédula:</b> ${cond.doc||'N/A'} | <b>Ciudad:</b> <span class="text-orange-400 font-bold">${cond.municipio||'Acacías'}</span> • Tel: ${cond.tel}</p><p class="text-[11px] text-slate-300">Vence: <b class="text-orange-400">${cond.vencimiento||'N/A'}</b></p><p class="text-[11px] text-amber-400 font-bold">⭐ Estrellas: ${cal} | Calificados: ${servicios}</p>${bono?`<div class="bg-amber-950/40 p-2 rounded border border-amber-500/50 flex justify-between items-center text-[11px]"><span class="text-amber-300 font-bold">✨ ¡Candidato a Bono!</span><button onclick="otorgarBonoTransportador(${idx},3)" class="bg-amber-600 px-2 py-1 rounded text-white font-black cursor-pointer">+3 Días ⭐</button></div>`:''}<div class="bg-slate-900 p-2 rounded-lg border border-slate-700 flex items-center space-x-2 pt-1"><input type="date" id="input-vence-${idx}" value="${cond.vencimiento||''}" class="p-1 bg-slate-800 border border-slate-700 rounded text-white text-[11px]"><button onclick="actualizarFechaSuscripcionAdmin(${idx})" class="bg-amber-600 px-2.5 py-1 rounded text-white font-bold cursor-pointer">Modificar Vencimiento</button></div>
-<div class="flex flex-wrap gap-1.5 pt-1">
-<button onclick="restablecerClaveAdmin(${idx})" class="bg-purple-600 hover:bg-purple-700 px-2.5 py-1.5 rounded text-white font-bold cursor-pointer">🔑 Restablecer Clave</button>
-${cond.estado!=='Activo'?`<button onclick="cambiarEstadoConductor(${idx},'Activo')" class="bg-green-600 px-2.5 py-1.5 rounded text-white font-bold cursor-pointer">Aprobar</button>`:`<button onclick="cambiarEstadoConductor(${idx},'Suspendido')" class="bg-amber-600 px-2.5 py-1.5 rounded text-white font-bold cursor-pointer">Suspender</button>`}
-<button onclick="editarConductorAdmin(${idx})" class="bg-blue-600 hover:bg-blue-700 px-2.5 py-1.5 rounded text-white font-bold cursor-pointer">✏️ Editar</button>
-<button onclick="eliminarConductorAdmin(${idx})" class="bg-red-600 hover:bg-red-700 px-2.5 py-1.5 rounded text-white font-bold cursor-pointer">Eliminar</button>
-</div></div>`;}).join('');
+return`<div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-xs space-y-3 shadow-xl">
+  <!-- CABECERA DE LA TARJETA: NOMBRE, PLACA Y ESTADO -->
+  <div class="flex justify-between items-start border-b border-slate-700 pb-2">
+    <div>
+      <h4 class="font-black text-white text-sm">${cond.nombre}</h4>
+      <p class="text-orange-400 font-black text-xs">Placa: <span class="tracking-widest">${cond.placa}</span></p>
+    </div>
+    <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${cond.estado==='Activo'?'bg-green-500/20 text-green-400 border border-green-500/30':'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">${cond.estado}</span>
+  </div>
+
+  <!-- DATOS DE CONTACTO Y CALIFICACIÓN -->
+  <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1 text-slate-300">
+    <p><b>Cédula:</b> ${cond.doc||'N/A'} | <b>Tel:</b> ${cond.tel||'N/A'}</p>
+    <p><b>Base:</b> <span class="text-orange-400 font-bold">${cond.municipio||'Acacías'}</span> | <b class="text-amber-400">⭐ ${cal}</b> (${servicios} calificados)</p>
+    <p class="text-[11px] pt-0.5">Vigencia de Membresía: <b class="text-white">${cond.vencimiento||'N/A'}</b></p>
+  </div>
+
+  ${bono?`<div class="bg-amber-950/40 p-2.5 rounded-xl border border-amber-500/50 flex justify-between items-center text-[11px]"><span class="text-amber-300 font-bold">✨ ¡Candidato a Bono por Excelencia!</span><button onclick="otorgarBonoTransportador(${idx},3)" class="bg-amber-600 hover:bg-amber-700 px-2.5 py-1 rounded-lg text-white font-black cursor-pointer shadow">+3 Días ⭐</button></div>`:''}
+
+  <!-- MÓDULO DE GESTIÓN DE VENCIMIENTO -->
+  <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1.5">
+    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Modificar Vencimiento de Suscripción:</label>
+    <div class="flex space-x-2">
+      <input type="date" id="input-vence-${idx}" value="${cond.vencimiento||''}" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-bold text-xs outline-none">
+      <button onclick="actualizarFechaSuscripcionAdmin(${idx})" class="bg-amber-600 hover:bg-amber-700 px-3 py-2 rounded-lg text-white font-bold text-xs whitespace-nowrap cursor-pointer shadow">Guardar Fecha</button>
+    </div>
+  </div>
+
+  <!-- BOTONES DE ACCIÓN ADMINISTRATIVA ORGANIZADOS POR JERARQUÍA -->
+  <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-700">
+    <button onclick="restablecerClaveAdmin(${idx})" class="bg-purple-600 hover:bg-purple-700 py-2 px-3 rounded-xl text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center space-x-1"><span>🔑</span><span>Restablecer Clave</span></button>
+    ${cond.estado!=='Activo'?`<button onclick="cambiarEstadoConductor(${idx},'Activo')" class="bg-green-600 hover:bg-green-700 py-2 px-3 rounded-xl text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center space-x-1"><span>✅</span><span>Aprobar Cuenta</span></button>`:`<button onclick="cambiarEstadoConductor(${idx},'Suspendido')" class="bg-amber-600 hover:bg-amber-700 py-2 px-3 rounded-xl text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center space-x-1"><span>⏸️</span><span>Suspender Cuenta</span></button>`}
+  </div>
+
+  <div class="grid grid-cols-2 gap-2">
+    <button onclick="editarConductorAdmin(${idx})" class="bg-blue-600 hover:bg-blue-700 py-2 px-3 rounded-xl text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center space-x-1"><span>✏️</span><span>Editar Datos</span></button>
+    <button onclick="eliminarConductorAdmin(${idx})" class="bg-red-600/90 hover:bg-red-700 py-2 px-3 rounded-xl text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center space-x-1"><span>🗑️</span><span>Eliminar</span></button>
+  </div>
+</div>`;}).join('');
 }
 
 function restablecerClaveAdmin(idx){state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;const cond=state.conductores[idx];const nuevaClave=prompt(`🔑 Ingresa la nueva contraseña personal para el transportador ${cond.nombre} (Placa: ${cond.placa}):`);if(nuevaClave&&nuevaClave.trim()){cond.password=nuevaClave.trim();guardarDatosLocal();renderAdminConductores();alert(`✅ ¡Contraseña restablecida con éxito para el vehículo ${cond.placa}!`);}}
