@@ -7,6 +7,9 @@
 <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2921/2921222.png">
 <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2921/2921222.png">
 <script src="https://cdn.tailwindcss.com"></script>
+<!-- Firebase SDK para sincronización en tiempo real en la nube -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 <style>body,input,select,textarea,button{font-size:15px!important}.btn-tab-active{background-color:#f97316!important;color:#fff!important;font-weight:800!important}</style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col leading-relaxed">
@@ -376,6 +379,31 @@
 </div>
 
 <script>
+// ==========================================
+// CONFIGURACIÓN DE FIREBASE (NUBE EN TIEMPO REAL) - INTEGRADA CON TUS CREDENCIALES
+// ==========================================
+const firebaseConfig = {
+  apiKey: "AIzaSyBeRps9jtHT1C18W0KmG1Iif1t8nctzHNg",
+  authDomain: "kargass-apk.firebaseapp.com",
+  databaseURL: "https://kargass-apk-default-rtdb.firebaseio.com",
+  projectId: "kargass-apk",
+  storageBucket: "kargass-apk.appspot.com",
+  messagingSenderId: "994813888243",
+  appId: "1:994813888243:web:358dc3bb81db9bb0045986"
+};
+
+// Inicialización de Firebase (con respaldo a localStorage si no está configurado aún)
+let firebaseApp = null;
+let db = null;
+try {
+  if(firebaseConfig.apiKey !== "TU_API_KEY") {
+    firebaseApp = firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+  }
+} catch(e) {
+  console.log("Usando modo local offline temporal hasta configurar Firebase.");
+}
+
 const listaMunicipiosMeta=["Villavicencio","Acacías","Barranca de Upía","Cabuyaro","Castilla la Nueva","Cubarral","Cumaral","El Calvario","El Castillo","El Dorado","Fuente de Oro","Granada","Guamal","La Macarena","La Uribe","Lejanías","Mapiripán","Mesetas","Puerto Concordia","Puerto Gaitán","Puerto Lleras","Puerto López","Puerto Rico","Restrepo","San Carlos de Guaroa","San Juan de Arama","San Juanito","San Martín","Vista Hermosa"];
 const tarifasBaseAcacias={urbano:[{id:1,ruta:"Urbano",valor:"$25.000"},{id:2,ruta:"Cobalto",valor:"$40.000"},{id:3,ruta:"Trasteos",valor:"$40.000"},{id:4,ruta:"Escombros",valor:"$40.000"}],veredas:[{id:5,ruta:"Vereda San Nicolas",valor:"$35.000"},{id:6,ruta:"Vereda El Centro",valor:"$35.000"},{id:7,ruta:"Vereda El Dimante",valor:"$35.000"},{id:8,ruta:"Vereda Monte Bello",valor:"$50.000"},{id:9,ruta:"Vereda la Esmeralda",valor:"$50.000 - $60.000"},{id:10,ruta:"Vereda Montelibano",valor:"$60.000"},{id:11,ruta:"Vereda San Calletano",valor:"$60.000"}],municipios:[{id:12,ruta:"Guamal",valor:"$60.000"},{id:13,ruta:"Chichimene",valor:"$60.000"},{id:14,ruta:"Violeta",valor:"$80.000"},{id:15,ruta:"Santa Rosa",valor:"$80.000"},{id:16,ruta:"Castilla",valor:"$100.000"},{id:17,ruta:"Puerto Canecas",valor:"$100.000"},{id:18,ruta:"San Martin",valor:"$130.000"},{id:19,ruta:"Cubarral",valor:"$130.000"},{id:20,ruta:"Dinamarca",valor:"$130.000"},{id:21,ruta:"Patio Bonito",valor:"$130.000"},{id:22,ruta:"Villavicencio",valor:"$130.000"},{id:23,ruta:"San Lorenzo",valor:"$150.000"},{id:24,ruta:"El Dorado",valor:"$160.000"},{id:25,ruta:"Granada",valor:"$190.000 - $220.000"},{id:26,ruta:"Sancarlos de guaroba",valor:"$250.000"},{id:27,ruta:"Surimena",valor:"$250.000"}]};
 const reglamentoEsencialPorDefecto=`REGLAMENTO OPERATIVO Y DE CONVIVENCIA – GRUPO KARGASS\n"Unidos hacemos más camino. En Grupo Kargass nuestra mayor herramienta es la confianza del cliente."\n\n1. Nuestra Carta de Presentación:\n• Trato amable, cordial y respetuoso con el cliente.\n• Vestimenta adecuada, limpia y profesional.\n• Cuidado del vehículo en higiene y mecánica.\n\n2. Compromiso con el Tiempo y la Puntualidad:\n• Puntualidad estricta en la hora de recogida acordada.\n• Evitar cancelaciones de último momento.\n\n3. Cuidado y Respeto Absoluto por la Carga:\n• Manipulación impecable de mercancías y trasteos.\n• Cobro transparente según tarifa cotizada en la app.\n\n4. Programa de Estrellas y Bonificaciones ⭐:\n• Promedio mínimo deseado: 4.5 a 5.0 estrellas.\n• Al sumar 15 servicios calificados con excelencia, la Central otorga días adicionales de suscripción mensual de regalo.`;
@@ -395,7 +423,46 @@ gain2.gain.setValueAtTime(0.3,now+0.25);gain2.gain.exponentialRampToValueAtTime(
 osc2.connect(gain2);gain2.connect(ctx.destination);osc2.start(now+0.25);osc2.stop(now+0.5);
 }catch(e){console.log("Audio waiting gesture",e);}}
 
-function guardarDatosLocal(){try{localStorage.setItem('kargass_cargas',JSON.stringify(state.cargas));localStorage.setItem('kargass_conductores',JSON.stringify(state.conductores));localStorage.setItem('kargass_tarifas_municipios',JSON.stringify(state.tarifasPorMunicipio));localStorage.setItem('kargass_config_global',JSON.stringify(state.config));localStorage.setItem('kargass_trans_ultimo_uso',Date.now().toString());actualizarCampanitaServicios();}catch(e){console.error(e);alert("⚠️ Memoria llena.");}}
+function guardarDatosLocal(){
+try{
+  localStorage.setItem('kargass_cargas',JSON.stringify(state.cargas));
+  localStorage.setItem('kargass_conductores',JSON.stringify(state.conductores));
+  localStorage.setItem('kargass_tarifas_municipios',JSON.stringify(state.tarifasPorMunicipio));
+  localStorage.setItem('kargass_config_global',JSON.stringify(state.config));
+  localStorage.setItem('kargass_trans_ultimo_uso',Date.now().toString());
+
+  // Sincronización automática con Firebase si está activo
+  if(db) {
+    db.ref('kargass_app_data').set({
+      cargas: state.cargas,
+      conductores: state.conductores,
+      tarifas: state.tarifasPorMunicipio,
+      config: state.config
+    });
+  }
+
+  actualizarCampanitaServicios();
+}catch(e){console.error(e);alert("⚠️ Memoria llena.");}
+}
+
+// Escuchar datos en tiempo real de Firebase si está configurado
+if(db) {
+  db.ref('kargass_app_data').on('value', (snapshot) => {
+    const data = snapshot.val();
+    if(data) {
+      if(data.cargas) state.cargas = data.cargas;
+      if(data.conductores) state.conductores = data.conductores;
+      if(data.tarifas) state.tarifasPorMunicipio = data.tarifas;
+      if(data.config) state.config = data.config;
+      
+      // Refrescar vistas activas
+      if(state.rolGuardado==='cliente') renderHistorialCliente();
+      if(state.rolGuardado==='transportador') { renderCargasDisponiblesTrans(); renderHistorialTransportador(); }
+      if(state.rolGuardado==='central' && state.isAdmin) { renderAdminServicios(); renderAdminConductores(); }
+      actualizarCampanitaServicios();
+    }
+  });
+}
 
 function registrarActividadUsuario(){localStorage.setItem('kargass_trans_ultimo_uso',Date.now().toString());}
 
@@ -404,7 +471,6 @@ function verificarInactividadSesion(){if(state.transActualPlaca){const ultimoUso
 function actualizarCampanitaServicios(){
 const bellBox=document.getElementById('header-bell-box');
 if(!state.transActualPlaca){bellBox.classList.add('hidden');return;}
-// Solo mostrar la campanita si está en rol transportador activo
 if(state.rolGuardado!=='transportador'){bellBox.classList.add('hidden');return;}
 
 state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
@@ -454,8 +520,6 @@ document.getElementById('view-afiliacion').classList.add('hidden');
 document.getElementById('view-central').classList.add('hidden');
 poblarSelectMunicipios();
 actualizarTextosGlobales();
-
-// Ocultar o mostrar campana según rol
 actualizarCampanitaServicios();
 
 if(mod==='cliente'){
@@ -674,7 +738,6 @@ function renderCargasDisponiblesTrans(){
     const yaAsignadoOConOfertaAceptada=(c.conductorAsignadoPlaca!=null||c.estado.startsWith("Asignado"));
     const labelRuta=c.tipoZona==='Intermunicipal'?`📍 Intermunicipal: ${c.municipio} ➔ ${c.municipioDestino}`:`📍 ${c.municipio} (Urbano)`;
     
-    // Verificar si este conductor ya envió oferta en este servicio
     const yaEnvioOferta = c.ofertas && c.ofertas.some(o => o.placa === state.transActualPlaca);
     const miOfertaActual = yaEnvioOferta ? c.ofertas.find(o => o.placa === state.transActualPlaca) : null;
     
@@ -764,7 +827,6 @@ function enviarOfertaTransportador(cargaId){
   
   if(carga&&cond){
     if(!carga.ofertas) carga.ofertas=[];
-    // Validar si ya había cotizado para bloquear doble envío
     let existente=carga.ofertas.find(o=>o.placa===cond.placa);
     if(existente){
       alert("⚠️ Ya habías enviado una cotización para este servicio.");
