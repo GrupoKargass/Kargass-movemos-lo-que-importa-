@@ -383,7 +383,7 @@
 // CONFIGURACIÓN DE FIREBASE (NUBE EN TIEMPO REAL)
 // ==========================================
 const firebaseConfig = {
-  apiKey: "AIzaSyD...", // Clave activa de tu proyecto
+  apiKey: "AIzaSyD...", 
   authDomain: "kargass-apk.firebaseapp.com",
   databaseURL: "https://kargass-apk-default-rtdb.firebaseio.com",
   projectId: "kargass-apk",
@@ -392,7 +392,6 @@ const firebaseConfig = {
   appId: "1:123456789:web:abcde"
 };
 
-// Inicialización de Firebase con la URL activa
 let firebaseApp = null;
 let db = null;
 try {
@@ -431,7 +430,6 @@ try{
   localStorage.setItem('kargass_config_global',JSON.stringify(state.config));
   localStorage.setItem('kargass_trans_ultimo_uso',Date.now().toString());
 
-  // Sincronización automática con Firebase
   if(db) {
     db.ref('kargass_app_data').set({
       cargas: state.cargas,
@@ -440,22 +438,21 @@ try{
       config: state.config
     });
   }
-
   actualizarCampanitaServicios();
 }catch(e){console.error(e);alert("⚠️ Memoria llena.");}
 }
 
-// Escucha activa en tiempo real con Firebase (.on)
+// Escucha activa en tiempo real con Firebase (.on) con recarga automática de interfaces
 if(db) {
   db.ref('kargass_app_data').on('value', (snapshot) => {
     const data = snapshot.val();
     if(data) {
-      if(data.cargas) state.cargas = data.cargas;
-      if(data.conductores) state.conductores = data.conductores;
-      if(data.tarifas) state.tarifasPorMunicipio = data.tarifas;
-      if(data.config) state.config = data.config;
+      if(data.cargas) { state.cargas = data.cargas; localStorage.setItem('kargass_cargas', JSON.stringify(data.cargas)); }
+      if(data.conductores) { state.conductores = data.conductores; localStorage.setItem('kargass_conductores', JSON.stringify(data.conductores)); }
+      if(data.tarifas) { state.tarifasPorMunicipio = data.tarifas; localStorage.setItem('kargass_tarifas_municipios', JSON.stringify(data.tarifas)); }
+      if(data.config) { state.config = data.config; localStorage.setItem('kargass_config_global', JSON.stringify(data.config)); }
       
-      // Refrescar vistas activas en pantalla
+      // Refrescar vistas activas en pantalla de inmediato
       if(state.rolGuardado==='cliente') renderHistorialCliente();
       if(state.rolGuardado==='transportador') { renderCargasDisponiblesTrans(); renderHistorialTransportador(); }
       if(state.rolGuardado==='central' && state.isAdmin) { renderAdminServicios(); renderAdminConductores(); }
