@@ -105,7 +105,13 @@
 <div class="text-4xl">🏍️</div><h3 class="font-black text-lg text-white">Portal de Transportadores</h3><p class="text-xs text-slate-300">Ingresa tu placa y contraseña personal</p>
 <div class="space-y-2 pt-1 text-left">
 <div><label class="text-[11px] font-bold text-slate-300">Número de Placa</label><input type="text" id="trans-placa-input" placeholder="Ej: ABC123" autocomplete="off" class="w-full tracking-widest text-base p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-black uppercase outline-none mt-0.5"></div>
-<div><label class="text-[11px] font-bold text-slate-300">Contraseña Personal</label><input type="password" id="trans-pass-input" placeholder="Contraseña personal" autocomplete="off" class="w-full tracking-widest text-base p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-black outline-none mt-0.5"></div>
+<div>
+  <label class="text-[11px] font-bold text-slate-300">Contraseña Personal</label>
+  <div class="relative mt-0.5">
+    <input type="password" id="trans-pass-input" placeholder="Contraseña personal" autocomplete="off" class="w-full tracking-widest text-base p-3 pr-12 bg-slate-900 border border-slate-700 rounded-xl text-white font-black outline-none">
+    <button type="button" onclick="toggleVerPasswordTransLogin()" class="absolute right-3 top-3.5 text-slate-400 hover:text-white cursor-pointer text-lg">👁️</button>
+  </div>
+</div>
 </div>
 <button onclick="verificarTransportadorLogin()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white shadow-lg cursor-pointer mt-1">Ingresar al Panel</button>
 <button onclick="recuperarClaveTransportador()" class="text-xs text-slate-400 hover:text-orange-400 font-bold block mx-auto cursor-pointer pt-1">🔑 ¿Olvidaste tu contraseña? Solicitar a Central</button>
@@ -174,7 +180,23 @@
 </div>
 </div>
 <div id="t-content-viajes" class="space-y-3 hidden">
-<h3 class="font-black text-xs text-slate-300 uppercase tracking-wider">📋 Historial de Mis Viajes Realizados y Calificaciones</h3>
+<div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 space-y-3 text-xs shadow-xl">
+  <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+    <h3 class="font-black text-xs text-orange-400 uppercase tracking-wider">📊 Calcular Ingresos por Fechas</h3>
+    <button onclick="limpiarFiltroFechasTrans()" class="text-[10px] text-slate-400 hover:text-white underline cursor-pointer">Limpiar</button>
+  </div>
+  <div class="grid grid-cols-2 gap-2">
+    <div><label class="text-[10px] font-bold text-slate-300">Fecha Inicio</label><input type="date" id="filtro-fecha-ini" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold text-xs"></div>
+    <div><label class="text-[10px] font-bold text-slate-300">Fecha Fin</label><input type="date" id="filtro-fecha-fin" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold text-xs"></div>
+  </div>
+  <button onclick="renderHistorialTransportador()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-2 rounded-xl text-white shadow cursor-pointer text-xs uppercase">🔍 Filtrar e Ingresar Total</button>
+  <div id="box-resumen-ingresos" class="hidden bg-slate-900 p-3 rounded-xl border border-emerald-500/50 text-center space-y-1">
+    <p class="text-[10px] text-slate-400 font-bold uppercase">Total Ingresos en el Periodo:</p>
+    <p id="txt-total-ingresos-periodo" class="text-base font-black text-emerald-400">$0 COP</p>
+    <p id="txt-total-servicios-periodo" class="text-[10px] text-slate-300">0 servicios completados</p>
+  </div>
+</div>
+<h3 class="font-black text-xs text-slate-300 uppercase tracking-wider pt-1">📋 Historial de Mis Viajes Realizados y Calificaciones</h3>
 <div id="lista-mis-viajes-trans" class="space-y-2"><div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin viajes completados en este dispositivo.</div></div>
 </div>
 </div>
@@ -335,6 +357,7 @@
 </div>
 </div>
 </div>
+</div>
 </main>
 <div id="modal-cambiar-pass" class="fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-4 hidden">
 <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl max-w-xs w-full space-y-2.5 shadow-2xl text-xs">
@@ -408,7 +431,7 @@ const tarifasBaseAcacias={urbano:[{id:1,ruta:"Urbano",valor:"$25.000"},{id:2,rut
 const reglamentoEsencialPorDefecto=`REGLAMENTO OPERATIVO Y DE CONVIVENCIA – GRUPO KARGASS\n"Unidos hacemos más camino. En Grupo Kargass nuestra mayor herramienta es la confianza del cliente."\n\n1. Nuestra Carta de Presentación:\n• Trato amable, cordial y respetuoso con el cliente.\n• Vestimenta adecuada, limpia y profesional.\n• Cuidado del vehículo en higiene y mecánica.\n\n2. Compromiso con el Tiempo y la Puntualidad:\n• Puntualidad estricta en la hora de recogida acordada.\n• Evitar cancelaciones de último momento.\n\n3. Cuidado y Respeto Absoluto por la Carga:\n• Manipulación impecable de mercancías y trasteos.\n• Cobro transparente según tarifa cotizada en la app.\n\n4. Programa de Estrellas y Bonificaciones ⭐:\n• Promedio mínimo deseado: 4.5 a 5.0 estrellas.\n• Al sumar 15 servicios calificados con excelencia, la Central otorga días adicionales de suscripción mensual de regalo.`;
 const picoPlacaPorDefecto=`📅 Periodo: Vigente 2026.\n⏰ Horarios: De 6:30 a.m. a 9:30 a.m. y de 5:00 p.m. a 8:00 p.m.\n🗓️ Regla: Lunes a viernes (excepto festivos).`;
 
-let state={cargas:JSON.parse(localStorage.getItem('kargass_cargas'))||[],conductores:JSON.parse(localStorage.getItem('kargass_conductores'))||[{placa:"ABC123",password:"3100000000",nombre:"Conductor de Prueba ABC",doc:"3100000000",tel:"3100000000",vehiculo:"Motocarguero sencillo",marca:"AKT",cilindraje:"200cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null},{placa:"571AGU",password:"3143842007",nombre:"Daniel David Martínez Santamaría",doc:"1122124473",tel:"3143842007",vehiculo:"Motocarguero sencillo",marca:"Camello",cilindraje:"250cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null}],tarifasPorMunicipio:JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||{"Acacías":tarifasBaseAcacias},config:JSON.parse(localStorage.getItem('kargass_config_global'))||{adminPass:"1234",adminMaster:"KARGASS-RESCUE-2026",valorSuscripcion:45000,nequi:"3143842007",whatsapp:"3507690951",picoPlacaTexto:picoPlacaPorDefecto,reglamentoTexto:reglamentoEsencialPorDefecto},rolGuardado:localStorage.getItem('kargass_rol_activo_memoria')||null,clienteActualDoc:localStorage.getItem('kargass_cliente_doc_memoria')||null,transActualPlaca:localStorage.getItem('kargass_trans_placa_memoria')||null,isAdmin:false,tipoZona:"Local (Urbano)",horarioTipo:"Inmediato",fotoBase64:null,conteoServiciosAnterior:0};
+let state={cargas:JSON.parse(localStorage.getItem('kargass_cargas'))||[],conductores:JSON.parse(localStorage.getItem('kargass_conductores'))||[{placa:"ABC123",password:"3100000000",nombre:"Conductor de Prueba ABC",doc:"3100000000",tel:"3100000000",vehiculo:"Motocarguero sencillo",marca:"AKT",cilindraje:"200cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null},{placa:"571AGU",password:"3143842007",nombre:"Daniel David Martínez Santamaría",doc:"1122124473",tel:"3143842007",vehiculo:"Motocarguero sencillo",marca:"Camello",cilindraje:"250cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null}],tarifasPorMunicipio:JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||{"Acacías":tarifasBaseAcacias},config:JSON.parse(localStorage.getItem('kargass_config_global'))||{adminPass:"1234",adminMaster:"KARGASS-RESCUE-2026",valorSuscripcion:45000,nequi:"3143842007",whatsapp:"3507690951",picoPlacaTexto:picoPlacaPorDefecto,reglamentoTexto:reglamentoEsencialPorDefecto},rolGuardado:localStorage.getItem('kargass_rol_activo_memoria')||null,clienteActualDoc:localStorage.getItem('kargass_cliente_doc_memoria')||null,transActualPlaca:localStorage.getItem('kargass_trans_placa_memoria')||null,isAdmin:false,tipoZona:"Local (Urbano)",horarioTipo:"Inmediato",fotoBase64:null,conteoServiciosAnterior:0,estadoAsignadoAnteriorMap:{}};
 
 function emitirPitoDobleAlerta(){try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const now=ctx.currentTime;
 const osc1=ctx.createOscillator();const gain1=ctx.createGain();
@@ -421,6 +444,14 @@ osc2.type='sine';osc2.frequency.setValueAtTime(1200,now+0.25);osc2.frequency.exp
 gain2.gain.setValueAtTime(0.3,now+0.25);gain2.gain.exponentialRampToValueAtTime(0.01,now+0.5);
 osc2.connect(gain2);gain2.connect(ctx.destination);osc2.start(now+0.25);osc2.stop(now+0.5);
 }catch(e){console.log("Audio waiting gesture",e);}}
+
+// Tono especial de alarma cuando el transportador es seleccionado por el cliente
+function emitirAlarmaSeleccionadoExclusivo(){try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const now=ctx.currentTime;
+[0, 0.2, 0.4, 0.6].forEach((offset, idx)=>{const osc=ctx.createOscillator();const gain=ctx.createGain();
+osc.type='triangle';osc.frequency.setValueAtTime(1400 + (idx*300), now + offset);
+gain.gain.setValueAtTime(0.4, now + offset);gain.gain.exponentialRampToValueAtTime(0.01, now + offset + 0.15);
+osc.connect(gain);gain.connect(ctx.destination);osc.start(now + offset);osc.stop(now + offset + 0.18);});
+}catch(e){console.log("Audio alert",e);}}
 
 function guardarDatosLocal(){
 try{
@@ -442,12 +473,27 @@ try{
 }catch(e){console.error(e);alert("⚠️ Memoria llena.");}
 }
 
-// Escucha activa en tiempo real con Firebase (.on) con recarga automática de interfaces
+// Escucha activa en tiempo real con Firebase (.on) con recarga automática de interfaces y detección de selección de transportador
 if(db) {
   db.ref('kargass_app_data').on('value', (snapshot) => {
     const data = snapshot.val();
     if(data) {
-      if(data.cargas) { state.cargas = data.cargas; localStorage.setItem('kargass_cargas', JSON.stringify(data.cargas)); }
+      if(data.cargas) { 
+        // Verificar si algún servicio recién fue asignado al transportador actual para lanzar alarma especial
+        if(state.transActualPlaca && state.cargas) {
+          data.cargas.forEach(c => {
+            if(c.conductorAsignadoPlaca === state.transActualPlaca) {
+              const prev = state.estadoAsignadoAnteriorMap[c.id];
+              if(!prev || prev !== c.conductorAsignadoPlaca) {
+                emitirAlarmaSeleccionadoExclusivo();
+              }
+            }
+            state.estadoAsignadoAnteriorMap[c.id] = c.conductorAsignadoPlaca;
+          });
+        }
+        state.cargas = data.cargas; 
+        localStorage.setItem('kargass_cargas', JSON.stringify(data.cargas)); 
+      }
       if(data.conductores) { state.conductores = data.conductores; localStorage.setItem('kargass_conductores', JSON.stringify(data.conductores)); }
       if(data.tarifas) { state.tarifasPorMunicipio = data.tarifas; localStorage.setItem('kargass_tarifas_municipios', JSON.stringify(data.tarifas)); }
       if(data.config) { state.config = data.config; localStorage.setItem('kargass_config_global', JSON.stringify(data.config)); }
@@ -502,6 +548,9 @@ function abrirReglamentoModal(){document.getElementById('modal-reglamento').clas
 function cerrarReglamentoModal(){document.getElementById('modal-reglamento').classList.add('hidden');}
 function ampliarFoto(urlFoto){document.getElementById('imagen-ampliada').src=urlFoto;document.getElementById('modal-ver-foto').classList.remove('hidden');}
 function cerrarModalFoto(){document.getElementById('modal-ver-foto').classList.add('hidden');}
+
+// Función para alternar visibilidad de contraseña en login de transportadores
+function toggleVerPasswordTransLogin(){const passInput=document.getElementById('trans-pass-input');passInput.type=passInput.type==="password"?"text":"password";}
 
 function irModulo(mod){
 state.rolGuardado=mod;
@@ -773,19 +822,65 @@ function renderCargasDisponiblesTrans(){
 }
 
 function renderHistorialTransportador(){
-state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];
-const el=document.getElementById('lista-mis-viajes-trans');
-if(!el)return;
-const misViajes=state.cargas.filter(c=>c.conductorAsignadoPlaca===state.transActualPlaca||(c.estado&&c.estado.includes(state.transActualPlaca)));
-if(misViajes.length===0){
-el.innerHTML='<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin viajes completados en este dispositivo.</div>';
-return;
+  state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];
+  const el=document.getElementById('lista-mis-viajes-trans');
+  if(!el)return;
+
+  const misViajes=state.cargas.filter(c=>c.conductorAsignadoPlaca===state.transActualPlaca||(c.estado&&c.estado.includes(state.transActualPlaca)));
+
+  // Leer valores de filtros por fecha
+  const fechaIniStr=document.getElementById('filtro-fecha-ini').value;
+  const fechaFinStr=document.getElementById('filtro-fecha-fin').value;
+  let viajesFiltrados=misViajes;
+
+  if(fechaIniStr || fechaFinStr){
+    viajesFiltrados=misViajes.filter(c=>{
+      if(!c.fechaCreacion) return false;
+      const partesFecha=c.fechaCreacion.split(' ')[0].split('/');
+      if(partesFecha.length!==3) return true;
+      const fechaServicioStr=`${partesFecha[2]}-${partesFecha[1].padStart(2,'0')}-${partesFecha[0].padStart(2,'0')}`;
+      if(fechaIniStr && fechaServicioStr < fechaIniStr) return false;
+      if(fechaFinStr && fechaServicioStr > fechaFinStr) return false;
+      return true;
+    });
+
+    // Calcular suma de ingresos en el periodo
+    let totalIngresos=0;
+    viajesFiltrados.forEach(c=>{
+      if(c.ofertas){
+        let miof=c.ofertas.find(o=>o.placa===state.transActualPlaca);
+        if(miof && !isNaN(miof.precio)){
+          totalIngresos+=Number(miof.precio);
+        }
+      }
+    });
+
+    const boxResumen=document.getElementById('box-resumen-ingresos');
+    boxResumen.classList.remove('hidden');
+    document.getElementById('txt-total-ingresos-periodo').innerText=`$${totalIngresos.toLocaleString('es-CO')} COP`;
+    document.getElementById('txt-total-servicios-periodo').innerText=`${viajesFiltrados.length} servicios completados en el rango`;
+  }else{
+    const boxResumen=document.getElementById('box-resumen-ingresos');
+    boxResumen.classList.add('hidden');
+  }
+
+  if(viajesFiltrados.length===0){
+    el.innerHTML='<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin viajes completados en este periodo.</div>';
+    return;
+  }
+
+  el.innerHTML=viajesFiltrados.map(c=>{
+    let precio="Acordado";
+    if(c.ofertas){let miof=c.ofertas.find(o=>o.placa===state.transActualPlaca);if(miof)precio=`$${Number(miof.precio).toLocaleString('es-CO')}`;}
+    return`<div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow"><div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1"><span>📍 ${c.origen} ➔ ${c.destino}</span><span class="text-emerald-400">${precio}</span></div><p class="text-white"><b>Cliente:</b> ${c.clienteNombre} (${c.clienteTel})</p><p class="text-slate-300"><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p><p class="text-orange-300 font-bold">Estado: ${c.estado}</p><p class="text-[10px] text-slate-400">📅 Fecha: ${c.fechaCreacion||'N/A'}</p>${c.calificacionEstrellas?`<p class="text-amber-400 font-bold">⭐ Calificación del Cliente: ${c.calificacionEstrellas} / 5</p>`:'<p class="text-slate-400 italic">Pendiente de calificación</p>'}</div>`;
+  }).join('');
 }
-el.innerHTML=misViajes.map(c=>{
-let precio="Acordado";
-if(c.ofertas){let miof=c.ofertas.find(o=>o.placa===state.transActualPlaca);if(miof)precio=`$${Number(miof.precio).toLocaleString('es-CO')}`;}
-return`<div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow"><div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1"><span>📍 ${c.origen} ➔ ${c.destino}</span><span class="text-emerald-400">${precio}</span></div><p class="text-white"><b>Cliente:</b> ${c.clienteNombre} (${c.clienteTel})</p><p class="text-slate-300"><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p><p class="text-orange-300 font-bold">Estado: ${c.estado}</p>${c.calificacionEstrellas?`<p class="text-amber-400 font-bold">⭐ Calificación del Cliente: ${c.calificacionEstrellas} / 5</p>`:'<p class="text-slate-400 italic">Pendiente de calificación</p>'}</div>`;
-}).join('');
+
+function limpiarFiltroFechasTrans(){
+  document.getElementById('filtro-fecha-ini').value='';
+  document.getElementById('filtro-fecha-fin').value='';
+  document.getElementById('box-resumen-ingresos').classList.add('hidden');
+  renderHistorialTransportador();
 }
 
 function enviarOfertaTransportador(cargaId){
