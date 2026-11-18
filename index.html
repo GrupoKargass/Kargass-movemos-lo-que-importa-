@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Kargass - Plataforma de Acarreos Meta</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Kargass - Plataforma de Acarreos y Pasajeros Meta</title>
 
 <meta name="theme-color" content="#f97316">
 <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2921/2921222.png">
@@ -32,9 +32,9 @@
 <div id="modal-selector" class="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4 overflow-y-auto hidden">
 <div class="bg-slate-800 border-2 border-slate-700 p-5 rounded-3xl max-w-sm w-full text-center space-y-4 shadow-2xl my-auto">
 <div class="w-16 h-16 mx-auto rounded-2xl bg-orange-500/20 border-2 border-orange-500/50 flex items-center justify-center text-3xl shadow-lg">🛺</div>
-<div><h2 class="text-xl font-black text-white tracking-wide">GRUPO KARGASS</h2><p class="text-xs text-slate-300 mt-0.5 font-medium">Servicio de acarreos seguro en el Meta</p></div>
+<div><h2 class="text-xl font-black text-white tracking-wide">GRUPO KARGASS</h2><p class="text-xs text-slate-300 mt-0.5 font-medium">Servicio de acarreos y transporte en el Meta</p></div>
 <div class="space-y-3 pt-1">
-<button onclick="irModulo('cliente')" class="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 font-black py-4 rounded-2xl text-white text-base shadow-xl flex items-center justify-center space-x-2 border-2 border-orange-400 cursor-pointer"><span class="text-xl">📦</span><span>¡Solicitar Acarreo!</span></button>
+<button onclick="irModulo('cliente')" class="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 font-black py-4 rounded-2xl text-white text-base shadow-xl flex items-center justify-center space-x-2 border-2 border-orange-400 cursor-pointer"><span class="text-xl">📦</span><span>¡Solicitar Servicio!</span></button>
 <div class="grid grid-cols-2 gap-2">
 <button onclick="irModulo('transportador')" class="bg-slate-900 hover:bg-slate-950 border border-slate-700 font-black py-3 rounded-xl text-orange-400 text-xs shadow-md cursor-pointer flex items-center justify-center space-x-1"><span>🏍️</span><span>Conductores</span></button>
 <button onclick="irModulo('central')" class="bg-slate-900 hover:bg-slate-950 border border-slate-700 font-black py-3 rounded-xl text-slate-300 text-xs shadow-md cursor-pointer flex items-center justify-center space-x-1"><span>🛠️</span><span>Central</span></button>
@@ -71,11 +71,21 @@
 <button type="button" id="btn-tipo-urbano" onclick="setTipoZona('Local (Urbano)')" class="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer"><span>🏠 Local (Urbano)</span></button>
 <button type="button" id="btn-tipo-inter" onclick="setTipoZona('Intermunicipal')" class="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer"><span>🛣️ Intermunicipal</span></button>
 </div>
-<div><label class="text-[11px] font-bold text-slate-300">Municipio Base de Operación (Salida)</label><select id="cli-mun-local" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select></div>
-<div id="box-municipio-destino" class="hidden pt-1"><label class="text-[11px] font-bold text-orange-400">Municipio de Destino (Llegada)</label><select id="cli-mun-destino" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select></div>
+<div><label class="text-[11px] font-bold text-slate-300">Municipio Base de Operación (Salida)</label><select id="cli-mun-local" onchange="verificarZonaMototaxiCliente()" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select></div>
+<div id="box-municipio-destino" class="hidden pt-1"><label class="text-[11px] font-bold text-orange-400">Municipio de Destino (Llegada)</label><select id="cli-mun-destino" onchange="verificarZonaMototaxiCliente()" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select></div>
+
+<!-- Selector exclusivo para Guamal y Castilla (Acarreo o Mototaxi) -->
+<div id="box-selector-servicio-gm" class="hidden pt-2">
+<label class="text-[11px] font-black text-orange-400 uppercase">Selecciona el Tipo de Servicio</label>
+<div class="grid grid-cols-2 gap-2 mt-1">
+<button type="button" id="btn-serv-acarreo" onclick="setTipoServicioCliente('Acarreo')" class="btn-tab-active border border-slate-700 py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer font-bold"><span>📦 Acarreo / Carga</span></button>
+<button type="button" id="btn-serv-mototaxi" onclick="setTipoServicioCliente('Mototaxi')" class="bg-slate-900 text-slate-400 border border-slate-700 py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer font-bold"><span>🛵 Mototaxi / Pasajero</span></button>
+</div>
+</div>
+
 </div>
 <div class="space-y-2 border-b border-slate-700 pb-3">
-<h2 class="text-xs font-black text-orange-400 uppercase tracking-wider">3. HORARIO DE CARGUE</h2>
+<h2 class="text-xs font-black text-orange-400 uppercase tracking-wider">3. HORARIO DE CARGUE / VIAJE</h2>
 <div class="grid grid-cols-2 gap-2">
 <button type="button" id="btn-horario-inmediato" onclick="setHorario('Inmediato')" class="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer">⚡ Inmediato</button>
 <button type="button" id="btn-horario-programado" onclick="setHorario('Programado')" class="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer">⏰ Programar Hora</button>
@@ -85,11 +95,11 @@
 <div class="space-y-3">
 <h2 class="text-xs font-black text-orange-400 uppercase tracking-wider">4. VEHÍCULO Y DIRECCIONES</h2>
 <div><label class="text-[11px] font-bold text-slate-300">Vehículo Requerido</label><select id="cli-vehiculo" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black outline-none"><option value="Motocarguero Sencillo">🛺 Motocarguero Sencillo</option><option value="Motocarguero Doble Pacha">🚛 Motocarguero Doble Pacha</option><option value="Camioneta">🚙 Camioneta</option><option value="Camión">🚚 Camión</option></select></div>
-<div><label class="text-[11px] font-bold text-slate-300">Peso o Referencia (Ej: 250 kg, nevera...)</label><input type="text" id="cli-peso" placeholder="Ej: 250 kg, nevera..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
+<div id="campo-peso-carga"><label class="text-[11px] font-bold text-slate-300">Peso o Referencia (Ej: 250 kg, nevera...)</label><input type="text" id="cli-peso" placeholder="Ej: 250 kg, nevera..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
 <div><div class="flex justify-between items-center"><label class="text-[11px] font-bold text-slate-300">Dirección de Origen (Recogida)</label><button type="button" onclick="obtenerGPS()" class="text-[10px] text-orange-400 font-black hover:underline cursor-pointer">📍 Usar GPS / Ubicación Actual</button></div><input type="text" id="cli-origen" placeholder="Ej: Calle 5 # 19-14 o Frente al parque de la vida" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
 <div><label class="text-[11px] font-bold text-slate-300">Dirección de Destino (Entrega)</label><input type="text" id="cli-destino" placeholder="Ej: Calle 5 # 23-48, barrio La Carolina" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
 <div><label class="text-[11px] font-bold text-slate-300">Detalles adicionales (Observaciones)</label><textarea id="cli-obs" rows="2" placeholder="Observaciones..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-medium outline-none"></textarea></div>
-<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
+<div id="seccion-foto-carga" class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
 <div class="flex items-center space-x-2"><span class="text-base">📸</span><div><p class="font-bold text-white text-[11px]">Foto de la Carga</p><p id="foto-estado" class="text-[10px] text-slate-400">Sin foto</p></div></div>
 <input type="file" id="cli-foto-input" accept="image/*" capture="environment" class="hidden" onchange="capturarFoto(event)">
 <button type="button" onclick="document.getElementById('cli-foto-input').click()" class="bg-slate-800 hover:bg-slate-700 px-2.5 py-1.5 rounded-lg border border-slate-600 text-orange-400 font-bold text-[11px] cursor-pointer">Cámara / Galería</button>
@@ -227,7 +237,7 @@
 <div><label class="text-[11px] font-bold text-slate-300">Teléfono Celular</label><input type="tel" id="af-tel" placeholder="314..." class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-bold outline-none"></div>
 <div><label class="text-[11px] font-bold text-slate-300">Municipio Base de Operación</label><select id="af-municipio" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select></div>
 <div class="grid grid-cols-2 gap-2">
-<div><label class="text-[11px] font-bold text-slate-300">Tipo de Vehículo</label><select id="af-vehiculo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-black outline-none"><option value="Motocarguero sencillo">Motocarguero sencillo</option><option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option><option value="Camioneta">Camioneta</option><option value="Camión">Camión</option></select></div>
+<div><label class="text-[11px] font-bold text-slate-300">Tipo de Vehículo</label><select id="af-vehiculo" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-black outline-none"><option value="Motocarguero sencillo">Motocarguero sencillo</option><option value="Mototaxi">Mototaxi (Pasajeros)</option><option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option><option value="Camioneta">Camioneta</option><option value="Camión">Camión</option></select></div>
 <div><label class="text-[11px] font-bold text-slate-300">Placa</label><input type="text" id="af-placa" placeholder="Placa" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white font-black uppercase outline-none"></div>
 </div>
 <div class="grid grid-cols-2 gap-2">
@@ -278,7 +288,7 @@
 <div><label class="text-[11px] font-bold text-slate-300">Contraseña Personal</label><input type="password" id="adm-c-pass" placeholder="Clave personal" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none"></div>
 </div>
 <div><label class="text-[11px] font-bold text-slate-300">Municipio Base de Operación</label><select id="adm-c-municipio" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white font-black select-municipios outline-none"></select></div>
-<div><label class="text-[11px] font-bold text-slate-300">Tipo de Vehículo</label><select id="adm-c-vehiculo" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none"><option value="Motocarguero sencillo">Motocarguero sencillo</option><option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option><option value="Camioneta">Camioneta</option><option value="Camión">Camión</option></select></div>
+<div><label class="text-[11px] font-bold text-slate-300">Tipo de Vehículo</label><select id="adm-c-vehiculo" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none"><option value="Motocarguero sencillo">Motocarguero sencillo</option><option value="Mototaxi">Mototaxi (Pasajeros)</option><option value="Motocarguero Doble Pacha">Motocarguero Doble Pacha</option><option value="Camioneta">Camioneta</option><option value="Camión">Camión</option></select></div>
 <div class="grid grid-cols-2 gap-2">
 <div><label class="text-[11px] font-bold text-slate-300">Marca</label><input type="text" id="adm-c-marca" placeholder="Ej: Camello" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none"></div>
 <div><label class="text-[11px] font-bold text-slate-300">Cilindraje</label><input type="text" id="adm-c-cilindraje" placeholder="Ej: 250cc" class="w-full mt-0.5 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold outline-none"></div>
@@ -373,11 +383,11 @@
 </div>
 <div id="modal-editar-servicio" class="fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-4 hidden">
 <div class="bg-slate-800 border border-slate-700 p-5 rounded-3xl max-w-sm w-full space-y-3 shadow-2xl text-xs">
-<h3 class="font-black text-sm text-orange-400 text-center">✏️ Editar Detalles del Acarreo</h3>
+<h3 class="font-black text-sm text-orange-400 text-center">✏️ Editar Detalles del Servicio</h3>
 <input type="hidden" id="edit-serv-id">
 <div><label class="font-bold text-slate-300">Origen (Recogida)</label><input type="text" id="edit-serv-origen" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold"></div>
 <div><label class="font-bold text-slate-300">Destino (Entrega)</label><input type="text" id="edit-serv-destino" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold"></div>
-<div><label class="font-bold text-slate-300">Peso / Carga</label><input type="text" id="edit-serv-peso" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold"></div>
+<div><label class="font-bold text-slate-300">Peso / Pasajeros</label><input type="text" id="edit-serv-peso" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-bold"></div>
 <div><label class="font-bold text-slate-300">Observaciones</label><textarea id="edit-serv-obs" rows="2" class="w-full mt-0.5 p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-medium"></textarea></div>
 <div class="grid grid-cols-2 gap-2 pt-2">
 <button onclick="guardarEdicionServicio()" class="bg-orange-500 hover:bg-orange-600 font-bold py-2.5 rounded-xl text-white">Guardar Cambios</button>
@@ -389,7 +399,7 @@
 <div class="bg-white text-slate-900 p-5 rounded-3xl max-w-sm w-full space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto">
 <div class="text-center"><h3 class="text-lg font-black text-orange-600">REGLAMENTO OPERATIVO</h3><p class="text-[11px] text-slate-600 font-bold">Normas Esenciales de la Comunidad Kargass</p></div>
 <div id="modal-reglamento-texto" class="space-y-2 text-xs text-slate-800 font-medium whitespace-pre-line"></div>
-<button onclick="cerrarReglamentoModal()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white text-xs cursor-pointer">Entendido y Cerrado</button>
+<button onclick="cerrarReglamentoModal()" class="w-full bg-orange-500 hover:bg-orange-600 font-black py-3 rounded-xl text-white text-xs cursor-pointer shadow-lg">✓ Entendido, Continuar Registro</button>
 </div>
 </div>
 <div id="modal-ver-foto" class="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4 hidden" onclick="cerrarModalFoto()">
@@ -430,7 +440,7 @@ const tarifasBaseAcacias={urbano:[{id:1,ruta:"Urbano",valor:"$25.000"},{id:2,rut
 const reglamentoEsencialPorDefecto=`REGLAMENTO OPERATIVO Y DE CONVIVENCIA – GRUPO KARGASS\n"Unidos hacemos más camino. En Grupo Kargass nuestra mayor herramienta es la confianza del cliente."\n\n1. Nuestra Carta de Presentación:\n• Trato amable, cordial y respetuoso con el cliente.\n• Vestimenta adecuada, limpia y profesional.\n• Cuidado del vehículo en higiene y mecánica.\n\n2. Compromiso con el Tiempo y la Puntualidad:\n• Puntualidad estricta en la hora de recogida acordada.\n• Evitar cancelaciones de último momento.\n\n3. Cuidado y Respeto Absoluto por la Carga:\n• Manipulación impecable de mercancías y trasteos.\n• Cobro transparente según tarifa cotizada en la app.\n\n4. Programa de Estrellas y Bonificaciones ⭐:\n• Promedio mínimo deseado: 4.5 a 5.0 estrellas.\n• Al sumar 15 servicios calificados con excelencia, la Central otorga días adicionales de suscripción mensual de regalo.`;
 const picoPlacaPorDefecto=`📅 Periodo: Vigente 2026.\n⏰ Horarios: De 6:30 a.m. a 9:30 a.m. y de 5:00 p.m. a 8:00 p.m.\n🗓️ Regla: Lunes a viernes (excepto festivos).`;
 
-let state={cargas:JSON.parse(localStorage.getItem('kargass_cargas'))||[],conductores:JSON.parse(localStorage.getItem('kargass_conductores'))||[{placa:"ABC123",password:"3100000000",nombre:"Conductor de Prueba ABC",doc:"3100000000",tel:"3100000000",vehiculo:"Motocarguero sencillo",marca:"AKT",cilindraje:"200cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null},{placa:"571AGU",password:"3143842007",nombre:"Daniel David Martínez Santamaría",doc:"1122124473",tel:"3143842007",vehiculo:"Motocarguero sencillo",marca:"Camello",cilindraje:"250cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null}],tarifasPorMunicipio:JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||{"Acacías":tarifasBaseAcacias},config:JSON.parse(localStorage.getItem('kargass_config_global'))||{adminPass:"1234",adminMaster:"KARGASS-RESCUE-2026",valorSuscripcion:45000,nequi:"3143842007",whatsapp:"3507690951",picoPlacaTexto:picoPlacaPorDefecto,reglamentoTexto:reglamentoEsencialPorDefecto},rolGuardado:localStorage.getItem('kargass_rol_activo_memoria')||null,clienteActualDoc:localStorage.getItem('kargass_cliente_doc_memoria')||null,transActualPlaca:localStorage.getItem('kargass_trans_placa_memoria')||null,isAdmin:false,tipoZona:"Local (Urbano)",horarioTipo:"Inmediato",fotoBase64:null,conteoServiciosAnterior:0,estadoAsignadoAnteriorMap:{}};
+let state={cargas:JSON.parse(localStorage.getItem('kargass_cargas'))||[],conductores:JSON.parse(localStorage.getItem('kargass_conductores'))||[{placa:"ABC123",password:"3100000000",nombre:"Conductor de Prueba ABC",doc:"3100000000",tel:"3100000000",vehiculo:"Motocarguero sencillo",marca:"AKT",cilindraje:"200cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null},{placa:"571AGU",password:"3143842007",nombre:"Daniel David Martínez Santamaría",doc:"1122124473",tel:"3143842007",vehiculo:"Motocarguero sencillo",marca:"Camello",cilindraje:"250cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null}],tarifasPorMunicipio:JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||{"Acacías":tarifasBaseAcacias},config:JSON.parse(localStorage.getItem('kargass_config_global'))||{adminPass:"1234",adminMaster:"KARGASS-RESCUE-2026",valorSuscripcion:45000,nequi:"3143842007",whatsapp:"3507690951",picoPlacaTexto:picoPlacaPorDefecto,reglamentoTexto:reglamentoEsencialPorDefecto},rolGuardado:localStorage.getItem('kargass_rol_activo_memoria')||null,clienteActualDoc:localStorage.getItem('kargass_cliente_doc_memoria')||null,transActualPlaca:localStorage.getItem('kargass_trans_placa_memoria')||null,isAdmin:false,tipoZona:"Local (Urbano)",tipoServicioCli:"Acarreo",horarioTipo:"Inmediato",fotoBase64:null,conteoServiciosAnterior:0,estadoAsignadoAnteriorMap:{}};
 
 function emitirPitoDobleAlerta(){try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const now=ctx.currentTime;
 const osc1=ctx.createOscillator();const gain1=ctx.createGain();
@@ -518,7 +528,10 @@ bellBox.classList.remove('hidden');
 state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];
 const disponibles=state.cargas.filter(c=>{
 const esMiZona=c.tipoZona==='Local (Urbano)'?c.municipio===cond.municipio:(c.municipio===cond.municipio||c.municipioDestino===cond.municipio);
-return esMiZona && (c.conductorAsignadoPlaca==null) && (!c.estado.startsWith("Asignado"));
+const esMototaxiConductor = (cond.vehiculo === "Mototaxi");
+const esServicioMototaxi = (c.categoriaServicio === "Mototaxi");
+const matchVehiculo = esMototaxiConductor ? esServicioMototaxi : !esServicioMototaxi;
+return esMiZona && matchVehiculo && (c.conductorAsignadoPlaca==null) && (!c.estado.startsWith("Asignado"));
 });
 const total=disponibles.length;
 const badgeHead=document.getElementById('bell-badge-count');
@@ -535,8 +548,49 @@ state.conteoServiciosAnterior=total;
 
 function descargarRespaldoJSON(){const datosBackup={cargas:state.cargas,conductores:state.conductores,tarifasPorMunicipio:state.tarifasPorMunicipio,config:state.config,fechaRespaldo:new Date().toISOString()};const dataStr="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(datosBackup,null,2));const downloadAnchor=document.createElement('a');downloadAnchor.setAttribute("href",dataStr);downloadAnchor.setAttribute("download",`kargass_backup_${new Date().toISOString().split('T')[0]}.json`);document.body.appendChild(downloadAnchor);downloadAnchor.click();downloadAnchor.remove();alert("✅ ¡Copia de seguridad descargada con éxito!");}
 function restaurarRespaldoJSON(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const contenido=JSON.parse(e.target.result);if(contenido.cargas&&contenido.conductores&&contenido.config){state.cargas=contenido.cargas;state.conductores=contenido.conductores;if(contenido.tarifasPorMunicipio)state.tarifasPorMunicipio=contenido.tarifasPorMunicipio;state.config=contenido.config;guardarDatosLocal();alert("✅ ¡Datos restaurados con éxito!");location.reload();}else{alert("❌ Formato incorrecto.");}}catch(err){alert("❌ Error al leer JSON.");}};reader.readAsText(file);}
-function poblarSelectMunicipios(){document.querySelectorAll('.select-municipios').forEach(sel=>{const actual=sel.value||"Acacías";sel.innerHTML=listaMunicipiosMeta.map(m=>`<option value="${m}">${m}</option>`).join('');sel.value=actual;});}
+function poblarSelectMunicipios(){document.querySelectorAll('.select-municipios').forEach(sel=>{const actual=sel.value||"Acacías";sel.innerHTML=listaMunicipiosMeta.map(m=>`<option value="${m}">${m}</option>`).join('');sel.value=actual;}); verificarZonaMototaxiCliente();}
 function actualizarTextosGlobales(){document.getElementById('sub-valor-text').innerText=`$${Number(state.config.valorSuscripcion).toLocaleString('es-CO')} COP`;document.getElementById('sub-nequi-text').innerText=state.config.nequi;document.getElementById('af-valor-sub').innerText=`$${Number(state.config.valorSuscripcion).toLocaleString('es-CO')} COP`;document.getElementById('af-nequi-num').innerText=state.config.nequi;document.getElementById('sub-wa-btn').href=`https://wa.me/57${state.config.whatsapp}?text=`+encodeURIComponent("Hola Central, envío el comprobante de pago de mi suscripción mensual Kargass.");document.getElementById('af-wa-btn').href=`https://wa.me/57${state.config.whatsapp}?text=`+encodeURIComponent("Hola Central, quiero afiliarme a Kargass. Adjunto mis datos y pago.");const elPico=document.getElementById('pico-placa-dinamico');if(elPico)elPico.innerText=state.config.picoPlacaTexto||picoPlacaPorDefecto;const elReg=document.getElementById('modal-reglamento-texto');if(elReg)elReg.innerText=state.config.reglamentoTexto||reglamentoEsencialPorDefecto;const elMaster=document.getElementById('cfg-admin-master');if(elMaster)elMaster.value=state.config.adminMaster||"KARGASS-RESCUE-2026";}
+
+function verificarZonaMototaxiCliente(){
+  const munLocal = document.getElementById('cli-mun-local');
+  const munDestino = document.getElementById('cli-mun-destino');
+  const boxGm = document.getElementById('box-selector-servicio-gm');
+  if(!munLocal || !boxGm) return;
+
+  const m1 = munLocal.value;
+  const m2 = (munDestino && !document.getElementById('box-municipio-destino').classList.contains('hidden')) ? munDestino.value : "";
+  const esGuamalCastilla = (m1 === "Guamal" || m1 === "Castilla la Nueva" || m2 === "Guamal" || m2 === "Castilla la Nueva");
+
+  if(esGuamalCastilla){
+    boxGm.classList.remove('hidden');
+  } else {
+    boxGm.classList.add('hidden');
+    setTipoServicioCliente('Acarreo');
+  }
+}
+
+function setTipoServicioCliente(tipo){
+  state.tipoServicioCli = tipo;
+  const btnA = document.getElementById('btn-serv-acarreo');
+  const btnM = document.getElementById('btn-serv-mototaxi');
+  const campoVehiculo = document.getElementById('cli-vehiculo');
+  const campoPeso = document.getElementById('campo-peso-carga');
+  const campoFoto = document.getElementById('seccion-foto-carga');
+
+  if(tipo === 'Mototaxi'){
+    if(btnM) btnM.className = "btn-tab-active border border-slate-700 py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer font-bold";
+    if(btnA) btnA.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer font-bold";
+    if(campoVehiculo) campoVehiculo.innerHTML = '<option value="Mototaxi">🛵 Mototaxi / Pasajero</option>';
+    if(campoPeso) campoPeso.classList.add('hidden');
+    if(campoFoto) campoFoto.classList.add('hidden');
+  } else {
+    if(btnA) btnA.className = "btn-tab-active border border-slate-700 py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer font-bold";
+    if(btnM) btnM.className = "bg-slate-900 text-slate-400 border border-slate-700 py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer font-bold";
+    if(campoVehiculo) campoVehiculo.innerHTML = '<option value="Motocarguero Sencillo">🛺 Motocarguero Sencillo</option><option value="Motocarguero Doble Pacha">🚛 Motocarguero Doble Pacha</option><option value="Camioneta">🚙 Camioneta</option><option value="Camión">🚚 Camión</option>';
+    if(campoPeso) campoPeso.classList.remove('hidden');
+    if(campoFoto) campoFoto.classList.remove('hidden');
+  }
+}
 
 function mostrarSelectorRolManual(){
   document.getElementById('modal-selector').classList.remove('hidden');
@@ -549,10 +603,8 @@ function abrirReglamentoModal(){
 }
 
 function cerrarReglamentoModal(){
+  // Corrección quirúrgica: Cierra el modal limpiamente sin sacar al usuario del formulario
   document.getElementById('modal-reglamento').classList.add('hidden');
-  if(history.state && history.state.modal==='reglamento'){
-    history.back();
-  }
 }
 
 function ampliarFoto(urlFoto){
@@ -634,7 +686,7 @@ function verificarClienteLogin(){const doc=document.getElementById('cli-doc-inpu
 function verificarClienteLoginMemoria(doc){state.clienteActualDoc=doc;localStorage.setItem('kargass_cliente_doc_memoria',doc);document.getElementById('cliente-login').classList.add('hidden');document.getElementById('cliente-dashboard').classList.remove('hidden');document.getElementById('cli-perfil-doc').innerText=doc;const guardado=JSON.parse(localStorage.getItem('kargass_memoria_cli_'+doc));if(guardado){document.getElementById('cli-nombre').value=guardado.nombre||"";document.getElementById('cli-tel').value=guardado.tel||"";}renderHistorialCliente();}
 function cambiarCedulaCliente(){state.clienteActualDoc=null;localStorage.removeItem('kargass_cliente_doc_memoria');document.getElementById('cliente-dashboard').classList.add('hidden');document.getElementById('cliente-login').classList.remove('hidden');document.getElementById('cli-doc-input').value='';}
 
-function setTipoZona(tipo){state.tipoZona=tipo;const btnU=document.getElementById('btn-tipo-urbano');const btnI=document.getElementById('btn-tipo-inter');const boxDestino=document.getElementById('box-municipio-destino');if(tipo==='Local (Urbano)'){btnU.className="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";btnI.className="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";if(boxDestino)boxDestino.classList.add('hidden');}else{btnI.className="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";btnU.className="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";if(boxDestino)boxDestino.classList.remove('hidden');}}
+function setTipoZona(tipo){state.tipoZona=tipo;const btnU=document.getElementById('btn-tipo-urbano');const btnI=document.getElementById('btn-tipo-inter');const boxDestino=document.getElementById('box-municipio-destino');if(tipo==='Local (Urbano)'){btnU.className="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";btnI.className="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";if(boxDestino)boxDestino.classList.add('hidden');}else{btnI.className="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";btnU.className="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer";if(boxDestino)boxDestino.classList.remove('hidden');}verificarZonaMototaxiCliente();}
 function setHorario(horario){state.horarioTipo=horario;const btnI=document.getElementById('btn-horario-inmediato');const btnP=document.getElementById('btn-horario-programado');const box=document.getElementById('box-hora-programada');if(horario==='Inmediato'){btnI.className="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";btnP.className="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";box.classList.add('hidden');}else{btnP.className="btn-tab-active border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";btnI.className="bg-slate-900 text-slate-400 border border-slate-700 py-2 rounded-xl text-xs font-bold cursor-pointer";box.classList.remove('hidden');}}
 
 function obtenerGPS(){if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude.toFixed(4);const lon=pos.coords.longitude.toFixed(4);const inputOrigen=document.getElementById('cli-origen');inputOrigen.value=`GPS: ${lat}, ${lon}`;alert("📍 Coordenadas de GPS capturadas con éxito");},()=>alert("No se pudo obtener la ubicación GPS"));}else alert("GPS no soportado en este dispositivo");}
@@ -644,13 +696,13 @@ function capturarFoto(e){const file=e.target.files[0];if(file){const reader=new 
 function publicarSolicitudCliente(){
   const nombre=document.getElementById('cli-nombre').value.trim();
   const tel=document.getElementById('cli-tel').value.trim();
-  const peso=document.getElementById('cli-peso').value.trim();
+  const peso=state.tipoServicioCli==='Mototaxi'?'Servicio Mototaxi / Pasajeros':(document.getElementById('cli-peso')?document.getElementById('cli-peso').value.trim():'');
   const origen=document.getElementById('cli-origen').value.trim();
   const destino=document.getElementById('cli-destino').value.trim();
   const municipioOrigen=document.getElementById('cli-mun-local').value;
   const municipioDestinoVal=(state.tipoZona==='Intermunicipal')?document.getElementById('cli-mun-destino').value:municipioOrigen;
 
-  if(!nombre||!tel||!peso||!origen||!destino){
+  if(!nombre||!tel||!origen||!destino||(state.tipoServicioCli==='Acarreo'&&!peso)){
     alert("⚠️ Debes completar todos los campos obligatorios.");
     return;
   }
@@ -670,15 +722,16 @@ function publicarSolicitudCliente(){
     clienteNombre:nombre,
     clienteTel:tel,
     tipoZona:state.tipoZona,
+    categoriaServicio:state.tipoServicioCli, // 'Acarreo' o 'Mototaxi'
     municipio:municipioOrigen,
     municipioDestino:municipioDestinoVal,
     horario:horaCargue,
-    vehiculo:document.getElementById('cli-vehiculo').value,
+    vehiculo:state.tipoServicioCli==='Mototaxi'?'Mototaxi':document.getElementById('cli-vehiculo').value,
     peso:peso,
     origen:origen,
     destino:destino,
     observaciones:document.getElementById('cli-obs').value.trim(),
-    foto:state.fotoBase64,
+    foto:state.tipoServicioCli==='Mototaxi'?null:state.fotoBase64,
     estado:"Recibiendo Cotizaciones",
     ofertas:[],
     conductorAsignadoPlaca:null,
@@ -691,11 +744,11 @@ function publicarSolicitudCliente(){
   guardarDatosLocal();
   alert("✅ ¡Solicitud publicada con éxito!");
   
-  document.getElementById('cli-peso').value='';
+  if(document.getElementById('cli-peso')) document.getElementById('cli-peso').value='';
   document.getElementById('cli-origen').value='';
   document.getElementById('cli-destino').value='';
   document.getElementById('cli-obs').value='';
-  document.getElementById('foto-estado').innerText="Sin foto";
+  if(document.getElementById('foto-estado')) document.getElementById('foto-estado').innerText="Sin foto";
   state.fotoBase64=null;
   renderHistorialCliente();
 }
@@ -715,23 +768,24 @@ function renderHistorialCliente(){
     const labelRutaInfo=c.tipoZona==='Intermunicipal'?`[${c.municipio} ➔ ${c.municipioDestino}]`:`[${c.municipio}]`;
     const esFantasmaAntiguo=(!c.municipio && !c.tipoZona);
     const totalOfertas = c.ofertas ? c.ofertas.length : 0;
+    const esMototaxi = c.categoriaServicio === 'Mototaxi';
     
     return`<div class="bg-slate-800 p-4 rounded-2xl border ${esFantasmaAntigoldHtml(esFantasmaAntiguo)} text-xs space-y-3 shadow-xl">
       <!-- 1. ZONA Y TIPO DESTACADO -->
       <div class="bg-slate-900 p-3 rounded-xl border border-orange-500/50 flex justify-between items-center shadow-inner">
         <div>
-          <span class="text-[10px] text-slate-400 font-bold uppercase block">Tipo de Servicio:</span>
-          <span class="text-sm font-black text-orange-400 tracking-wide">${c.tipoZona||'Urbano'} ${labelRutaInfo}</span>
+          <span class="text-[10px] text-slate-400 font-bold uppercase block">Servicio:</span>
+          <span class="text-sm font-black text-orange-400 tracking-wide">${esMototaxi?'🛵 Mototaxi / Pasajero':'📦 Acarreo / Carga'} ${labelRutaInfo}</span>
         </div>
         <span class="bg-orange-500/20 text-orange-400 font-black px-2 py-1 rounded-lg text-xs border border-orange-500/30">${c.estado}</span>
       </div>
 
-      <!-- 2. CARGA Y HORARIO DESTACADO -->
+      <!-- 2. DETALLE -->
       <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-1">
         <div class="flex items-center space-x-2">
-          <span class="text-xl">📦</span>
+          <span class="text-xl">${esMototaxi?'🛵':'📦'}</span>
           <div>
-            <span class="text-[10px] text-orange-400 uppercase font-black tracking-wider">Carga y Peso Requerido:</span>
+            <span class="text-[10px] text-orange-400 uppercase font-black tracking-wider">Detalle / Requisito:</span>
             <p class="text-sm font-black text-white">${c.peso}</p>
           </div>
         </div>
@@ -813,20 +867,21 @@ function renderCargasDisponiblesTrans(){
   state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
   const conductorActual=state.conductores.find(c=>c.placa===state.transActualPlaca);
   const municipioConductor=conductorActual?conductorActual.municipio:"Acacías";
+  const esMototaxiConductor=conductorActual?(conductorActual.vehiculo==="Mototaxi"):false;
+  
   const el=document.getElementById('lista-cargas-disponibles');
   if(!el)return;
   
   const cargasVisibles=state.cargas.filter(c=>{
     if(!c.municipio)return false;
-    if(c.tipoZona==='Local (Urbano)'){
-      return c.municipio===municipioConductor;
-    }else{
-      return c.municipio===municipioConductor||c.municipioDestino===municipioConductor;
-    }
+    const esMiZona = c.tipoZona==='Local (Urbano)' ? (c.municipio===municipioConductor) : (c.municipio===municipioConductor||c.municipioDestino===municipioConductor);
+    const esServicioMototaxi = (c.categoriaServicio === 'Mototaxi');
+    const matchVehiculo = esMototaxiConductor ? esServicioMototaxi : !esServicioMototaxi;
+    return esMiZona && matchVehiculo;
   });
 
   if(cargasVisibles.length===0){
-    el.innerHTML='<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay acarreos disponibles para tu municipio en este momento.</div>';
+    el.innerHTML='<div class="bg-slate-800 p-4 rounded-xl text-center text-xs text-slate-400 border border-slate-700">No hay servicios disponibles para tu tipología de vehículo y municipio en este momento.</div>';
     return;
   }
 
@@ -835,6 +890,7 @@ function renderCargasDisponiblesTrans(){
     const yaAsignadoAOtro=(c.conductorAsignadoPlaca!=null && c.conductorAsignadoPlaca!==state.transActualPlaca);
     const yaAsignadoOConOfertaAceptada=(c.conductorAsignadoPlaca!=null||c.estado.startsWith("Asignado"));
     const labelRuta=c.tipoZona==='Intermunicipal'?`Intermunicipal: ${c.municipio} ➔ ${c.municipioDestino}`:`${c.municipio} (Urbano)`;
+    const esMototaxiSrv = c.categoriaServicio === 'Mototaxi';
     
     const yaEnvioOferta = c.ofertas && c.ofertas.some(o => o.placa === state.transActualPlaca);
     const miOfertaActual = yaEnvioOferta ? c.ofertas.find(o => o.placa === state.transActualPlaca) : null;
@@ -871,22 +927,22 @@ function renderCargasDisponiblesTrans(){
           <span class="text-sm font-black text-orange-400 tracking-wide">${labelRuta}</span>
         </div>
         <div class="text-right">
-          <span class="text-[10px] text-slate-400 font-bold uppercase block">Vehículo:</span>
-          <span class="text-xs font-black text-white bg-orange-500/20 px-2 py-1 rounded-lg border border-orange-500/40">🛺 ${c.vehiculo}</span>
+          <span class="text-[10px] text-slate-400 font-bold uppercase block">Servicio:</span>
+          <span class="text-xs font-black text-white bg-orange-500/20 px-2 py-1 rounded-lg border border-orange-500/40">${esMototaxiSrv?'🛵 Mototaxi':'📦 Acarreo'}</span>
         </div>
       </div>
 
-      <!-- 2. DETALLE DE CARGA, PESO Y HORARIO (GRANDE Y VISTOSO) -->
+      <!-- 2. DETALLE -->
       <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-1.5">
         <div class="flex items-center space-x-2">
-          <span class="text-xl">📦</span>
+          <span class="text-xl">${esMototaxiSrv?'🛵':'📦'}</span>
           <div>
-            <span class="text-[10px] text-orange-400 uppercase font-black tracking-wider">Carga y Peso Requerido:</span>
+            <span class="text-[10px] text-orange-400 uppercase font-black tracking-wider">Detalle del Servicio:</span>
             <p class="text-sm font-black text-white">${c.peso}</p>
           </div>
         </div>
         <div class="pt-1.5 border-t border-slate-800 flex justify-between items-center text-xs">
-          <span class="text-slate-300 font-bold">⏰ Horario de Cargue:</span>
+          <span class="text-slate-300 font-bold">⏰ Horario:</span>
           <span class="font-black ${c.horario && c.horario.includes('Inmediato') ? 'text-amber-400 bg-amber-500/20 px-2.5 py-0.5 rounded-lg border border-amber-500/40' : 'text-blue-400 bg-blue-500/20 px-2.5 py-0.5 rounded-lg border border-blue-500/40'}">${c.horario}</span>
         </div>
       </div>
@@ -902,7 +958,7 @@ function renderCargasDisponiblesTrans(){
       
       ${yaAsignadoAOtro?
         `<div class="bg-slate-900 p-3 rounded-xl border border-red-500/40 text-center space-y-1">
-           <p class="text-red-400 font-bold text-xs">🔴 Este servicio ya fue asignado a otro compañero de la flota.</p>
+           <p class="text-red-400 font-bold text-xs">🔴 Este servicio ya fue asignado a otro compañero.</p>
          </div>`:
         (yaAsignadoOConOfertaAceptada?'':(yaEnvioOferta?
           `<div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/50 text-center space-y-1">
@@ -911,13 +967,13 @@ function renderCargasDisponiblesTrans(){
            </div>`:
           (limiteAlcanzado?
             `<div class="bg-slate-900 p-3 rounded-xl border border-amber-500/40 text-center space-y-1">
-               <p class="text-amber-400 font-bold text-xs">🔒 Límite de 5 cotizaciones alcanzado para este acarreo.</p>
+               <p class="text-amber-400 font-bold text-xs">🔒 Límite de 5 cotizaciones alcanzado para este servicio.</p>
                <p class="text-[10px] text-slate-400">El cliente está revisando las propuestas enviadas.</p>
              </div>`:
             `<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2">
-               <div class="flex justify-between items-center"><label class="font-bold text-slate-300">Enviar Cotización de Flete (COP):</label><span class="text-[10px] text-amber-400 font-bold">${totalOfertasRecibidas}/5 cotizaciones</span></div>
+               <div class="flex justify-between items-center"><label class="font-bold text-slate-300">Enviar Cotización de Tarifa (COP):</label><span class="text-[10px] text-amber-400 font-bold">${totalOfertasRecibidas}/5 cotizaciones</span></div>
                <div class="flex space-x-2">
-                 <input type="text" id="input-oferta-${c.id}" placeholder="Ej: 35000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs">
+                 <input type="text" id="input-oferta-${c.id}" placeholder="Ej: 8000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs">
                  <button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Cotización</button>
                </div>
              </div>`
@@ -979,7 +1035,7 @@ function renderHistorialTransportador(){
   el.innerHTML=viajesFiltrados.map(c=>{
     let precio="Acordado";
     if(c.ofertas){let miof=c.ofertas.find(o=>o.placa===state.transActualPlaca);if(miof)precio=`$${Number(miof.precio).toLocaleString('es-CO')}`;}
-    return`<div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow"><div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1"><span>📍 ${c.origen} ➔ ${c.destino}</span><span class="text-emerald-400">${precio}</span></div><p class="text-white"><b>Cliente:</b> ${c.clienteNombre} (${c.clienteTel})</p><p class="text-slate-300"><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p><p class="text-orange-300 font-bold">Estado: ${c.estado}</p><p class="text-[10px] text-slate-400">📅 Fecha: ${c.fechaCreacion||'N/A'}</p>${c.calificacionEstrellas?`<p class="text-amber-400 font-bold">⭐ Calificación del Cliente: ${c.calificacionEstrellas} / 5</p>`:'<p class="text-slate-400 italic">Pendiente de calificación</p>'}</div>`;
+    return`<div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-xs space-y-2 shadow"><div class="flex justify-between font-bold text-orange-400 border-b border-slate-700 pb-1"><span>📍 ${c.origen} ➔ ${c.destino}</span><span class="text-emerald-400">${precio}</span></div><p class="text-white"><b>Cliente:</b> ${c.clienteNombre} (${c.clienteTel})</p><p class="text-slate-300"><b>Vehículo:</b> ${c.vehiculo} | <b>Detalle:</b> ${c.peso}</p><p class="text-orange-300 font-bold">Estado: ${c.estado}</p><p class="text-[10px] text-slate-400">📅 Fecha: ${c.fechaCreacion||'N/A'}</p>${c.calificacionEstrellas?`<p class="text-amber-400 font-bold">⭐ Calificación del Cliente: ${c.calificacionEstrellas} / 5</p>`:'<p class="text-slate-400 italic">Pendiente de calificación</p>'}</div>`;
   }).join('');
 }
 
@@ -997,7 +1053,7 @@ function enviarOfertaTransportador(cargaId){
   const rawVal=inputEl.value.trim();
   if(!rawVal){alert("⚠️ Ingresa un valor válido.");return;}
   const inputVal=rawVal.replace(/[^0-9]/g,'');
-  if(!inputVal||isNaN(inputVal)){alert("⚠️ Ingresa un valor numérico válido (ej: 30000).");return;}
+  if(!inputVal||isNaN(inputVal)){alert("⚠️ Ingresa un valor numérico válido (ej: 8000).");return;}
   
   state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];
   state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
@@ -1036,7 +1092,7 @@ function cerrarSesionAdmin(){state.isAdmin=false;document.getElementById('admin-
 
 function switchTabAdmin(tab){const mapaContenedores={'servicios':'a-content-servicios','conductores':'a-content-conductores','historial':'a-content-historial','tarifas':'a-content-tarifas','ajustes':'a-content-ajustes'};const mapaBotones={'servicios':'tab-a-servicios','conductores':'tab-a-conductores','historial':'tab-a-historial','tarifas':'tab-a-tarifas','ajustes':'tab-a-ajustes'};Object.keys(mapaContenedores).forEach(t=>{const content=document.getElementById(mapaContenedores[t]);const btn=document.getElementById(mapaBotones[t]);if(content&&btn){if(t===tab){content.classList.remove('hidden');btn.className="bg-orange-500 text-white py-2 px-1 rounded-lg cursor-pointer font-black truncate";}else{content.classList.add('hidden');btn.className="text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate";}}});if(tab==='conductores')renderAdminConductores();if(tab==='servicios')renderAdminServicios();if(tab==='historial')renderSelectHistorialPlacas();if(tab==='tarifas'){inicializarSelectMunicipioTarifasAdmin();renderAdminTarifas();}}
 
-function renderAdminServicios(){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];document.getElementById('admin-total-servicios').innerText=state.cargas.length;const el=document.getElementById('admin-lista-cargas');if(!el)return;if(!state.cargas||state.cargas.length===0){el.innerHTML='<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin servicios registrados.</div>';return;}const listaConductoresActivos=state.conductores.filter(c=>c.estado==='Activo');el.innerHTML=state.cargas.map(c=>{const yaAsignado=(c.conductorAsignadoPlaca!=null||c.estado.startsWith("Asignado"));const labelRutaAdmin=c.tipoZona==='Intermunicipal'?`[${c.municipio} ➔ ${c.municipioDestino}]`:`[${c.municipio}]`;return`<div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-2 shadow-md"><div class="flex justify-between items-center border-b border-slate-700 pb-1"><span class="font-bold text-orange-400">${labelRutaAdmin} ${c.clienteNombre} (${c.clienteTel})</span><div class="space-x-1"><a href="https://wa.me/57${c.clienteTel}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded text-white font-bold inline-block">WhatsApp</a><button onclick="abrirEditarServicio(${c.id})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Editar</button><button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button></div></div>${c.foto?`<div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')"><img src="${c.foto}" class="w-full h-36 object-contain bg-slate-950 rounded-lg border border-slate-700"><div class="absolute bottom-2 right-2 bg-slate-900/90 text-orange-400 font-bold text-[10px] px-2 py-1 rounded border border-slate-700">🔍 Ampliar foto</div></div>`:''}<p class="text-white"><b>Vehículo:</b> ${c.vehiculo} | <b>Carga:</b> ${c.peso}</p><p class="text-slate-300"><b>Ruta:</b> ${c.origen} ➔ ${c.destino}</p>${yaAsignado?`<div class="bg-emerald-950/60 p-3 rounded-xl border border-emerald-500 text-center space-y-1"><p class="text-emerald-400 font-black text-sm">✅ ${c.estado.toUpperCase()}</p><button onclick="forzarReasignacionConductor(${c.id})" class="bg-slate-800 hover:bg-slate-700 text-orange-400 font-bold px-3 py-1.5 rounded-lg border border-orange-500/40 text-[11px] cursor-pointer">🔄 Cambiar / Forzar Conductor</button></div>`:`<p class="text-orange-300 font-bold">Estado actual: ${c.estado}</p><div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 flex items-center space-x-2 pt-2"><select id="select-asignar-${c.id}" class="w-full p-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-[11px] font-bold"><option value="">-- Asignar Conductor Directo --</option>${listaConductoresActivos.map(cond=>`<option value="${cond.nombre} - ${cond.placa}">${cond.nombre} (${cond.placa})</option>`).join('')}</select><button onclick="asignarConductorAdmin(${c.id})" class="bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-lg text-white font-bold whitespace-nowrap cursor-pointer">Asignar</button></div>`}${c.calificacionEstrellas?`<p class="text-amber-400 font-bold">⭐ Calificación: ${c.calificacionEstrellas}/5</p>`:''}<div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700 space-y-1"><p class="font-bold text-slate-300">🏷️ Ofertas de la Flota (${c.ofertas?c.ofertas.length:0}/5):</p>${(!c.ofertas||c.ofertas.length===0)?'<p class="text-slate-400 italic">Sin ofertas aún.</p>':c.ofertas.map(of=>`<div class="flex justify-between items-center text-[11px] bg-slate-800 p-1.5 rounded"><span>${of.conductorNombre} (${of.placa})</span><span class="font-black text-emerald-400">$${Number(of.precio).toLocaleString('es-CO')}</span></div>`).join('')}</div></div>`;}).join('');}
+function renderAdminServicios(){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];document.getElementById('admin-total-servicios').innerText=state.cargas.length;const el=document.getElementById('admin-lista-cargas');if(!el)return;if(!state.cargas||state.cargas.length===0){el.innerHTML='<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin servicios registrados.</div>';return;}const listaConductoresActivos=state.conductores.filter(c=>c.estado==='Activo');el.innerHTML=state.cargas.map(c=>{const yaAsignado=(c.conductorAsignadoPlaca!=null||c.estado.startsWith("Asignado"));const labelRutaAdmin=c.tipoZona==='Intermunicipal'?`[${c.municipio} ➔ ${c.municipioDestino}]`:`[${c.municipio}]`;const esMototaxi=c.categoriaServicio==='Mototaxi';return`<div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-2 shadow-md"><div class="flex justify-between items-center border-b border-slate-700 pb-1"><span class="font-bold text-orange-400">${esMototaxi?'🛵 [Mototaxi]':'📦 [Acarreo]'} ${labelRutaAdmin} ${c.clienteNombre} (${c.clienteTel})</span><div class="space-x-1"><a href="https://wa.me/57${c.clienteTel}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded text-white font-bold inline-block">WhatsApp</a><button onclick="abrirEditarServicio(${c.id})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Editar</button><button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button></div></div>${c.foto?`<div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')"><img src="${c.foto}" class="w-full h-36 object-contain bg-slate-950 rounded-lg border border-slate-700"><div class="absolute bottom-2 right-2 bg-slate-900/90 text-orange-400 font-bold text-[10px] px-2 py-1 rounded border border-slate-700">🔍 Ampliar foto</div></div>`:''}<p class="text-white"><b>Vehículo:</b> ${c.vehiculo} | <b>Detalle:</b> ${c.peso}</p><p class="text-slate-300"><b>Ruta:</b> ${c.origen} ➔ ${c.destino}</p>${yaAsignado?`<div class="bg-emerald-950/60 p-3 rounded-xl border border-emerald-500 text-center space-y-1"><p class="text-emerald-400 font-black text-sm">✅ ${c.estado.toUpperCase()}</p><button onclick="forzarReasignacionConductor(${c.id})" class="bg-slate-800 hover:bg-slate-700 text-orange-400 font-bold px-3 py-1.5 rounded-lg border border-orange-500/40 text-[11px] cursor-pointer">🔄 Cambiar / Forzar Conductor</button></div>`:`<p class="text-orange-300 font-bold">Estado actual: ${c.estado}</p><div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 flex items-center space-x-2 pt-2"><select id="select-asignar-${c.id}" class="w-full p-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-[11px] font-bold"><option value="">-- Asignar Conductor Directo --</option>${listaConductoresActivos.map(cond=>`<option value="${cond.nombre} - ${cond.placa}">${cond.nombre} (${cond.placa})</option>`).join('')}</select><button onclick="asignarConductorAdmin(${c.id})" class="bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-lg text-white font-bold whitespace-nowrap cursor-pointer">Asignar</button></div>`}${c.calificacionEstrellas?`<p class="text-amber-400 font-bold">⭐ Calificación: ${c.calificacionEstrellas}/5</p>`:''}<div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700 space-y-1"><p class="font-bold text-slate-300">🏷️ Ofertas de la Flota (${c.ofertas?c.ofertas.length:0}/5):</p>${(!c.ofertas||c.ofertas.length===0)?'<p class="text-slate-400 italic">Sin ofertas aún.</p>':c.ofertas.map(of=>`<div class="flex justify-between items-center text-[11px] bg-slate-800 p-1.5 rounded"><span>${of.conductorNombre} (${of.placa})</span><span class="font-black text-emerald-400">$${Number(of.precio).toLocaleString('es-CO')}</span></div>`).join('')}</div></div>`;}).join('');}
 
 function asignarConductorAdmin(cargaId){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];const val=document.getElementById(`select-asignar-${cargaId}`).value;if(!val){alert("Selecciona conductor");return;}let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));if(carga){carga.estado=`Asignado a: ${val}`;const partes=val.split(" - ");if(partes[1])carga.conductorAsignadoPlaca=partes[1].trim();guardarDatosLocal();renderAdminServicios();alert("✅ Asignado con éxito.");}}
 function forzarReasignacionConductor(cargaId){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));if(carga){carga.conductorAsignadoPlaca=null;carga.estado="Recibiendo Cotizaciones";guardarDatosLocal();renderAdminServicios();alert("🔄 Servicio liberado.");}}
@@ -1092,7 +1148,7 @@ const servicios=cond.serviciosCalificados||0;
 const cal=cond.calificacion!==undefined?cond.calificacion:5.0;
 const bono=(servicios>=5&&cal>=4.5);
 return`<div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-xs space-y-3 shadow-xl">
-  <!-- CABECERA DE LA TARJETA: NOMBRE, PLACA Y ESTADO -->
+  <!-- CABECERA -->
   <div class="flex justify-between items-start border-b border-slate-700 pb-2">
     <div>
       <h4 class="font-black text-white text-sm">${cond.nombre}</h4>
@@ -1101,16 +1157,16 @@ return`<div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-xs 
     <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${cond.estado==='Activo'?'bg-green-500/20 text-green-400 border border-green-500/30':'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">${cond.estado}</span>
   </div>
 
-  <!-- DATOS DE CONTACTO Y CALIFICACIÓN -->
+  <!-- DATOS -->
   <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1 text-slate-300">
     <p><b>Cédula:</b> ${cond.doc||'N/A'} | <b>Tel:</b> ${cond.tel||'N/A'}</p>
-    <p><b>Base:</b> <span class="text-orange-400 font-bold">${cond.municipio||'Acacías'}</span> | <b class="text-amber-400">⭐ ${cal}</b> (${servicios} calificados)</p>
-    <p class="text-[11px] pt-0.5">Vigencia de Membresía: <b class="text-white">${cond.vencimiento||'N/A'}</b></p>
+    <p><b>Base:</b> <span class="text-orange-400 font-bold">${cond.municipio||'Acacías'}</span> | <b>Vehículo:</b> <span class="text-white font-bold">${cond.vehiculo||'Motocarguero'}</span></p>
+    <p><b class="text-amber-400">⭐ ${cal}</b> (${servicios} calificados) | Vigencia: <b class="text-white">${cond.vencimiento||'N/A'}</b></p>
   </div>
 
   ${bono?`<div class="bg-amber-950/40 p-2.5 rounded-xl border border-amber-500/50 flex justify-between items-center text-[11px]"><span class="text-amber-300 font-bold">✨ ¡Candidato a Bono por Excelencia!</span><button onclick="otorgarBonoTransportador(${idx},3)" class="bg-amber-600 hover:bg-amber-700 px-2.5 py-1 rounded-lg text-white font-black cursor-pointer shadow">+3 Días ⭐</button></div>`:''}
 
-  <!-- MÓDULO DE GESTIÓN DE VENCIMIENTO -->
+  <!-- GESTIÓN VENCIMIENTO -->
   <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1.5">
     <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Modificar Vencimiento de Suscripción:</label>
     <div class="flex space-x-2">
@@ -1119,7 +1175,7 @@ return`<div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-xs 
     </div>
   </div>
 
-  <!-- BOTONES DE ACCIÓN ADMINISTRATIVA ORGANIZADOS POR JERARQUÍA -->
+  <!-- BOTONES -->
   <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-700">
     <button onclick="restablecerClaveAdmin(${idx})" class="bg-purple-600 hover:bg-purple-700 py-2 px-3 rounded-xl text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center space-x-1"><span>🔑</span><span>Restablecer Clave</span></button>
     ${cond.estado!=='Activo'?`<button onclick="cambiarEstadoConductor(${idx},'Activo')" class="bg-green-600 hover:bg-green-700 py-2 px-3 rounded-xl text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center space-x-1"><span>✅</span><span>Aprobar Cuenta</span></button>`:`<button onclick="cambiarEstadoConductor(${idx},'Suspendido')" class="bg-amber-600 hover:bg-amber-700 py-2 px-3 rounded-xl text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center space-x-1"><span>⏸️</span><span>Suspender Cuenta</span></button>`}
