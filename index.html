@@ -603,7 +603,6 @@ function abrirReglamentoModal(){
 }
 
 function cerrarReglamentoModal(){
-  // Corrección quirúrgica: Cierra el modal limpiamente sin sacar al usuario del formulario
   document.getElementById('modal-reglamento').classList.add('hidden');
 }
 
@@ -651,9 +650,6 @@ function irModulo(mod){
   }
 }
 
-// ==========================================
-// CONTROL DEL BOTÓN "ATRÁS" DEL TELÉFONO NATIVO
-// ==========================================
 window.onpopstate = function(event) {
   const modalReglamento = document.getElementById('modal-reglamento');
   const modalFoto = document.getElementById('modal-ver-foto');
@@ -696,11 +692,21 @@ function capturarFoto(e){const file=e.target.files[0];if(file){const reader=new 
 function publicarSolicitudCliente(){
   const nombre=document.getElementById('cli-nombre').value.trim();
   const tel=document.getElementById('cli-tel').value.trim();
-  const peso=state.tipoServicioCli==='Mototaxi'?'Servicio Mototaxi / Pasajeros':(document.getElementById('cli-peso')?document.getElementById('cli-peso').value.trim():'');
-  const origen=document.getElementById('cli-origen').value.trim();
-  const destino=document.getElementById('cli-destino').value.trim();
   const municipioOrigen=document.getElementById('cli-mun-local').value;
   const municipioDestinoVal=(state.tipoZona==='Intermunicipal')?document.getElementById('cli-mun-destino').value:municipioOrigen;
+
+  // Validación estricta para el módulo Mototaxi: Debe estar en Guamal o Castilla la Nueva
+  if(state.tipoServicioCli === 'Mototaxi'){
+    const esGuamalCastilla = (municipioOrigen === "Guamal" || municipioOrigen === "Castilla la Nueva" || municipioDestinoVal === "Guamal" || municipioDestinoVal === "Castilla la Nueva");
+    if(!esGuamalCastilla){
+      alert("⚠️ El servicio de Mototaxi solo está habilitado para los municipios de Guamal y Castilla la Nueva.");
+      return;
+    }
+  }
+
+  const peso=state.tipoServicioCli==='Mototaxi'?'Servicio Mototaxi / Pasajero':(document.getElementById('cli-peso')?document.getElementById('cli-peso').value.trim():'');
+  const origen=document.getElementById('cli-origen').value.trim();
+  const destino=document.getElementById('cli-destino').value.trim();
 
   if(!nombre||!tel||!origen||!destino||(state.tipoServicioCli==='Acarreo'&&!peso)){
     alert("⚠️ Debes completar todos los campos obligatorios.");
@@ -732,7 +738,7 @@ function publicarSolicitudCliente(){
     destino:destino,
     observaciones:document.getElementById('cli-obs').value.trim(),
     foto:state.tipoServicioCli==='Mototaxi'?null:state.fotoBase64,
-    estado:"Recibiendo Cotizaciones",
+    estado:state.tipoServicioCli==='Mototaxi'?"Buscando Mototaxi Cercano...":"Recibiendo Cotizaciones",
     ofertas:[],
     conductorAsignadoPlaca:null,
     calificacionEstrellas:null,
@@ -764,7 +770,7 @@ function renderHistorialCliente(){
   }
   
   el.innerHTML=mis.map(c=>{
-    const yaAsignadoOConOfertaAceptada=(c.conductorAsignadoPlaca!=null||c.estado.startsWith("Asignado"));
+    const yaAsignadoOConOfertaAceptada=(c.conductorAsignadoPlaca!=null||c.estado.startsWith("Asignado")||c.estado.startsWith("En Curso"));
     const labelRutaInfo=c.tipoZona==='Intermunicipal'?`[${c.municipio} ➔ ${c.municipioDestino}]`:`[${c.municipio}]`;
     const esFantasmaAntiguo=(!c.municipio && !c.tipoZona);
     const totalOfertas = c.ofertas ? c.ofertas.length : 0;
@@ -801,10 +807,24 @@ function renderHistorialCliente(){
       <p class="text-slate-300"><b>Vehículo:</b> ${c.vehiculo}</p>
       
       ${c.foto?`<div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')"><img src="${c.foto}" class="w-full h-40 object-contain bg-slate-950 rounded-xl border border-slate-700"><div class="absolute bottom-2 right-2 bg-slate-900/80 text-orange-400 font-bold text-[10px] px-2 py-1 rounded-lg border border-slate-700">🔍 Toca para ampliar foto</div></div>`:''}
-      <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1.5">
-        <p class="font-black text-orange-400">🏷️ Cotizaciones Recibidas (${totalOfertas}/5 Máx):</p>
-        ${(!c.ofertas||c.ofertas.length===0)?'<p class="text-slate-400 italic">Esperando que los transportadores envíen sus cotizaciones...</p>':c.ofertas.map((of,oIdx)=>{const yaSeleccionado=(c.conductorAsignadoPlaca===of.placa);return`<div class="flex justify-between items-center bg-slate-800 p-2 rounded-lg border border-slate-700"><div><p class="font-bold text-white">${of.conductorNombre} (${of.placa})</p><p class="text-[10px] text-slate-300">Tel: ${of.tel}</p></div><div class="text-right"><span class="font-black text-emerald-400 text-sm">$${Number(of.precio).toLocaleString('es-CO')}</span>${yaSeleccionado?`<span class="block mt-1 bg-emerald-600 text-white font-black px-2.5 py-1 rounded text-[10px]">✅ Conductor Seleccionado</span>`:(yaAsignadoOConOfertaAceptada?'':`<button onclick="seleccionarOfertaCliente(${c.id}, ${oIdx})" class="block mt-1 bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1 rounded text-[10px] cursor-pointer">Elegir Conductor</button>`)}</div></div>`;}).join('')}
-      </div>
+      
+      ${esMototaxi ? 
+        `<div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2">
+           <p class="font-black text-orange-400">🛵 Estado de Asignación Mototaxi:</p>
+           ${c.conductorAsignadoPlaca ? 
+             `<div class="bg-emerald-950/60 p-2.5 rounded-lg border border-emerald-500 text-center">
+                <p class="text-emerald-400 font-black">🎉 ¡Conductor asignado en camino!</p>
+                <p class="text-white font-bold text-xs mt-1">Placa: ${c.conductorAsignadoPlaca}</p>
+              </div>` : 
+             `<p class="text-amber-400 italic text-center animate-pulse">Buscando al taxista/mototaxista más cercano disponible...</p>`
+           }
+         </div>` :
+        `<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1.5">
+          <p class="font-black text-orange-400">🏷️ Cotizaciones Recibidas (${totalOfertas}/5 Máx):</p>
+          ${(!c.ofertas||c.ofertas.length===0)?'<p class="text-slate-400 italic">Esperando que los transportadores envíen sus cotizaciones...</p>':c.ofertas.map((of,oIdx)=>{const yaSeleccionado=(c.conductorAsignadoPlaca===of.placa);return`<div class="flex justify-between items-center bg-slate-800 p-2 rounded-lg border border-slate-700"><div><p class="font-bold text-white">${of.conductorNombre} (${of.placa})</p><p class="text-[10px] text-slate-300">Tel: ${of.tel}</p></div><div class="text-right"><span class="font-black text-emerald-400 text-sm">$${Number(of.precio).toLocaleString('es-CO')}</span>${yaSeleccionado?`<span class="block mt-1 bg-emerald-600 text-white font-black px-2.5 py-1 rounded text-[10px]">✅ Conductor Seleccionado</span>`:(yaAsignadoOConOfertaAceptada?'':`<button onclick="seleccionarOfertaCliente(${c.id}, ${oIdx})" class="block mt-1 bg-orange-500 hover:bg-orange-600 text-white font-bold px-2.5 py-1 rounded text-[10px] cursor-pointer">Elegir Conductor</button>`)}</div></div>`;}).join('')}
+        </div>`
+      }
+
       ${c.conductorAsignadoPlaca?`<div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2 mt-2 text-center"><p class="font-black text-orange-400">⭐ Calificar Servicio del Transportador</p>${c.calificacionEstrellas?`<p class="text-emerald-400 font-bold text-sm">¡Calificado con ${c.calificacionEstrellas} ⭐ Estrellas!</p>`:`<div class="flex justify-center space-x-1 text-xl"><button onclick="calificarServicio(${c.id}, 1)" class="cursor-pointer">⭐</button><button onclick="calificarServicio(${c.id}, 2)" class="cursor-pointer">⭐</button><button onclick="calificarServicio(${c.id}, 3)" class="cursor-pointer">⭐</button><button onclick="calificarServicio(${c.id}, 4)" class="cursor-pointer">⭐</button><button onclick="calificarServicio(${c.id}, 5)" class="cursor-pointer">⭐</button></div><p class="text-[10px] text-slate-400">Haz clic en la estrella deseada para calificar</p>`}</div>`:''}
       <div class="flex justify-end pt-1"><button onclick="eliminarSolicitudCliente(${c.id})" class="bg-red-600/80 hover:bg-red-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] cursor-pointer shadow">🗑️ Eliminar Solicitud</button></div>
     </div>`;
@@ -866,8 +886,10 @@ function renderCargasDisponiblesTrans(){
   state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];
   state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
   const conductorActual=state.conductores.find(c=>c.placa===state.transActualPlaca);
-  const municipioConductor=conductorActual?conductorActual.municipio:"Acacías";
-  const esMototaxiConductor=conductorActual?(conductorActual.vehiculo==="Mototaxi"):false;
+  if(!conductorActual) return;
+
+  const municipioConductor=conductorActual.municipio||"Acacías";
+  const esMototaxiConductor=(conductorActual.vehiculo==="Mototaxi");
   
   const el=document.getElementById('lista-cargas-disponibles');
   if(!el)return;
@@ -877,6 +899,13 @@ function renderCargasDisponiblesTrans(){
     const esMiZona = c.tipoZona==='Local (Urbano)' ? (c.municipio===municipioConductor) : (c.municipio===municipioConductor||c.municipioDestino===municipioConductor);
     const esServicioMototaxi = (c.categoriaServicio === 'Mototaxi');
     const matchVehiculo = esMototaxiConductor ? esServicioMototaxi : !esServicioMototaxi;
+    
+    // Filtro geográfico estricto para Mototaxi: Únicamente Guamal y Castilla la Nueva
+    if(esServicioMototaxi){
+      const esGuamalCastilla = (c.municipio === "Guamal" || c.municipio === "Castilla la Nueva" || c.municipioDestino === "Guamal" || c.municipioDestino === "Castilla la Nueva");
+      if(!esGuamalCastilla) return false;
+    }
+
     return esMiZona && matchVehiculo;
   });
 
@@ -956,34 +985,117 @@ function renderCargasDisponiblesTrans(){
       ${c.observaciones?`<p class="text-slate-400 italic">"${c.observaciones}"</p>`:''}
       ${c.foto?`<div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')"><img src="${c.foto}" class="w-full h-44 object-contain bg-slate-950 rounded-xl border border-slate-700"><div class="absolute bottom-2 right-2 bg-slate-900/90 text-orange-400 font-bold text-[10px] px-2 py-1 rounded-lg border border-slate-700">🔍 Toca para ver foto completa</div></div>`:''}
       
-      ${yaAsignadoAOtro?
-        `<div class="bg-slate-900 p-3 rounded-xl border border-red-500/40 text-center space-y-1">
-           <p class="text-red-400 font-bold text-xs">🔴 Este servicio ya fue asignado a otro compañero.</p>
-         </div>`:
-        (yaAsignadoOConOfertaAceptada?'':(yaEnvioOferta?
-          `<div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/50 text-center space-y-1">
-             <p class="text-emerald-400 font-black">✅ Ya enviaste tu cotización por <b class="text-white">$${Number(miOfertaActual.precio).toLocaleString('es-CO')}</b></p>
-             <p class="text-[10px] text-slate-400">Esperando respuesta del cliente (${totalOfertasRecibidas}/5 ofertas)...</p>
+      ${esMototaxiSrv ?
+        // LÓGICA DE ASIGNACIÓN INSTANTÁNEA "EL PRIMERO QUE APRIETA" PARA MOTOTAXIS
+        (yaAsignadoAOtro ?
+          `<div class="bg-slate-900 p-3 rounded-xl border border-red-500/40 text-center space-y-1">
+             <p class="text-red-400 font-bold text-xs">🔴 Este viaje ya fue asignado a otro conductor.</p>
            </div>`:
-          (limiteAlcanzado?
-            `<div class="bg-slate-900 p-3 rounded-xl border border-amber-500/40 text-center space-y-1">
-               <p class="text-amber-400 font-bold text-xs">🔒 Límite de 5 cotizaciones alcanzado para este servicio.</p>
-               <p class="text-[10px] text-slate-400">El cliente está revisando las propuestas enviadas.</p>
+          (esAsignadoAceptado ?
+            `<div class="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/50 space-y-1 mt-2 text-center">
+               <p class="text-emerald-400 font-black">🎉 ¡Te has adjudicado este viaje de Mototaxi!</p>
+               <a href="https://wa.me/57${c.clienteTel}?text=`+encodeURIComponent("Hola "+c.clienteNombre+", voy en camino a recogerte con el servicio de Mototaxi en Kargass.")+`" target="_blank" class="block bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white shadow cursor-pointer">💬 Iniciar WhatsApp con el Pasajero</a>
              </div>`:
-            `<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2">
-               <div class="flex justify-between items-center"><label class="font-bold text-slate-300">Enviar Cotización de Tarifa (COP):</label><span class="text-[10px] text-amber-400 font-bold">${totalOfertasRecibidas}/5 cotizaciones</span></div>
-               <div class="flex space-x-2">
-                 <input type="text" id="input-oferta-${c.id}" placeholder="Ej: 8000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs">
-                 <button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Cotización</button>
-               </div>
+            `<div class="bg-slate-900 p-3 rounded-xl border border-orange-500/50 text-center space-y-2">
+               <p class="text-orange-400 font-bold text-xs">⚡ Asignación Instantánea (Primer Clic)</p>
+               <button onclick="aceptarViajeMototaxiInstantaneo(${c.id})" class="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black py-3 rounded-xl shadow-lg uppercase tracking-wider cursor-pointer">🛵 ¡Aceptar Viaje de Inmediato!</button>
              </div>`
           )
-        ))
+        ) :
+        // LÓGICA TRADICIONAL DE OFERTAS PARA ACARREOS
+        (yaAsignadoAOtro?
+          `<div class="bg-slate-900 p-3 rounded-xl border border-red-500/40 text-center space-y-1">
+             <p class="text-red-400 font-bold text-xs">🔴 Este servicio ya fue asignado a otro compañero.</p>
+           </div>`:
+          (yaAsignadoOConOfertaAceptada?'':(yaEnvioOferta?
+            `<div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/50 text-center space-y-1">
+               <p class="text-emerald-400 font-black">✅ Ya enviaste tu cotización por <b class="text-white">$${Number(miOfertaActual.precio).toLocaleString('es-CO')}</b></p>
+               <p class="text-[10px] text-slate-400">Esperando respuesta del cliente (${totalOfertasRecibidas}/5 ofertas)...</p>
+             </div>`:
+            (limiteAlcanzado?
+              `<div class="bg-slate-900 p-3 rounded-xl border border-amber-500/40 text-center space-y-1">
+                 <p class="text-amber-400 font-bold text-xs">🔒 Límite de 5 cotizaciones alcanzado para este servicio.</p>
+                 <p class="text-[10px] text-slate-400">El cliente está revisando las propuestas enviadas.</p>
+               </div>`:
+              `<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-2 pt-2">
+                 <div class="flex justify-between items-center"><label class="font-bold text-slate-300">Enviar Cotización de Tarifa (COP):</label><span class="text-[10px] text-amber-400 font-bold">${totalOfertasRecibidas}/5 cotizaciones</span></div>
+                 <div class="flex space-x-2">
+                   <input type="text" id="input-oferta-${c.id}" placeholder="Ej: 8000" class="w-full p-2 bg-slate-800 border border-slate-700 rounded-lg text-white font-black outline-none text-xs">
+                   <button onclick="enviarOfertaTransportador(${c.id})" class="bg-orange-500 hover:bg-orange-600 font-black px-3 py-2 rounded-lg text-white cursor-pointer shadow">Enviar Cotización</button>
+                 </div>
+               </div>`
+            )
+          ))
+        )
       }
 
-      ${esAsignadoAceptado?`<div class="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/50 space-y-1 mt-2 text-center"><p class="text-emerald-400 font-black">🎉 ¡Tu oferta fue aceptada por el cliente!</p><a href="https://wa.me/57${c.clienteTel}?text=`+encodeURIComponent("Hola "+c.clienteNombre+", fui el transportador seleccionado en Kargass.")+`" target="_blank" class="block bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white shadow cursor-pointer">💬 Iniciar WhatsApp Directo con el Cliente</a></div>`:''}
+      ${(esAsignadoAceptado && !esMototaxiSrv)?`<div class="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/50 space-y-1 mt-2 text-center"><p class="text-emerald-400 font-black">🎉 ¡Tu oferta fue aceptada por el cliente!</p><a href="https://wa.me/57${c.clienteTel}?text=`+encodeURIComponent("Hola "+c.clienteNombre+", fui el transportador seleccionado en Kargass.")+`" target="_blank" class="block bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white shadow cursor-pointer">💬 Iniciar WhatsApp Directo con el Cliente</a></div>`:''}
     </div>`;
   }).join('');
+}
+
+// ==========================================
+// FUNCIÓN ATÓMICA FIREBASE PARA MOTOTAXIS (PRIMERO EN ACEPTAR)
+// ==========================================
+function aceptarViajeMototaxiInstantaneo(cargaId){
+  registrarActividadUsuario();
+  state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
+  const cond=state.conductores.find(co=>co.placa===state.transActualPlaca);
+  if(!cond){alert("Error de sesión de conductor");return;}
+
+  if(db){
+    // Operación atómica en Firebase Realtime Database para evitar race conditions
+    const cargaRef=db.ref('kargass_app_data/cargas');
+    db.ref('kargass_app_data').transaction((currentData)=>{
+      if(!currentData || !currentData.cargas) return currentData;
+      let targetIndex = currentData.cargas.findIndex(item => Number(item.id) === Number(cargaId));
+      if(targetIndex === -1) return currentData;
+      
+      let item = currentData.cargas[targetIndex];
+      // Verificar si ya fue tomado por otro conductor
+      if(item.conductorAsignadoPlaca != null) {
+        return currentData; // Ya fue tomado, no hacer nada
+      }
+
+      // Asignar al primer conductor en presionar
+      item.conductorAsignadoPlaca = cond.placa;
+      item.estado = `Asignado a ${cond.nombre} (Mototaxi)`;
+      currentData.cargas[targetIndex] = item;
+      return currentData;
+    }, (error, committed, snapshot)=>{
+      if(error){
+        alert("❌ Error de red al intentar aceptar el viaje. Intenta de nuevo.");
+      } else if(committed){
+        // Refrescar datos locales con el snapshot actualizado
+        const updatedData = snapshot.val();
+        if(updatedData && updatedData.cargas){
+          state.cargas = updatedData.cargas;
+          localStorage.setItem('kargass_cargas', JSON.stringify(updatedData.cargas));
+        }
+        renderCargasDisponiblesTrans();
+        alert("🎉 ¡Felicitaciones! Te has adjudicado el viaje de Mototaxi exitosamente.");
+      } else {
+        alert("⚠️ Lo sentimos, otro compañero se ha adelantado y ya aceptó este viaje de Mototaxi.");
+        renderCargasDisponiblesTrans();
+      }
+    });
+  } else {
+    // Respaldo local si Firebase no estuviera inicializado
+    state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];
+    let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));
+    if(carga){
+      if(carga.conductorAsignadoPlaca != null){
+        alert("⚠️ Este viaje ya fue tomado por otro conductor.");
+        renderCargasDisponiblesTrans();
+        return;
+      }
+      carga.conductorAsignadoPlaca = cond.placa;
+      carga.estado = `Asignado a ${cond.nombre} (Mototaxi)`;
+      guardarDatosLocal();
+      renderCargasDisponiblesTrans();
+      alert("🎉 ¡Te has adjudicado el viaje de Mototaxi con éxito!");
+    }
+  }
 }
 
 function renderHistorialTransportador(){
