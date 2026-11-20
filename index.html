@@ -263,12 +263,23 @@
 <button onclick="recuperarClaveAdminMaestra()" class="text-xs text-slate-400 hover:text-orange-400 font-bold block mx-auto cursor-pointer pt-1">🔑 ¿Olvidaste la Clave Administrador? Usar Clave Maestra de Rescate</button>
 </div>
 <div id="admin-dashboard" class="hidden space-y-3">
+<!-- Alerta visual de nuevos transportadores pendientes por aprobar -->
+<div id="admin-alerta-pendientes" onclick="switchTabAdmin('conductores')" class="hidden bg-amber-500/20 border-2 border-amber-400 p-3 rounded-2xl shadow-lg cursor-pointer flex items-center justify-between text-xs animate-pulse">
+<div class="flex items-center space-x-2">
+<span class="text-xl">🚨</span>
+<div>
+<p class="font-black text-amber-300">¡Nuevo(s) Transportador(es) Pendiente(s)!</p>
+<p id="admin-texto-pendientes" class="text-[11px] text-slate-200">Hay solicitudes de inscripción por revisar en Flota.</p>
+</div>
+</div>
+<span class="bg-amber-400 text-slate-950 font-black px-2.5 py-1 rounded-lg text-[10px] uppercase">Ver Flota</span>
+</div>
 <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 flex justify-between items-center text-xs shadow-lg">
 <p class="font-black text-orange-400">🛠️ Panel de Control Central</p><button onclick="cerrarSesionAdmin()" class="bg-slate-700 hover:bg-slate-600 px-2.5 py-1.5 rounded-lg text-slate-200 font-black cursor-pointer">Cerrar Sesión</button>
 </div>
 <div class="grid grid-cols-5 gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700 text-[10px] font-black text-center">
 <button onclick="switchTabAdmin('servicios')" id="tab-a-servicios" class="bg-orange-500 text-white py-2 px-1 rounded-lg cursor-pointer truncate">Call Center</button>
-<button onclick="switchTabAdmin('conductores')" id="tab-a-conductores" class="text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate">Flota</button>
+<button onclick="switchTabAdmin('conductores')" id="tab-a-conductores" class="text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate relative">Flota <span id="admin-badge-pendientes" class="hidden bg-red-600 text-white text-[9px] px-1 rounded-full">0</span></button>
 <button onclick="switchTabAdmin('historial')" id="tab-a-historial" class="text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate">Historial</button>
 <button onclick="switchTabAdmin('tarifas')" id="tab-a-tarifas" class="text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate">Tarifas</button>
 <button onclick="switchTabAdmin('ajustes')" id="tab-a-ajustes" class="text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate">Ajustes</button>
@@ -440,7 +451,27 @@ const tarifasBaseAcacias={urbano:[{id:1,ruta:"Urbano",valor:"$25.000"},{id:2,rut
 const reglamentoEsencialPorDefecto=`REGLAMENTO OPERATIVO Y DE CONVIVENCIA – GRUPO KARGASS\n"Unidos hacemos más camino. En Grupo Kargass nuestra mayor herramienta es la confianza del cliente."\n\n1. Nuestra Carta de Presentación:\n• Trato amable, cordial y respetuoso con el cliente.\n• Vestimenta adecuada, limpia y profesional.\n• Cuidado del vehículo en higiene y mecánica.\n\n2. Compromiso con el Tiempo y la Puntualidad:\n• Puntualidad estricta en la hora de recogida acordada.\n• Evitar cancelaciones de último momento.\n\n3. Cuidado y Respeto Absoluto por la Carga:\n• Manipulación impecable de mercancías y trasteos.\n• Cobro transparente según tarifa cotizada en la app.\n\n4. Programa de Estrellas y Bonificaciones ⭐:\n• Promedio mínimo deseado: 4.5 a 5.0 estrellas.\n• Al sumar 15 servicios calificados con excelencia, la Central otorga días adicionales de suscripción mensual de regalo.`;
 const picoPlacaPorDefecto=`📅 Periodo: Vigente 2026.\n⏰ Horarios: De 6:30 a.m. a 9:30 a.m. y de 5:00 p.m. a 8:00 p.m.\n🗓️ Regla: Lunes a viernes (excepto festivos).`;
 
-let state={cargas:JSON.parse(localStorage.getItem('kargass_cargas'))||[],conductores:JSON.parse(localStorage.getItem('kargass_conductores'))||[{placa:"ABC123",password:"3100000000",nombre:"Conductor de Prueba ABC",doc:"3100000000",tel:"3100000000",vehiculo:"Motocarguero sencillo",marca:"AKT",cilindraje:"200cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null},{placa:"571AGU",password:"3143842007",nombre:"Daniel David Martínez Santamaría",doc:"1122124473",tel:"3143842007",vehiculo:"Motocarguero sencillo",marca:"Camello",cilindraje:"250cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null}],tarifasPorMunicipio:JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||{"Acacías":tarifasBaseAcacias},config:JSON.parse(localStorage.getItem('kargass_config_global'))||{adminPass:"1234",adminMaster:"KARGASS-RESCUE-2026",valorSuscripcion:45000,nequi:"3143842007",whatsapp:"3507690951",picoPlacaTexto:picoPlacaPorDefecto,reglamentoTexto:reglamentoEsencialPorDefecto},rolGuardado:localStorage.getItem('kargass_rol_activo_memoria')||null,clienteActualDoc:localStorage.getItem('kargass_cliente_doc_memoria')||null,transActualPlaca:localStorage.getItem('kargass_trans_placa_memoria')||null,isAdmin:false,tipoZona:"Local (Urbano)",tipoServicioCli:"Acarreo",horarioTipo:"Inmediato",fotoBase64:null,conteoServiciosAnterior:0,estadoAsignadoAnteriorMap:{}};
+let state={
+  cargas:JSON.parse(localStorage.getItem('kargass_cargas'))||[],
+  conductores:JSON.parse(localStorage.getItem('kargass_conductores'))||[
+    {placa:"ABC123",password:"3100000000",nombre:"Conductor de Prueba ABC",doc:"3100000000",tel:"3100000000",vehiculo:"Motocarguero sencillo",marca:"AKT",cilindraje:"200cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null},
+    {placa:"571AGU",password:"3143842007",nombre:"Daniel David Martínez Santamaría",doc:"1122124473",tel:"3143842007",vehiculo:"Motocarguero sencillo",marca:"Camello",cilindraje:"250cc",municipio:"Acacías",estado:"Activo",vencimiento:"2026-12-01",calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null}
+  ],
+  tarifasPorMunicipio:JSON.parse(localStorage.getItem('kargass_tarifas_municipios'))||{"Acacías":tarifasBaseAcacias},
+  config:JSON.parse(localStorage.getItem('kargass_config_global'))||{adminPass:"1234",adminMaster:"KARGASS-RESCUE-2026",valorSuscripcion:45000,nequi:"3143842007",whatsapp:"3507690951",picoPlacaTexto:picoPlacaPorDefecto,reglamentoTexto:reglamentoEsencialPorDefecto},
+  rolGuardado:localStorage.getItem('kargass_rol_activo_memoria')||null,
+  clienteActualDoc:localStorage.getItem('kargass_cliente_doc_memoria')||null,
+  transActualPlaca:localStorage.getItem('kargass_trans_placa_memoria')||null,
+  isAdmin:false,
+  tipoZona:"Local (Urbano)",
+  tipoServicioCli:"Acarreo",
+  horarioTipo:"Inmediato",
+  fotoBase64:null,
+  conteoServiciosAnterior:0,
+  estadoAsignadoAnteriorMap:{},
+  seleccionEstrellasTemp:{}, // { [cargaId]: numeroEstrellas }
+  conteoPendientesAdminAnterior:0
+};
 
 function emitirPitoDobleAlerta(){try{const ctx=new (window.AudioContext||window.webkitAudioContext)();const now=ctx.currentTime;
 const osc1=ctx.createOscillator();const gain1=ctx.createGain();
@@ -461,6 +492,64 @@ gain.gain.setValueAtTime(0.4, now + offset);gain.gain.exponentialRampToValueAtTi
 osc.connect(gain);gain.connect(ctx.destination);osc.start(now + offset);osc.stop(now + offset + 0.18);});
 }catch(e){console.log("Audio alert",e);}}
 
+// Alerta sonora DISTINTA para nuevos transportadores (taxista, mototaxista, motocarguero, camioneta) en la Central
+function emitirAlertaNuevoConductor(){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const now=ctx.currentTime;
+    // Tres pulsos graves/medios tipo "campana/timbre de registro" distintos al agudo de carreras
+    [0, 0.28, 0.56].forEach((offset)=>{
+      const osc=ctx.createOscillator();
+      const gain=ctx.createGain();
+      osc.type='sawtooth';
+      osc.frequency.setValueAtTime(520, now + offset);
+      osc.frequency.linearRampToValueAtTime(740, now + offset + 0.14);
+      gain.gain.setValueAtTime(0.28, now + offset);
+      gain.gain.exponentialRampToValueAtTime(0.008, now + offset + 0.22);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + offset);
+      osc.stop(now + offset + 0.23);
+    });
+  }catch(e){console.log("Audio nuevo conductor",e);}
+}
+
+function revisarAlertasPendientesCentral(forzarSonidoSiHayPendientes = false){
+  const pendientes = (state.conductores || []).filter(c => c.estado === 'Pendiente');
+  const totalPendientes = pendientes.length;
+  const badgeAdmin = document.getElementById('admin-badge-pendientes');
+  const alertaBanner = document.getElementById('admin-alerta-pendientes');
+  const textoPendientes = document.getElementById('admin-texto-pendientes');
+
+  if(badgeAdmin){
+    if(totalPendientes > 0){
+      badgeAdmin.innerText = totalPendientes;
+      badgeAdmin.classList.remove('hidden');
+    } else {
+      badgeAdmin.classList.add('hidden');
+    }
+  }
+
+  if(alertaBanner){
+    if(totalPendientes > 0 && state.isAdmin){
+      alertaBanner.classList.remove('hidden');
+      if(textoPendientes){
+        const nombres = pendientes.slice(0, 2).map(p => `${p.nombre} (${p.vehiculo || 'Transportador'})`).join(', ');
+        textoPendientes.innerText = `Hay ${totalPendientes} usuario(s) por aceptar: ${nombres}${totalPendientes > 2 ? '...' : ''}`;
+      }
+    } else {
+      alertaBanner.classList.add('hidden');
+    }
+  }
+
+  if(state.isAdmin && totalPendientes > 0){
+    if(totalPendientes > state.conteoPendientesAdminAnterior || forzarSonidoSiHayPendientes){
+      emitirAlertaNuevoConductor();
+    }
+  }
+  state.conteoPendientesAdminAnterior = totalPendientes;
+}
+
 function guardarDatosLocal(){
 try{
   localStorage.setItem('kargass_cargas',JSON.stringify(state.cargas));
@@ -478,6 +567,7 @@ try{
     });
   }
   actualizarCampanitaServicios();
+  revisarAlertasPendientesCentral(false);
 }catch(e){console.error(e);alert("⚠️ Memoria llena.");}
 }
 
@@ -500,7 +590,10 @@ if(db) {
         state.cargas = data.cargas; 
         localStorage.setItem('kargass_cargas', JSON.stringify(data.cargas)); 
       }
-      if(data.conductores) { state.conductores = data.conductores; localStorage.setItem('kargass_conductores', JSON.stringify(data.conductores)); }
+      if(data.conductores) {
+        state.conductores = data.conductores;
+        localStorage.setItem('kargass_conductores', JSON.stringify(data.conductores));
+      }
       if(data.tarifas) { state.tarifasPorMunicipio = data.tarifas; localStorage.setItem('kargass_tarifas_municipios', JSON.stringify(data.tarifas)); }
       if(data.config) { state.config = data.config; localStorage.setItem('kargass_config_global', JSON.stringify(data.config)); }
       
@@ -508,6 +601,7 @@ if(db) {
       if(state.rolGuardado==='transportador') { renderCargasDisponiblesTrans(); renderHistorialTransportador(); }
       if(state.rolGuardado==='central' && state.isAdmin) { renderAdminServicios(); renderAdminConductores(); }
       actualizarCampanitaServicios();
+      revisarAlertasPendientesCentral(false);
     }
   });
 }
@@ -646,7 +740,15 @@ function irModulo(mod){
     document.getElementById('view-afiliacion').classList.remove('hidden');
   }else if(mod==='central'){
     document.getElementById('view-central').classList.remove('hidden');
-    if(state.isAdmin){document.getElementById('admin-login').classList.add('hidden');document.getElementById('admin-dashboard').classList.remove('hidden');}else{document.getElementById('admin-pass').value='';document.getElementById('admin-login').classList.remove('hidden');document.getElementById('admin-dashboard').classList.add('hidden');}
+    if(state.isAdmin){
+      document.getElementById('admin-login').classList.add('hidden');
+      document.getElementById('admin-dashboard').classList.remove('hidden');
+      revisarAlertasPendientesCentral(true);
+    }else{
+      document.getElementById('admin-pass').value='';
+      document.getElementById('admin-login').classList.remove('hidden');
+      document.getElementById('admin-dashboard').classList.add('hidden');
+    }
   }
 }
 
@@ -728,7 +830,7 @@ function publicarSolicitudCliente(){
     clienteNombre:nombre,
     clienteTel:tel,
     tipoZona:state.tipoZona,
-    categoriaServicio:state.tipoServicioCli, // 'Acarreo' o 'Mototaxi'
+    categoriaServicio:state.tipoServicioCli,
     municipio:municipioOrigen,
     municipioDestino:municipioDestinoVal,
     horario:horaCargue,
@@ -741,6 +843,7 @@ function publicarSolicitudCliente(){
     estado:state.tipoServicioCli==='Mototaxi'?"Buscando Mototaxi Cercano...":"Recibiendo Cotizaciones",
     ofertas:[],
     conductorAsignadoPlaca:null,
+    conductorAsignadoInfo:null,
     calificacionEstrellas:null,
     fechaCreacion:fechaHoyObj.toLocaleDateString('es-CO')+' '+fechaHoyObj.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})
   };
@@ -759,8 +862,14 @@ function publicarSolicitudCliente(){
   renderHistorialCliente();
 }
 
+function seleccionarEstrellaTemporal(cargaId, cantidad){
+  state.seleccionEstrellasTemp[cargaId] = cantidad;
+  renderHistorialCliente();
+}
+
 function renderHistorialCliente(){
   state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];
+  state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
   const el=document.getElementById('lista-mis-cargas');
   if(!el)return;
   const mis=state.cargas.filter(c=>c.clienteDoc===state.clienteActualDoc);
@@ -775,9 +884,20 @@ function renderHistorialCliente(){
     const esFantasmaAntiguo=(!c.municipio && !c.tipoZona);
     const totalOfertas = c.ofertas ? c.ofertas.length : 0;
     const esMototaxi = c.categoriaServicio === 'Mototaxi';
-    
+
+    // Buscar información completa del conductor asignado
+    const condObj = c.conductorAsignadoPlaca ? state.conductores.find(co => co.placa === c.conductorAsignadoPlaca) : null;
+    const infoCond = c.conductorAsignadoInfo || (condObj ? {
+      nombre: condObj.nombre,
+      placa: condObj.placa,
+      tel: condObj.tel,
+      vehiculo: condObj.vehiculo,
+      marca: condObj.marca
+    } : (c.conductorAsignadoPlaca ? { nombre: 'Conductor Kargass', placa: c.conductorAsignadoPlaca, tel: '', vehiculo: c.vehiculo, marca: '' } : null));
+
+    const estrellasSeleccionadas = state.seleccionEstrellasTemp[c.id] || 0;
+
     return`<div class="bg-slate-800 p-4 rounded-2xl border ${esFantasmaAntigoldHtml(esFantasmaAntiguo)} text-xs space-y-3 shadow-xl">
-      <!-- 1. ZONA Y TIPO DESTACADO -->
       <div class="bg-slate-900 p-3 rounded-xl border border-orange-500/50 flex justify-between items-center shadow-inner">
         <div>
           <span class="text-[10px] text-slate-400 font-bold uppercase block">Servicio:</span>
@@ -786,7 +906,6 @@ function renderHistorialCliente(){
         <span class="bg-orange-500/20 text-orange-400 font-black px-2 py-1 rounded-lg text-xs border border-orange-500/30">${c.estado}</span>
       </div>
 
-      <!-- 2. DETALLE -->
       <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-1">
         <div class="flex items-center space-x-2">
           <span class="text-xl">${esMototaxi?'🛵':'📦'}</span>
@@ -811,10 +930,16 @@ function renderHistorialCliente(){
       ${esMototaxi ? 
         `<div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2">
            <p class="font-black text-orange-400">🛵 Estado de Asignación Mototaxi:</p>
-           ${c.conductorAsignadoPlaca ? 
-             `<div class="bg-emerald-950/60 p-2.5 rounded-lg border border-emerald-500 text-center">
-                <p class="text-emerald-400 font-black">🎉 ¡Conductor asignado en camino!</p>
-                <p class="text-white font-bold text-xs mt-1">Placa: ${c.conductorAsignadoPlaca}</p>
+           ${infoCond ? 
+             `<div class="bg-emerald-950/60 p-3 rounded-xl border border-emerald-500 space-y-2 text-center">
+                <p class="text-emerald-400 font-black text-sm">🎉 ¡Mototaxista asignado en camino!</p>
+                <div class="text-left bg-slate-900/80 p-2.5 rounded-lg border border-emerald-500/30 text-xs space-y-1">
+                  <p class="text-white"><b>Conductor:</b> ${infoCond.nombre}</p>
+                  <p class="text-orange-300"><b>Placa:</b> <span class="font-black tracking-wider">${infoCond.placa}</span></p>
+                  ${infoCond.vehiculo ? `<p class="text-slate-300"><b>Vehículo:</b> ${infoCond.vehiculo}${infoCond.marca ? ` (${infoCond.marca})` : ''}</p>` : ''}
+                  ${infoCond.tel ? `<p class="text-slate-300"><b>Teléfono:</b> ${infoCond.tel}</p>` : ''}
+                </div>
+                ${infoCond.tel ? `<a href="https://wa.me/57${infoCond.tel.replace(/\D/g,'')}?text=${encodeURIComponent("Hola "+infoCond.nombre+", solicité el servicio de Mototaxi en Kargass. Estoy en: "+c.origen)}" target="_blank" class="block w-full bg-emerald-600 hover:bg-emerald-700 font-black py-2.5 rounded-xl text-white shadow cursor-pointer">💬 Escribir por WhatsApp al Conductor</a>` : ''}
               </div>` : 
              `<p class="text-amber-400 italic text-center animate-pulse">Buscando al taxista/mototaxista más cercano disponible...</p>`
            }
@@ -825,15 +950,43 @@ function renderHistorialCliente(){
         </div>`
       }
 
-      ${c.conductorAsignadoPlaca?`<div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2 mt-2 text-center"><p class="font-black text-orange-400">⭐ Calificar Servicio del Transportador</p>${c.calificacionEstrellas?`<p class="text-emerald-400 font-bold text-sm">¡Calificado con ${c.calificacionEstrellas} ⭐ Estrellas!</p>`:`<div class="flex justify-center space-x-1 text-xl"><button onclick="calificarServicio(${c.id}, 1)" class="cursor-pointer">⭐</button><button onclick="calificarServicio(${c.id}, 2)" class="cursor-pointer">⭐</button><button onclick="calificarServicio(${c.id}, 3)" class="cursor-pointer">⭐</button><button onclick="calificarServicio(${c.id}, 4)" class="cursor-pointer">⭐</button><button onclick="calificarServicio(${c.id}, 5)" class="cursor-pointer">⭐</button></div><p class="text-[10px] text-slate-400">Haz clic en la estrella deseada para calificar</p>`}</div>`:''}
+      ${c.conductorAsignadoPlaca ? `
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2.5 mt-2 text-center">
+          <p class="font-black text-orange-400">⭐ Calificar Servicio del Transportador</p>
+          ${c.calificacionEstrellas ? 
+            `<p class="text-emerald-400 font-bold text-sm">¡Calificado con ${c.calificacionEstrellas} ⭐ Estrellas!</p>` : 
+            `<div class="flex justify-center items-center space-x-2 py-1">
+              ${[1,2,3,4,5].map(num => {
+                const marcada = num <= estrellasSeleccionadas;
+                return `<button type="button" onclick="seleccionarEstrellaTemporal(${c.id}, ${num})" class="text-3xl leading-none cursor-pointer transition-transform active:scale-110" style="color: ${marcada ? '#facc15' : '#64748b'};" aria-label="${num} estrellas">${marcada ? '★' : '☆'}</button>`;
+              }).join('')}
+            </div>
+            <p class="text-[11px] font-bold ${estrellasSeleccionadas > 0 ? 'text-yellow-300' : 'text-slate-400'}">
+              ${estrellasSeleccionadas > 0 ? `Seleccionaste ${estrellasSeleccionadas} de 5 estrella(s). Puedes ajustar antes de enviar.` : 'Toca las estrellas sin marcar para elegir tu calificación'}
+            </p>
+            <button type="button" onclick="confirmarEnvioCalificacion(${c.id})" class="w-full ${estrellasSeleccionadas > 0 ? 'bg-amber-500 hover:bg-amber-600 text-slate-950' : 'bg-slate-800 text-slate-500 cursor-not-allowed'} font-black py-2.5 rounded-xl text-xs uppercase tracking-wider shadow cursor-pointer transition-colors">
+              Enviar Calificación
+            </button>`
+          }
+        </div>` : ''}
       <div class="flex justify-end pt-1"><button onclick="eliminarSolicitudCliente(${c.id})" class="bg-red-600/80 hover:bg-red-700 text-white font-black px-3 py-1.5 rounded-lg text-[10px] cursor-pointer shadow">🗑️ Eliminar Solicitud</button></div>
     </div>`;
   }).join('');
 }
 
+function confirmarEnvioCalificacion(cargaId){
+  const estrellas = state.seleccionEstrellasTemp[cargaId];
+  if(!estrellas || estrellas < 1 || estrellas > 5){
+    alert("⚠️ Primero toca las estrellas para seleccionar cuántas quieres darle.");
+    return;
+  }
+  delete state.seleccionEstrellasTemp[cargaId];
+  calificarServicio(cargaId, estrellas);
+}
+
 function esFantasmaAntigoldHtml(esFantasma){return esFantasma ? 'border-red-500/80 bg-slate-800/90' : 'border-slate-700';}
 function eliminarSolicitudCliente(id){if(confirm("¿Estás seguro de eliminar esta solicitud de tu historial?")){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];state.cargas=state.cargas.filter(c=>Number(c.id)!==Number(id));guardarDatosLocal();renderHistorialCliente();alert("🗑️ Solicitud eliminada con éxito.");}}
-function seleccionarOfertaCliente(cargaId,ofertaIdx){registrarActividadUsuario();state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));if(carga&&carga.ofertas[ofertaIdx]){const seleccionada=carga.ofertas[ofertaIdx];carga.estado=`Asignado a ${seleccionada.conductorNombre} ($${Number(seleccionada.precio).toLocaleString('es-CO')})`;carga.conductorAsignadoPlaca=seleccionada.placa;guardarDatosLocal();renderHistorialCliente();alert(`✅ ¡Seleccionado ${seleccionada.conductorNombre}!`);}}
+function seleccionarOfertaCliente(cargaId,ofertaIdx){registrarActividadUsuario();state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));if(carga&&carga.ofertas[ofertaIdx]){const seleccionada=carga.ofertas[ofertaIdx];const condFull=state.conductores.find(co=>co.placa===seleccionada.placa);carga.estado=`Asignado a ${seleccionada.conductorNombre} ($${Number(seleccionada.precio).toLocaleString('es-CO')})`;carga.conductorAsignadoPlaca=seleccionada.placa;carga.conductorAsignadoInfo={nombre:seleccionada.conductorNombre,placa:seleccionada.placa,tel:seleccionada.tel||'',vehiculo:condFull?condFull.vehiculo:'',marca:condFull?condFull.marca:''};guardarDatosLocal();renderHistorialCliente();alert(`✅ ¡Seleccionado ${seleccionada.conductorNombre}!`);}}
 function calificarServicio(cargaId,estrellas){registrarActividadUsuario();state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));if(carga&&carga.conductorAsignadoPlaca){carga.calificacionEstrellas=estrellas;let cond=state.conductores.find(co=>co.placa===carga.conductorAsignadoPlaca);if(cond){if(cond.serviciosCalificados===undefined)cond.serviciosCalificados=0;cond.serviciosCalificados+=1;if(cond.calificacion===undefined)cond.calificacion=5.0;cond.calificacion=Number(((cond.calificacion+estrellas)/2).toFixed(1));}guardarDatosLocal();renderHistorialCliente();alert(`✅ ¡Calificado con ${estrellas} estrellas ⭐!`);}}
 
 function verificarTransportadorLogin(){const placa=document.getElementById('trans-placa-input').value.trim().toUpperCase().replace(/\s+/g,'');const pass=document.getElementById('trans-pass-input').value.trim();if(!placa||!pass){alert("⚠️ Ingresa placa y contraseña");return;}state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;let cond=state.conductores.find(c=>c.placa.replace(/\s+/g, '')===placa);if(!cond){alert("⚠️ Placa no encontrada o pendiente de aprobación.");return;}const claveReal=cond.password||cond.doc;if(pass!==claveReal){alert("❌ Contraseña incorrecta.");return;}if(cond.estado!=='Activo'){alert("⚠️ Cuenta en estado: "+cond.estado);return;}state.transActualPlaca=cond.placa;localStorage.setItem('kargass_trans_placa_memoria',cond.placa);registrarActividadUsuario();cargarDashboardTrans(cond);}
@@ -900,7 +1053,6 @@ function renderCargasDisponiblesTrans(){
     const esServicioMototaxi = (c.categoriaServicio === 'Mototaxi');
     const matchVehiculo = esMototaxiConductor ? esServicioMototaxi : !esServicioMototaxi;
     
-    // Filtro geográfico estricto para Mototaxi: Únicamente Guamal y Castilla la Nueva
     if(esServicioMototaxi){
       const esGuamalCastilla = (c.municipio === "Guamal" || c.municipio === "Castilla la Nueva" || c.municipioDestino === "Guamal" || c.municipioDestino === "Castilla la Nueva");
       if(!esGuamalCastilla) return false;
@@ -949,7 +1101,6 @@ function renderCargasDisponiblesTrans(){
     const destinoHtml = formatearUbicacionConEnlace(c.destino, c.municipioDestino || c.municipio);
 
     return`<div class="bg-slate-800 p-4 rounded-2xl border-2 border-orange-500/40 text-xs space-y-3 shadow-xl">
-      <!-- 1. ZONA Y RUTA DESTACADA -->
       <div class="bg-slate-900 p-3 rounded-xl border border-orange-500/50 flex justify-between items-center shadow-inner">
         <div>
           <span class="text-[10px] text-slate-400 font-bold uppercase block">Tipo de Ruta / Zona:</span>
@@ -961,7 +1112,6 @@ function renderCargasDisponiblesTrans(){
         </div>
       </div>
 
-      <!-- 2. DETALLE -->
       <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-1.5">
         <div class="flex items-center space-x-2">
           <span class="text-xl">${esMototaxiSrv?'🛵':'📦'}</span>
@@ -986,7 +1136,6 @@ function renderCargasDisponiblesTrans(){
       ${c.foto?`<div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')"><img src="${c.foto}" class="w-full h-44 object-contain bg-slate-950 rounded-xl border border-slate-700"><div class="absolute bottom-2 right-2 bg-slate-900/90 text-orange-400 font-bold text-[10px] px-2 py-1 rounded-lg border border-slate-700">🔍 Toca para ver foto completa</div></div>`:''}
       
       ${esMototaxiSrv ?
-        // LÓGICA DE ASIGNACIÓN INSTANTÁNEA "EL PRIMERO QUE APRIETA" PARA MOTOTAXIS
         (yaAsignadoAOtro ?
           `<div class="bg-slate-900 p-3 rounded-xl border border-red-500/40 text-center space-y-1">
              <p class="text-red-400 font-bold text-xs">🔴 Este viaje ya fue asignado a otro conductor.</p>
@@ -1002,7 +1151,6 @@ function renderCargasDisponiblesTrans(){
              </div>`
           )
         ) :
-        // LÓGICA TRADICIONAL DE OFERTAS PARA ACARREOS
         (yaAsignadoAOtro?
           `<div class="bg-slate-900 p-3 rounded-xl border border-red-500/40 text-center space-y-1">
              <p class="text-red-400 font-bold text-xs">🔴 Este servicio ya fue asignado a otro compañero.</p>
@@ -1043,22 +1191,27 @@ function aceptarViajeMototaxiInstantaneo(cargaId){
   const cond=state.conductores.find(co=>co.placa===state.transActualPlaca);
   if(!cond){alert("Error de sesión de conductor");return;}
 
+  const infoConductor = {
+    nombre: cond.nombre,
+    placa: cond.placa,
+    tel: cond.tel || '',
+    vehiculo: cond.vehiculo || 'Mototaxi',
+    marca: cond.marca || ''
+  };
+
   if(db){
-    // Operación atómica en Firebase Realtime Database para evitar race conditions
-    const cargaRef=db.ref('kargass_app_data/cargas');
     db.ref('kargass_app_data').transaction((currentData)=>{
       if(!currentData || !currentData.cargas) return currentData;
       let targetIndex = currentData.cargas.findIndex(item => Number(item.id) === Number(cargaId));
       if(targetIndex === -1) return currentData;
       
       let item = currentData.cargas[targetIndex];
-      // Verificar si ya fue tomado por otro conductor
       if(item.conductorAsignadoPlaca != null) {
-        return currentData; // Ya fue tomado, no hacer nada
+        return currentData;
       }
 
-      // Asignar al primer conductor en presionar
       item.conductorAsignadoPlaca = cond.placa;
+      item.conductorAsignadoInfo = infoConductor;
       item.estado = `Asignado a ${cond.nombre} (Mototaxi)`;
       currentData.cargas[targetIndex] = item;
       return currentData;
@@ -1066,7 +1219,6 @@ function aceptarViajeMototaxiInstantaneo(cargaId){
       if(error){
         alert("❌ Error de red al intentar aceptar el viaje. Intenta de nuevo.");
       } else if(committed){
-        // Refrescar datos locales con el snapshot actualizado
         const updatedData = snapshot.val();
         if(updatedData && updatedData.cargas){
           state.cargas = updatedData.cargas;
@@ -1080,7 +1232,6 @@ function aceptarViajeMototaxiInstantaneo(cargaId){
       }
     });
   } else {
-    // Respaldo local si Firebase no estuviera inicializado
     state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];
     let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));
     if(carga){
@@ -1090,6 +1241,7 @@ function aceptarViajeMototaxiInstantaneo(cargaId){
         return;
       }
       carga.conductorAsignadoPlaca = cond.placa;
+      carga.conductorAsignadoInfo = infoConductor;
       carga.estado = `Asignado a ${cond.nombre} (Mototaxi)`;
       guardarDatosLocal();
       renderCargasDisponiblesTrans();
@@ -1195,10 +1347,28 @@ function enviarOfertaTransportador(cargaId){
 
 function copiarNequi(){registrarActividadUsuario();navigator.clipboard.writeText(state.config.nequi);alert("✅ Número Nequi copiado: "+state.config.nequi);}
 
-function enviarPostulacion(){const nombre=document.getElementById('af-nombre').value.trim();const doc=document.getElementById('af-doc').value.trim();const passNuevo=document.getElementById('af-pass-nuevo').value.trim();const tel=document.getElementById('af-tel').value.trim();const municipio=document.getElementById('af-municipio').value;const vehiculo=document.getElementById('af-vehiculo').value;const placa=document.getElementById('af-placa').value.trim().toUpperCase().replace(/\s+/g,'');const marca=document.getElementById('af-marca').value.trim();const cilindraje=document.getElementById('af-cilindraje').value.trim();const acepto=document.getElementById('af-check-reglamento').checked;if(!nombre||!doc||!passNuevo||!tel||!placa||!marca||!cilindraje){alert("⚠️ Completa todos los campos obligatorios.");return;}if(!acepto){alert("⚠️ Debes aceptar el reglamento.");return;}const fechaFutura=new Date();fechaFutura.setDate(fechaFutura.getDate()+30);state.conductores.push({placa,password:passNuevo,nombre,doc,tel,municipio,vehiculo,marca,cilindraje,estado:"Pendiente",vencimiento:fechaFutura.toISOString().split('T')[0],calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null});guardarDatosLocal();alert("🚀 ¡Postulación enviada a la Central con éxito!");irModulo('central');}
+function enviarPostulacion(){
+  const nombre=document.getElementById('af-nombre').value.trim();
+  const doc=document.getElementById('af-doc').value.trim();
+  const passNuevo=document.getElementById('af-pass-nuevo').value.trim();
+  const tel=document.getElementById('af-tel').value.trim();
+  const municipio=document.getElementById('af-municipio').value;
+  const vehiculo=document.getElementById('af-vehiculo').value;
+  const placa=document.getElementById('af-placa').value.trim().toUpperCase().replace(/\s+/g,'');
+  const marca=document.getElementById('af-marca').value.trim();
+  const cilindraje=document.getElementById('af-cilindraje').value.trim();
+  const acepto=document.getElementById('af-check-reglamento').checked;
+  if(!nombre||!doc||!passNuevo||!tel||!placa||!marca||!cilindraje){alert("⚠️ Completa todos los campos obligatorios.");return;}
+  if(!acepto){alert("⚠️ Debes aceptar el reglamento.");return;}
+  const fechaFutura=new Date();fechaFutura.setDate(fechaFutura.getDate()+30);
+  state.conductores.push({placa,password:passNuevo,nombre,doc,tel,municipio,vehiculo,marca,cilindraje,estado:"Pendiente",vencimiento:fechaFutura.toISOString().split('T')[0],calificacion:5.0,serviciosCalificados:0,bonoNotificacion:null});
+  guardarDatosLocal();
+  alert("🚀 ¡Postulación enviada a la Central con éxito!");
+  irModulo('central');
+}
 
 function toggleVerPasswordAdminLogin(){const passInput=document.getElementById('admin-pass');passInput.type=passInput.type==="password"?"text":"password";}
-function verificarAdminLogin(){const pass=document.getElementById('admin-pass').value.trim();if(pass===state.config.adminPass){state.isAdmin=true;document.getElementById('admin-login').classList.add('hidden');document.getElementById('admin-dashboard').classList.remove('hidden');renderAdminServicios();renderAdminConductores();renderSelectHistorialPlacas();inicializarSelectMunicipioTarifasAdmin();renderAdminTarifas();cargarAjustesGlobales();}else alert("Clave incorrecta");}
+function verificarAdminLogin(){const pass=document.getElementById('admin-pass').value.trim();if(pass===state.config.adminPass){state.isAdmin=true;document.getElementById('admin-login').classList.add('hidden');document.getElementById('admin-dashboard').classList.remove('hidden');renderAdminServicios();renderAdminConductores();renderSelectHistorialPlacas();inicializarSelectMunicipioTarifasAdmin();renderAdminTarifas();cargarAjustesGlobales();revisarAlertasPendientesCentral(true);}else alert("Clave incorrecta");}
 function toggleVerPasswordAdmin(){const inputPass=document.getElementById('cfg-admin-pass');inputPass.type=inputPass.type==="password"?"text":"password";}
 function cerrarSesionAdmin(){state.isAdmin=false;document.getElementById('admin-dashboard').classList.add('hidden');document.getElementById('admin-login').classList.remove('hidden');document.getElementById('admin-pass').value='';}
 
@@ -1206,8 +1376,8 @@ function switchTabAdmin(tab){const mapaContenedores={'servicios':'a-content-serv
 
 function renderAdminServicios(){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];document.getElementById('admin-total-servicios').innerText=state.cargas.length;const el=document.getElementById('admin-lista-cargas');if(!el)return;if(!state.cargas||state.cargas.length===0){el.innerHTML='<div class="bg-slate-800 p-3 rounded-xl text-center text-xs text-slate-400 border border-slate-700">Sin servicios registrados.</div>';return;}const listaConductoresActivos=state.conductores.filter(c=>c.estado==='Activo');el.innerHTML=state.cargas.map(c=>{const yaAsignado=(c.conductorAsignadoPlaca!=null||c.estado.startsWith("Asignado"));const labelRutaAdmin=c.tipoZona==='Intermunicipal'?`[${c.municipio} ➔ ${c.municipioDestino}]`:`[${c.municipio}]`;const esMototaxi=c.categoriaServicio==='Mototaxi';return`<div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 text-xs space-y-2 shadow-md"><div class="flex justify-between items-center border-b border-slate-700 pb-1"><span class="font-bold text-orange-400">${esMototaxi?'🛵 [Mototaxi]':'📦 [Acarreo]'} ${labelRutaAdmin} ${c.clienteNombre} (${c.clienteTel})</span><div class="space-x-1"><a href="https://wa.me/57${c.clienteTel}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded text-white font-bold inline-block">WhatsApp</a><button onclick="abrirEditarServicio(${c.id})" class="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Editar</button><button onclick="eliminarCargaAdmin(${c.id})" class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-white font-bold cursor-pointer">Eliminar</button></div></div>${c.foto?`<div class="relative cursor-pointer group" onclick="ampliarFoto('${c.foto}')"><img src="${c.foto}" class="w-full h-36 object-contain bg-slate-950 rounded-lg border border-slate-700"><div class="absolute bottom-2 right-2 bg-slate-900/90 text-orange-400 font-bold text-[10px] px-2 py-1 rounded border border-slate-700">🔍 Ampliar foto</div></div>`:''}<p class="text-white"><b>Vehículo:</b> ${c.vehiculo} | <b>Detalle:</b> ${c.peso}</p><p class="text-slate-300"><b>Ruta:</b> ${c.origen} ➔ ${c.destino}</p>${yaAsignado?`<div class="bg-emerald-950/60 p-3 rounded-xl border border-emerald-500 text-center space-y-1"><p class="text-emerald-400 font-black text-sm">✅ ${c.estado.toUpperCase()}</p><button onclick="forzarReasignacionConductor(${c.id})" class="bg-slate-800 hover:bg-slate-700 text-orange-400 font-bold px-3 py-1.5 rounded-lg border border-orange-500/40 text-[11px] cursor-pointer">🔄 Cambiar / Forzar Conductor</button></div>`:`<p class="text-orange-300 font-bold">Estado actual: ${c.estado}</p><div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 flex items-center space-x-2 pt-2"><select id="select-asignar-${c.id}" class="w-full p-1.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-[11px] font-bold"><option value="">-- Asignar Conductor Directo --</option>${listaConductoresActivos.map(cond=>`<option value="${cond.nombre} - ${cond.placa}">${cond.nombre} (${cond.placa})</option>`).join('')}</select><button onclick="asignarConductorAdmin(${c.id})" class="bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-lg text-white font-bold whitespace-nowrap cursor-pointer">Asignar</button></div>`}${c.calificacionEstrellas?`<p class="text-amber-400 font-bold">⭐ Calificación: ${c.calificacionEstrellas}/5</p>`:''}<div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700 space-y-1"><p class="font-bold text-slate-300">🏷️ Ofertas de la Flota (${c.ofertas?c.ofertas.length:0}/5):</p>${(!c.ofertas||c.ofertas.length===0)?'<p class="text-slate-400 italic">Sin ofertas aún.</p>':c.ofertas.map(of=>`<div class="flex justify-between items-center text-[11px] bg-slate-800 p-1.5 rounded"><span>${of.conductorNombre} (${of.placa})</span><span class="font-black text-emerald-400">$${Number(of.precio).toLocaleString('es-CO')}</span></div>`).join('')}</div></div>`;}).join('');}
 
-function asignarConductorAdmin(cargaId){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];const val=document.getElementById(`select-asignar-${cargaId}`).value;if(!val){alert("Selecciona conductor");return;}let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));if(carga){carga.estado=`Asignado a: ${val}`;const partes=val.split(" - ");if(partes[1])carga.conductorAsignadoPlaca=partes[1].trim();guardarDatosLocal();renderAdminServicios();alert("✅ Asignado con éxito.");}}
-function forzarReasignacionConductor(cargaId){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));if(carga){carga.conductorAsignadoPlaca=null;carga.estado="Recibiendo Cotizaciones";guardarDatosLocal();renderAdminServicios();alert("🔄 Servicio liberado.");}}
+function asignarConductorAdmin(cargaId){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;const val=document.getElementById(`select-asignar-${cargaId}`).value;if(!val){alert("Selecciona conductor");return;}let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));if(carga){carga.estado=`Asignado a: ${val}`;const partes=val.split(" - ");if(partes[1]){const pl=partes[1].trim();carga.conductorAsignadoPlaca=pl;const co=state.conductores.find(x=>x.placa===pl);if(co)carga.conductorAsignadoInfo={nombre:co.nombre,placa:co.placa,tel:co.tel||'',vehiculo:co.vehiculo||'',marca:co.marca||''};}guardarDatosLocal();renderAdminServicios();alert("✅ Asignado con éxito.");}}
+function forzarReasignacionConductor(cargaId){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];let carga=state.cargas.find(c=>Number(c.id)===Number(cargaId));if(carga){carga.conductorAsignadoPlaca=null;carga.conductorAsignadoInfo=null;carga.estado="Recibiendo Cotizaciones";guardarDatosLocal();renderAdminServicios();alert("🔄 Servicio liberado.");}}
 function abrirEditarServicio(id){state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];const carga=state.cargas.find(c=>Number(c.id)===Number(id));if(carga){document.getElementById('edit-serv-id').value=carga.id;document.getElementById('edit-serv-origen').value=carga.origen||'';document.getElementById('edit-serv-destino').value=carga.destino||'';document.getElementById('edit-serv-peso').value=carga.peso||'';document.getElementById('edit-serv-obs').value=carga.observaciones||'';document.getElementById('modal-editar-servicio').classList.remove('hidden');}}
 function cerrarModalEditarServicio(){document.getElementById('modal-editar-servicio').classList.add('hidden');}
 function guardarEdicionServicio(){const id=parseInt(document.getElementById('edit-serv-id').value);state.cargas=JSON.parse(localStorage.getItem('kargass_cargas'))||[];let carga=state.cargas.find(c=>Number(c.id)===Number(id));if(carga){carga.origen=document.getElementById('edit-serv-origen').value.trim();carga.destino=document.getElementById('edit-serv-destino').value.trim();carga.peso=document.getElementById('edit-serv-peso').value.trim();carga.observaciones=document.getElementById('edit-serv-obs').value.trim();guardarDatosLocal();cerrarModalEditarServicio();renderAdminServicios();alert("✅ ¡Actualizado!");}}
@@ -1247,6 +1417,7 @@ function limpiarFormTarifaAdmin(){document.getElementById('admin-tarifa-nombre')
 
 function renderAdminConductores(){
 state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
+revisarAlertasPendientesCentral(false);
 const el=document.getElementById('admin-lista-conductores');
 const queryBusqueda=document.getElementById('input-buscar-flota')?document.getElementById('input-buscar-flota').value.trim().toUpperCase():"";
 if(!el)return;
@@ -1259,8 +1430,7 @@ const idx=state.conductores.findIndex(c=>c.placa===cond.placa);
 const servicios=cond.serviciosCalificados||0;
 const cal=cond.calificacion!==undefined?cond.calificacion:5.0;
 const bono=(servicios>=5&&cal>=4.5);
-return`<div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-xs space-y-3 shadow-xl">
-  <!-- CABECERA -->
+return`<div class="bg-slate-800 p-4 rounded-2xl border ${cond.estado==='Pendiente'?'border-amber-400':'border-slate-700'} text-xs space-y-3 shadow-xl">
   <div class="flex justify-between items-start border-b border-slate-700 pb-2">
     <div>
       <h4 class="font-black text-white text-sm">${cond.nombre}</h4>
@@ -1269,7 +1439,6 @@ return`<div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-xs 
     <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${cond.estado==='Activo'?'bg-green-500/20 text-green-400 border border-green-500/30':'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">${cond.estado}</span>
   </div>
 
-  <!-- DATOS -->
   <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1 text-slate-300">
     <p><b>Cédula:</b> ${cond.doc||'N/A'} | <b>Tel:</b> ${cond.tel||'N/A'}</p>
     <p><b>Base:</b> <span class="text-orange-400 font-bold">${cond.municipio||'Acacías'}</span> | <b>Vehículo:</b> <span class="text-white font-bold">${cond.vehiculo||'Motocarguero'}</span></p>
@@ -1278,7 +1447,6 @@ return`<div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-xs 
 
   ${bono?`<div class="bg-amber-950/40 p-2.5 rounded-xl border border-amber-500/50 flex justify-between items-center text-[11px]"><span class="text-amber-300 font-bold">✨ ¡Candidato a Bono por Excelencia!</span><button onclick="otorgarBonoTransportador(${idx},3)" class="bg-amber-600 hover:bg-amber-700 px-2.5 py-1 rounded-lg text-white font-black cursor-pointer shadow">+3 Días ⭐</button></div>`:''}
 
-  <!-- GESTIÓN VENCIMIENTO -->
   <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 space-y-1.5">
     <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Modificar Vencimiento de Suscripción:</label>
     <div class="flex space-x-2">
@@ -1287,7 +1455,6 @@ return`<div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 text-xs 
     </div>
   </div>
 
-  <!-- BOTONES -->
   <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-700">
     <button onclick="restablecerClaveAdmin(${idx})" class="bg-purple-600 hover:bg-purple-700 py-2 px-3 rounded-xl text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center space-x-1"><span>🔑</span><span>Restablecer Clave</span></button>
     ${cond.estado!=='Activo'?`<button onclick="cambiarEstadoConductor(${idx},'Activo')" class="bg-green-600 hover:bg-green-700 py-2 px-3 rounded-xl text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center space-x-1"><span>✅</span><span>Aprobar Cuenta</span></button>`:`<button onclick="cambiarEstadoConductor(${idx},'Suspendido')" class="bg-amber-600 hover:bg-amber-700 py-2 px-3 rounded-xl text-white font-bold text-xs cursor-pointer shadow flex items-center justify-center space-x-1"><span>⏸️</span><span>Suspender Cuenta</span></button>`}
@@ -1338,6 +1505,7 @@ verificarInactividadSesion();
 poblarSelectMunicipios();
 actualizarTextosGlobales();
 actualizarCampanitaServicios();
+revisarAlertasPendientesCentral(false);
 if(state.rolGuardado==='cliente' && state.clienteActualDoc){
 irModulo('cliente');
 }else if(state.rolGuardado==='transportador' && state.transActualPlaca){
