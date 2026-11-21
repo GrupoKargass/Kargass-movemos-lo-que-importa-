@@ -457,7 +457,6 @@ try {
 
 const listaMunicipiosMeta=["Villavicencio","Acacías","Barranca de Upía","Cabuyaro","Castilla la Nueva","Cubarral","Cumaral","El Calvario","El Castillo","El Dorado","Fuente de Oro","Granada","Guamal","La Macarena","La Uribe","Lejanías","Mapiripán","Mesetas","Puerto Concordia","Puerto Gaitán","Puerto Lleras","Puerto López","Puerto Rico","Restrepo","San Carlos de Guaroa","San Juan de Arama","San Juanito","San Martín","Vista Hermosa"];
 
-// Tarifas base de Acacías específicas para Motocarguero (Sencillo y Doble Pacha)
 const tarifasBaseAcaciasMotocarguero={
   urbano:[{id:1,ruta:"Urbano",valor:"$25.000"},{id:2,ruta:"Cobalto",valor:"$40.000"},{id:3,ruta:"Trasteos",valor:"$40.000"},{id:4,ruta:"Escombros",valor:"$40.000"}],
   veredas:[{id:5,ruta:"Vereda San Nicolas",valor:"$35.000"},{id:6,ruta:"Vereda El Centro",valor:"$35.000"},{id:7,ruta:"Vereda El Dimante",valor:"$35.000"},{id:8,ruta:"Vereda Monte Bello",valor:"$50.000"},{id:9,ruta:"Vereda la Esmeralda",valor:"$50.000 - $60.000"},{id:10,ruta:"Vereda Montelibano",valor:"$60.000"},{id:11,ruta:"Vereda San Calletano",valor:"$60.000"}],
@@ -472,7 +471,6 @@ function crearEstructuraTarifasInicial(){
   };
 }
 
-// Normaliza y protege el diccionario de tarifas por municipio y tipo de vehículo
 function normalizarTarifasPorMunicipio(raw){
   if(!raw || typeof raw !== 'object') return crearEstructuraTarifasInicial();
   const limpio = {};
@@ -528,7 +526,14 @@ function escaparHTML(texto){
 function renderizarBloquePicoYPlacaHTML(textoManual){
   const hoy = new Date();
   const diaSemana = hoy.getDay(); // 0: Domingo, 1: Lunes ... 6: Sábado
-  const fechaCompleta = hoy.toLocaleDateString('es-CO', {
+  const fechaMayus = hoy.toLocaleDateString('es-CO', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).toUpperCase();
+
+  const fechaNormal = hoy.toLocaleDateString('es-CO', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -536,19 +541,25 @@ function renderizarBloquePicoYPlacaHTML(textoManual){
   });
 
   const rotacionVillavicencio = {
-    1: { dia: "LUNES", digitos: "5 y 6" },
-    2: { dia: "MARTES", digitos: "7 y 8" },
-    3: { dia: "MIÉRCOLES", digitos: "9 y 0" },
-    4: { dia: "JUEVES", digitos: "1 y 2" },
-    5: { dia: "VIERNES", digitos: "3 y 4" }
+    1: { dia: "lunes", digitos: "5 y 6" },
+    2: { dia: "martes", digitos: "7 y 8" },
+    3: { dia: "miércoles", digitos: "9 y 0" },
+    4: { dia: "jueves", digitos: "1 y 2" },
+    5: { dia: "viernes", digitos: "3 y 4" }
   };
 
   if (textoManual) {
     return `
-      <div class="bg-slate-900 p-3.5 rounded-xl border-2 border-orange-500/60 space-y-2 shadow-inner">
-        <div class="flex items-center justify-between gap-2">
-          <span class="bg-orange-500 text-slate-950 font-black px-2.5 py-1 rounded-lg text-sm uppercase tracking-wider">${escaparHTML(fechaCompleta)}</span>
-          <span class="text-[10px] font-black text-orange-400 uppercase">Aviso Central</span>
+      <div class="bg-slate-900 p-3.5 rounded-2xl border-2 border-orange-500/60 space-y-3 shadow-inner">
+        <div class="grid grid-cols-2 gap-2.5 items-stretch">
+          <div class="bg-orange-500 text-slate-950 rounded-xl p-3 flex flex-col justify-center shadow-lg">
+            <span class="text-[10px] font-black uppercase tracking-wider opacity-85">Hoy</span>
+            <span class="text-sm font-black leading-snug mt-0.5">${escaparHTML(fechaMayus)}</span>
+          </div>
+          <div class="bg-slate-800 border-2 border-orange-500 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-lg">
+            <span class="text-[11px] font-black text-orange-400 uppercase tracking-wider">PICO Y PLACA</span>
+            <span class="text-2xl font-black text-white leading-tight mt-1">AVISO</span>
+          </div>
         </div>
         <div class="text-slate-100 font-medium whitespace-pre-line text-xs leading-relaxed pt-1">${escaparHTML(textoManual)}</div>
       </div>
@@ -556,25 +567,21 @@ function renderizarBloquePicoYPlacaHTML(textoManual){
   }
 
   if (diaSemana === 0 || diaSemana === 6) {
-    const nombreFinDeSemana = diaSemana === 0 ? "DOMINGO" : "SÁBADO";
     return `
-      <div class="bg-slate-900 p-3.5 rounded-2xl border-2 border-emerald-500/50 space-y-3 shadow-inner">
-        <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-2">
-          <div>
-            <span class="text-[10px] text-slate-400 font-bold uppercase block">Día en curso</span>
-            <span class="text-lg font-black text-emerald-400 tracking-wide uppercase">${nombreFinDeSemana}</span>
+      <div class="bg-slate-900 p-3.5 rounded-2xl border-2 border-emerald-500/60 space-y-3 shadow-inner">
+        <div class="grid grid-cols-2 gap-2.5 items-stretch">
+          <div class="bg-orange-500 text-slate-950 rounded-xl p-3 flex flex-col justify-center shadow-lg">
+            <span class="text-[10px] font-black uppercase tracking-wider opacity-85">Fecha</span>
+            <span class="text-sm font-black leading-snug mt-0.5">${escaparHTML(fechaMayus)}</span>
           </div>
-          <span class="text-[11px] text-slate-300 font-bold text-right capitalize">${escaparHTML(fechaCompleta)}</span>
+          <div class="bg-emerald-950/80 border-2 border-emerald-400 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-lg">
+            <span class="text-[11px] font-black text-emerald-300 uppercase tracking-wider">PICO Y PLACA</span>
+            <span class="text-xl font-black text-white leading-tight mt-1">LIBRE</span>
+          </div>
         </div>
 
-        <div class="bg-emerald-950/50 border border-emerald-500/50 rounded-xl p-3 text-center space-y-1">
-          <span class="text-[10px] font-black text-emerald-300 uppercase tracking-widest block">Placas restringidas hoy</span>
-          <p class="text-2xl font-black text-white tracking-wider">SIN PICO Y PLACA</p>
-          <p class="text-[11px] text-emerald-300 font-bold">Fin de semana • Villavicencio</p>
-        </div>
-
-        <p class="text-[11px] text-slate-300 leading-relaxed">
-          Solo <b class="text-white">Villavicencio</b> aplica pico y placa en el Meta; si viajas desde Acacías, Guamal u otro municipio, verifica rutas y condiciones especiales antes de ingresar.
+        <p class="text-xs text-slate-200 leading-relaxed">
+          Hoy ${escaparHTML(fechaNormal)} no aplica pico y placa en Villavicencio por ser fin de semana. Si viajas desde Acacías, Guamal u otro municipio del Meta, revisa rutas y condiciones antes de ingresar.
         </p>
       </div>
     `;
@@ -583,23 +590,25 @@ function renderizarBloquePicoYPlacaHTML(textoManual){
   const reglaHoy = rotacionVillavicencio[diaSemana];
   return `
     <div class="bg-slate-900 p-3.5 rounded-2xl border-2 border-orange-500/60 space-y-3 shadow-inner">
-      <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-2">
-        <div>
-          <span class="text-[10px] text-slate-400 font-bold uppercase block">Día de hoy</span>
-          <span class="text-lg font-black text-orange-400 tracking-wide uppercase">${reglaHoy.dia}</span>
+      <div class="grid grid-cols-2 gap-2.5 items-stretch">
+        <div class="bg-orange-500 text-slate-950 rounded-xl p-3 flex flex-col justify-center shadow-lg">
+          <span class="text-[10px] font-black uppercase tracking-wider opacity-85">Día actual</span>
+          <span class="text-sm font-black leading-snug mt-0.5">${escaparHTML(fechaMayus)}</span>
         </div>
-        <span class="text-[11px] text-slate-300 font-bold text-right capitalize">${escaparHTML(fechaCompleta)}</span>
+        <div class="bg-red-950/75 border-2 border-red-500 rounded-xl p-3 flex flex-col items-center justify-center text-center shadow-lg">
+          <span class="text-[11px] font-black text-orange-400 uppercase tracking-wider">PICO Y PLACA</span>
+          <span class="text-3xl font-black text-white leading-none mt-1.5 tracking-tight">${reglaHoy.digitos}</span>
+        </div>
       </div>
 
-      <div class="bg-red-950/60 border-2 border-red-500/70 rounded-xl p-3 text-center space-y-1 shadow">
-        <span class="text-[10px] font-black text-red-300 uppercase tracking-widest block">🚫 Placa restringida hoy en Villavicencio</span>
-        <p class="text-2xl font-black text-white tracking-widest">TERMINADAS EN ${reglaHoy.digitos}</p>
-        <p class="text-[11px] text-amber-300 font-bold">Vehículos particulares • ${reglaHoy.dia}</p>
-      </div>
-
-      <div class="space-y-1.5 text-[11px] text-slate-200 pt-0.5">
-        <p><b class="text-orange-400">⏰ Horarios:</b> 6:30 a.m. – 9:30 a.m. y 5:00 p.m. – 8:00 p.m. (entre 9:30 a.m. y 5:00 p.m. circulación libre).</p>
-        <p><b class="text-orange-400">🛣️ Ingreso desde otros municipios:</b> Si viajas desde Acacías, Guamal u otro municipio del Meta hacia Villavicencio, valida tu último dígito, horarios y vías permitidas antes de entrar.</p>
+      <div class="space-y-2 text-xs text-slate-200 leading-relaxed pt-1">
+        <p>Hoy ${escaparHTML(fechaNormal)}, el pico y placa para vehículos particulares en Villavicencio aplica para las placas terminadas en <b class="text-white">${reglaHoy.digitos}</b>.</p>
+        <p class="font-bold text-white">Vehículos particulares</p>
+        <ul class="list-disc list-inside space-y-1 text-slate-200">
+          <li>Placas restringidas hoy (${reglaHoy.dia}): <b class="text-white">${reglaHoy.digitos}</b>.</li>
+          <li>Horarios: de 6:30 a. m. a 9:30 a. m. y de 5:00 p. m. a 8:00 p. m. (entre las 9:30 a. m. y las 5:00 p. m. no hay restricción).</li>
+          <li>Zona: opera dentro del polígono definido por la Alcaldía (se permite circular por la Avenida 40 y la Avenida El Llano, sin ingresar a las vías internas restringidas).</li>
+        </ul>
       </div>
     </div>
   `;
@@ -1288,9 +1297,6 @@ function calcularCuentaRegresivaSuscripcion(fechaVencimientoStr){const elFechas=
 function switchTabTrans(tab){registrarActividadUsuario();['servicios','tarifas','pico','sub','viajes'].forEach(t=>{const elContent=document.getElementById('t-content-'+t);const elTab=document.getElementById('tab-t-'+t);if(elContent)elContent.classList.add('hidden');if(elTab)elTab.className="text-slate-400 py-2 px-1 rounded-lg cursor-pointer truncate";});document.getElementById('t-content-'+tab).classList.remove('hidden');document.getElementById('tab-t-'+tab).className="bg-orange-500 text-white py-2 px-1 rounded-lg cursor-pointer truncate relative";if(tab==='servicios')renderCargasDisponiblesTrans();if(tab==='viajes')renderHistorialTransportador();if(tab==='tarifas'){const condActual=state.conductores.find(c=>c.placa===state.transActualPlaca);if(condActual)renderTarifasTransportador(condActual.municipio||'Acacías',condActual.vehiculo);}if(tab==='pico'){actualizarTextosGlobales();}}
 function switchSubTabTarifas(sub){registrarActividadUsuario();['urbano','veredas','municipios'].forEach(s=>{document.getElementById('subcontent-t-'+s).classList.add('hidden');document.getElementById('subtab-t-'+s).className="text-slate-400 py-1.5 rounded-lg cursor-pointer";});document.getElementById('subcontent-t-'+sub).classList.remove('hidden');document.getElementById('subtab-t-'+sub).className="bg-orange-500 text-white py-1.5 rounded-lg cursor-pointer";}
 
-// ==========================================
-// TARIFAS AISLADAS POR MUNICIPIO Y TIPO DE VEHÍCULO
-// ==========================================
 function renderTarifasTransportador(municipioConductor, vehiculoConductor){
   state.tarifasPorMunicipio = normalizarTarifasPorMunicipio(JSON.parse(localStorage.getItem('kargass_tarifas_municipios')) || state.tarifasPorMunicipio);
   const mun = municipioConductor || 'Acacías';
@@ -1491,9 +1497,6 @@ function renderCargasDisponiblesTrans(){
   }).join('');
 }
 
-// ==========================================
-// FUNCIÓN ATÓMICA FIREBASE PARA MOTOTAXIS (PRIMERO EN ACEPTAR)
-// ==========================================
 function aceptarViajeMototaxiInstantaneo(cargaId){
   registrarActividadUsuario();
   state.conductores=JSON.parse(localStorage.getItem('kargass_conductores'))||state.conductores;
