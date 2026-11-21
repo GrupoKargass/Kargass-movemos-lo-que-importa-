@@ -174,7 +174,7 @@
 <div id="t-content-pico" class="space-y-3 hidden">
 <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-3 text-xs">
 <div class="flex items-center space-x-2 border-b border-slate-700 pb-2"><span class="text-2xl">⚠️</span><div><h3 class="font-black text-sm text-orange-400">Pico y Placa Vigente (Villavicencio)</h3><p class="text-[10px] text-slate-300 font-bold">Rotación automática diaria • Referencia ingreso a Villavicencio</p></div></div>
-<div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2 text-slate-200"><div id="pico-placa-dinamico" class="text-slate-200 font-medium whitespace-pre-line text-xs"></div></div>
+<div id="pico-placa-dinamico" class="space-y-2.5 text-slate-200"></div>
 </div>
 </div>
 <div id="t-content-sub" class="space-y-3 hidden">
@@ -517,35 +517,92 @@ function mapearCategoriaVehiculoTarifa(vehiculoConductor){
   return "Motocarguero";
 }
 
-function obtenerTextoPicoYPlacaHoy(){
+function escaparHTML(texto){
+  return String(texto || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function renderizarBloquePicoYPlacaHTML(textoManual){
   const hoy = new Date();
   const diaSemana = hoy.getDay(); // 0: Domingo, 1: Lunes ... 6: Sábado
-  const fechaFormateada = hoy.toLocaleDateString('es-CO', {
+  const fechaCompleta = hoy.toLocaleDateString('es-CO', {
     weekday: 'long',
-    day: '2-digit',
-    month: 'short',
+    day: 'numeric',
+    month: 'long',
     year: 'numeric'
   });
 
   const rotacionVillavicencio = {
-    1: { dia: "Lunes", digitos: "5 y 6" },
-    2: { dia: "Martes", digitos: "7 y 8" },
-    3: { dia: "Miércoles", digitos: "9 y 0" },
-    4: { dia: "Jueves", digitos: "1 y 2" },
-    5: { dia: "Viernes", digitos: "3 y 4" }
+    1: { dia: "LUNES", digitos: "5 y 6" },
+    2: { dia: "MARTES", digitos: "7 y 8" },
+    3: { dia: "MIÉRCOLES", digitos: "9 y 0" },
+    4: { dia: "JUEVES", digitos: "1 y 2" },
+    5: { dia: "VIERNES", digitos: "3 y 4" }
   };
 
+  if (textoManual) {
+    return `
+      <div class="bg-slate-900 p-3.5 rounded-xl border-2 border-orange-500/60 space-y-2 shadow-inner">
+        <div class="flex items-center justify-between gap-2">
+          <span class="bg-orange-500 text-slate-950 font-black px-2.5 py-1 rounded-lg text-sm uppercase tracking-wider">${escaparHTML(fechaCompleta)}</span>
+          <span class="text-[10px] font-black text-orange-400 uppercase">Aviso Central</span>
+        </div>
+        <div class="text-slate-100 font-medium whitespace-pre-line text-xs leading-relaxed pt-1">${escaparHTML(textoManual)}</div>
+      </div>
+    `;
+  }
+
   if (diaSemana === 0 || diaSemana === 6) {
-    return `📅 Hoy (${fechaFormateada}) • Referencia Villavicencio\n` +
-           `✅ Sin pico y placa general para vehículos particulares (fin de semana).\n` +
-           `ℹ️ Solo Villavicencio aplica pico y placa en el Meta; si viajas desde Acacías, Guamal u otro municipio, verifica rutas y condiciones especiales antes de ingresar.`;
+    const nombreFinDeSemana = diaSemana === 0 ? "DOMINGO" : "SÁBADO";
+    return `
+      <div class="bg-slate-900 p-3.5 rounded-2xl border-2 border-emerald-500/50 space-y-3 shadow-inner">
+        <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-2">
+          <div>
+            <span class="text-[10px] text-slate-400 font-bold uppercase block">Día en curso</span>
+            <span class="text-lg font-black text-emerald-400 tracking-wide uppercase">${nombreFinDeSemana}</span>
+          </div>
+          <span class="text-[11px] text-slate-300 font-bold text-right capitalize">${escaparHTML(fechaCompleta)}</span>
+        </div>
+
+        <div class="bg-emerald-950/50 border border-emerald-500/50 rounded-xl p-3 text-center space-y-1">
+          <span class="text-[10px] font-black text-emerald-300 uppercase tracking-widest block">Placas restringidas hoy</span>
+          <p class="text-2xl font-black text-white tracking-wider">SIN PICO Y PLACA</p>
+          <p class="text-[11px] text-emerald-300 font-bold">Fin de semana • Villavicencio</p>
+        </div>
+
+        <p class="text-[11px] text-slate-300 leading-relaxed">
+          Solo <b class="text-white">Villavicencio</b> aplica pico y placa en el Meta; si viajas desde Acacías, Guamal u otro municipio, verifica rutas y condiciones especiales antes de ingresar.
+        </p>
+      </div>
+    `;
   }
 
   const reglaHoy = rotacionVillavicencio[diaSemana];
-  return `📅 Hoy: ${fechaFormateada} • Referencia Villavicencio\n` +
-         `🚫 Restricción hoy (${reglaHoy.dia}): Placas terminadas en ${reglaHoy.digitos}.\n` +
-         `⏰ Horarios: 6:30 a.m. – 9:30 a.m. y 5:00 p.m. – 8:00 p.m.\n` +
-         `🛣️ Si viajas desde Acacías, Guamal u otro municipio del Meta hacia Villavicencio, revisa tu último dígito y vías permitidas antes de entrar.`;
+  return `
+    <div class="bg-slate-900 p-3.5 rounded-2xl border-2 border-orange-500/60 space-y-3 shadow-inner">
+      <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-2">
+        <div>
+          <span class="text-[10px] text-slate-400 font-bold uppercase block">Día de hoy</span>
+          <span class="text-lg font-black text-orange-400 tracking-wide uppercase">${reglaHoy.dia}</span>
+        </div>
+        <span class="text-[11px] text-slate-300 font-bold text-right capitalize">${escaparHTML(fechaCompleta)}</span>
+      </div>
+
+      <div class="bg-red-950/60 border-2 border-red-500/70 rounded-xl p-3 text-center space-y-1 shadow">
+        <span class="text-[10px] font-black text-red-300 uppercase tracking-widest block">🚫 Placa restringida hoy en Villavicencio</span>
+        <p class="text-2xl font-black text-white tracking-widest">TERMINADAS EN ${reglaHoy.digitos}</p>
+        <p class="text-[11px] text-amber-300 font-bold">Vehículos particulares • ${reglaHoy.dia}</p>
+      </div>
+
+      <div class="space-y-1.5 text-[11px] text-slate-200 pt-0.5">
+        <p><b class="text-orange-400">⏰ Horarios:</b> 6:30 a.m. – 9:30 a.m. y 5:00 p.m. – 8:00 p.m. (entre 9:30 a.m. y 5:00 p.m. circulación libre).</p>
+        <p><b class="text-orange-400">🛣️ Ingreso desde otros municipios:</b> Si viajas desde Acacías, Guamal u otro municipio del Meta hacia Villavicencio, valida tu último dígito, horarios y vías permitidas antes de entrar.</p>
+      </div>
+    </div>
+  `;
 }
 
 const reglamentoEsencialPorDefecto=`REGLAMENTO OPERATIVO Y DE CONVIVENCIA – GRUPO KARGASS\n"Unidos hacemos más camino. En Grupo Kargass nuestra mayor herramienta es la confianza del cliente."\n\n1. Nuestra Carta de Presentación:\n• Trato amable, cordial y respetuoso con el cliente.\n• Vestimenta adecuada, limpia y profesional.\n• Cuidado del vehículo en higiene y mecánica.\n\n2. Compromiso con el Tiempo y la Puntualidad:\n• Puntualidad estricta en la hora de recogida acordada.\n• Evitar cancelaciones de último momento.\n\n3. Cuidado y Respeto Absoluto por la Carga:\n• Manipulación impecable de mercancías y trasteos.\n• Cobro transparente según tarifa cotizada en la app.\n\n4. Programa de Estrellas y Bonificaciones ⭐:\n• Promedio mínimo deseado: 4.5 a 5.0 estrellas.\n• Al sumar 15 servicios calificados con excelencia, la Central otorga días adicionales de suscripción mensual de regalo.`;
@@ -814,7 +871,7 @@ function actualizarTextosGlobales(){
   if(elPico){
     const textoGuardado=(state.config.picoPlacaTexto||'').trim();
     const esTextoGenericoAntiguo = !textoGuardado || textoGuardado===picoPlacaPorDefecto.trim() || textoGuardado.includes('Lunes a viernes (excepto festivos)');
-    elPico.innerText = esTextoGenericoAntiguo ? obtenerTextoPicoYPlacaHoy() : textoGuardado;
+    elPico.innerHTML = renderizarBloquePicoYPlacaHTML(esTextoGenericoAntiguo ? null : textoGuardado);
   }
 
   const elReg=document.getElementById('modal-reglamento-texto');
