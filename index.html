@@ -523,7 +523,7 @@ function escaparHTML(texto){
     .replace(/"/g, '&quot;');
 }
 
-function renderizarBloquePicoYPlacaHTML(textoManual){
+function renderizarBloquePicoYPlacaHTML(){
   const hoy = new Date();
   const diaSemana = hoy.getDay(); // 0: Domingo, 1: Lunes ... 6: Sábado
   const fechaMayus = hoy.toLocaleDateString('es-CO', {
@@ -548,44 +548,23 @@ function renderizarBloquePicoYPlacaHTML(textoManual){
     5: { dia: "viernes", digitos: "3 y 4" }
   };
 
-  if (textoManual) {
+  if (diaSemana === 0 || diaSemana === 6) {
     return `
-      <div class="bg-slate-900 p-3.5 rounded-2xl border-2 border-orange-500/60 space-y-3 shadow-inner">
-        <div class="grid grid-cols-2 gap-2.5 items-stretch">
+      <div class="bg-slate-900 p-3.5 rounded-2xl border-2 border-emerald-500/60 space-y-3 shadow-inner">
+        <div class="grid grid-cols-2 gap-2.5 items-start">
           <div class="bg-orange-500 text-slate-950 rounded-xl p-3 flex flex-col justify-center shadow-lg">
             <span class="text-[10px] font-black uppercase tracking-wider opacity-85">Hoy</span>
             <span class="text-sm font-black leading-snug mt-0.5">${escaparHTML(fechaMayus)}</span>
           </div>
-          <div class="flex flex-col">
-            <span class="text-[11px] font-black text-orange-400 uppercase tracking-wider text-center mb-1.5">PICO Y PLACA</span>
-            <div class="bg-slate-800 border-2 border-orange-500 rounded-xl p-3 flex-1 flex items-center justify-center text-center shadow-lg">
-              <span class="text-xl font-black text-white leading-tight">AVISO</span>
-            </div>
-          </div>
-        </div>
-        <div class="text-slate-100 font-medium whitespace-pre-line text-xs leading-relaxed pt-1">${escaparHTML(textoManual)}</div>
-      </div>
-    `;
-  }
-
-  if (diaSemana === 0 || diaSemana === 6) {
-    return `
-      <div class="bg-slate-900 p-3.5 rounded-2xl border-2 border-emerald-500/60 space-y-3 shadow-inner">
-        <div class="grid grid-cols-2 gap-2.5 items-stretch">
-          <div class="bg-orange-500 text-slate-950 rounded-xl p-3 flex flex-col justify-center shadow-lg">
-            <span class="text-[10px] font-black uppercase tracking-wider opacity-85">Fecha</span>
-            <span class="text-sm font-black leading-snug mt-0.5">${escaparHTML(fechaMayus)}</span>
-          </div>
-          <div class="flex flex-col">
-            <span class="text-[11px] font-black text-orange-400 uppercase tracking-wider text-center mb-1.5">PICO Y PLACA</span>
-            <div class="bg-emerald-950/80 border-2 border-emerald-400 rounded-xl p-3 flex-1 flex items-center justify-center text-center shadow-lg">
+          <div class="flex flex-col items-center">
+            <span class="text-xs font-black text-orange-400 uppercase tracking-wider mb-2">PICO Y PLACA</span>
+            <div class="w-full bg-emerald-950/80 border-2 border-emerald-400 rounded-xl py-3 px-2 flex items-center justify-center text-center shadow-lg">
               <span class="text-2xl font-black text-white leading-none">LIBRE</span>
             </div>
           </div>
         </div>
-
         <p class="text-xs text-slate-200 leading-relaxed">
-          Hoy ${escaparHTML(fechaNormal)} no aplica pico y placa en Villavicencio por ser fin de semana. Si viajas desde Acacías, Guamal u otro municipio del Meta, revisa rutas y condiciones antes de ingresar.
+          Hoy ${escaparHTML(fechaNormal)} no aplica pico y placa en Villavicencio por ser fin de semana.
         </p>
       </div>
     `;
@@ -594,19 +573,18 @@ function renderizarBloquePicoYPlacaHTML(textoManual){
   const reglaHoy = rotacionVillavicencio[diaSemana];
   return `
     <div class="bg-slate-900 p-3.5 rounded-2xl border-2 border-orange-500/60 space-y-3 shadow-inner">
-      <div class="grid grid-cols-2 gap-2.5 items-stretch">
+      <div class="grid grid-cols-2 gap-2.5 items-start">
         <div class="bg-orange-500 text-slate-950 rounded-xl p-3 flex flex-col justify-center shadow-lg">
-          <span class="text-[10px] font-black uppercase tracking-wider opacity-85">Día actual</span>
+          <span class="text-[10px] font-black uppercase tracking-wider opacity-85">Hoy</span>
           <span class="text-sm font-black leading-snug mt-0.5">${escaparHTML(fechaMayus)}</span>
         </div>
-        <div class="flex flex-col">
-          <span class="text-[11px] font-black text-orange-400 uppercase tracking-wider text-center mb-1.5">PICO Y PLACA</span>
-          <div class="bg-red-950/75 border-2 border-red-500 rounded-xl p-3 flex-1 flex items-center justify-center text-center shadow-lg">
-            <span class="text-3xl font-black text-white leading-none tracking-tight">${reglaHoy.digitos}</span>
+        <div class="flex flex-col items-center">
+          <span class="text-xs font-black text-orange-400 uppercase tracking-wider mb-2">PICO Y PLACA</span>
+          <div class="w-full bg-red-950/75 border-2 border-red-500 rounded-xl py-3 px-2 flex items-center justify-center text-center shadow-lg">
+            <span class="text-2xl font-black text-white leading-none">${reglaHoy.digitos}</span>
           </div>
         </div>
       </div>
-
       <div class="space-y-2 text-xs text-slate-200 leading-relaxed pt-1">
         <p>Hoy ${escaparHTML(fechaNormal)}, el pico y placa para vehículos particulares en Villavicencio aplica para las placas terminadas en <b class="text-white">${reglaHoy.digitos}</b>.</p>
         <p class="font-bold text-white">Vehículos particulares</p>
@@ -884,15 +862,7 @@ function actualizarTextosGlobales(){
 
   const elPico=document.getElementById('pico-placa-dinamico');
   if(elPico){
-    const textoGuardado=(state.config.picoPlacaTexto||'').trim();
-    const esRotacionAutomatica = (
-      !textoGuardado ||
-      textoGuardado === picoPlacaPorDefecto.trim() ||
-      textoGuardado.includes('Lunes a viernes') ||
-      textoGuardado.includes('6:30 a.m.') ||
-      textoGuardado.includes('Vigente 2026')
-    );
-    elPico.innerHTML = renderizarBloquePicoYPlacaHTML(esRotacionAutomatica ? null : textoGuardado);
+    elPico.innerHTML = renderizarBloquePicoYPlacaHTML();
   }
 
   const elReg=document.getElementById('modal-reglamento-texto');
